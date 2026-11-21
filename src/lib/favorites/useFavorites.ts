@@ -38,10 +38,10 @@ export function useFavorites() {
       slugs = new Set()
       setCurrent(new Set())
     }
-    pb.authStore.onChange(onChange)
+    const unsubscribe = pb.authStore.onChange(onChange)
     return () => {
       listeners.delete(listener)
-      pb.authStore.removeEventListener(onChange)
+      unsubscribe()
     }
   }, [])
 

@@ -98,7 +98,8 @@ export function useHomeShelves(ready?: boolean): HomeShelf[] {
 
 /** Seção de vitrine com heading editorial e cards reais do catálogo. */
 export function HomeShelfSection({ shelf }: { shelf: HomeShelf }) {
-  const { t } = useLocale()
+  const { locale } = useLocale()
+  const t = (key: string) => shopT(locale, key)
   return (
     <section aria-label={t(shelf.titleKey)} className="py-16 sm:py-20 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -117,7 +118,7 @@ export function HomeShelfSection({ shelf }: { shelf: HomeShelf }) {
         {shelf.products.length ? (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {shelf.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} localePrefix={`/${locale}`} />
             ))}
           </div>
         ) : (

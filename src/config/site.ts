@@ -32,10 +32,13 @@ export const siteConfig: SiteConfig = {
   cnpj: undefined,
   audio: {
     enabled: true,
-    // Na Etapa 1 NÃO há arquivo licenciado fornecido pelo cliente.
-    // O player funciona e ao clicar mostra mensagem honesta.
-    // Assim que o cliente fornecer 'public/audio/ambiente-loop.mp3', basta mudar hasLicensedFile para true.
-    hasLicensedFile: false,
+    // A experiência sonora está ATIVA. O provider tenta primeiro o MP3 em
+    // public/audio/ambiente-loop.mp3 ("soothing tibetian flute music",
+    // PoorArtistt, Pixabay Content License — ver src/lib/audio/tibetanSynth.ts);
+    // se o arquivo não existir, usa o fallback sintetizado via WebAudio
+    // (flauta tibetana pentatônica sobre drone). Nenhum autoplay: só após
+    // clique no controle do cabeçalho ou no convite.
+    hasLicensedFile: false, // informativo — o provider detecta o arquivo em runtime via HEAD
     src: '/audio/ambiente-loop.mp3',
     defaultVolume: 0.3,
   },

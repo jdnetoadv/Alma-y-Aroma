@@ -92,7 +92,7 @@ export const es: TranslationDictionary = {
   'audio.invite': 'Permite un momento de paz.',
   'audio.button': 'Activar la experiencia sonora',
   'audio.pending':
-    'Nuestra banda sonora se está finalizando con un audio original con licencia. Pronto estará disponible aquí.',
+    'Pista ambiental: flauta tibetana suave en bucle, a volumen bajo. Puedes pausar o reanudar desde el control de sonido en la cabecera en cualquier momento.',
   'audio.title': 'Experiencia Sonora Meditativa',
   'audio.playing': 'Banda sonora meditativa en reproducción',
   'audio.paused': 'Banda sonora pausada',

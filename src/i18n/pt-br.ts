@@ -90,7 +90,7 @@ export const ptBR: TranslationDictionary = {
   'audio.invite': 'Permita-se um momento de paz.',
   'audio.button': 'Ativar experiência sonora',
   'audio.pending':
-    'Nossa trilha sonora está sendo finalizada com um áudio original licenciado. Em breve estará disponível aqui.',
+    'Trilha ambiente: flauta tibetana suave em loop, em volume baixo. Você pode pausar ou retomar pelo controle de som no cabeçalho a qualquer momento.',
   'audio.title': 'Experiência Sonora Meditativa',
   'audio.playing': 'Trilha meditativa em reprodução',
   'audio.paused': 'Trilha sonora pausada',

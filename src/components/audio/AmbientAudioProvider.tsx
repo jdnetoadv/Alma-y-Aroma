@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { siteConfig } from '@/config/site'
+import { startTibetanFluteSynth } from '@/lib/audio/tibetanSynth'
 
 interface AmbientAudioContextValue {
   isPlaying: boolean
@@ -24,24 +25,47 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
   const [hasInteracted, setHasInteracted] = useState(false)
   const [isInviteVisible, setIsInviteVisible] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const synthRef = useRef<{ stop: () => void } | null>(null)
+  // Which source is in use: null = still probing, true = MP3, false = synth fallback
+  const [hasLicensedFile, setHasLicensedFile] = useState<boolean | null>(null)
 
-  const hasLicensedFile = siteConfig.audio.hasLicensedFile
-
-  // Setup HTML Audio element if licensed file exists
+  // Source resolution: prefer the licensed MP3 when it exists at
+  // public/audio/ambiente-loop.mp3; otherwise fall back to the WebAudio
+  // tibetan-flute synth (see src/lib/audio/tibetanSynth.ts for the track
+  // this fallback stands in for and how to swap it).
   useEffect(() => {
-    if (!hasLicensedFile) return
+    if (!siteConfig.audio.enabled) return
 
-    const audio = new Audio(siteConfig.audio.src)
-    audio.loop = true
-    audio.volume = siteConfig.audio.defaultVolume
-    audioRef.current = audio
+    let cancelled = false
+
+    const probeFile = async () => {
+      try {
+        const res = await fetch(siteConfig.audio.src, { method: 'HEAD' })
+        return res.ok
+      } catch {
+        return false
+      }
+    }
+
+    void probeFile().then((found) => {
+      if (cancelled) return
+      setHasLicensedFile(found)
+      if (!found) return
+
+      const audio = new Audio(siteConfig.audio.src)
+      audio.loop = true
+      audio.volume = siteConfig.audio.defaultVolume
+      audioRef.current = audio
+    })
 
     return () => {
-      audio.pause()
-      audio.src = ''
+      cancelled = true
+      audioRef.current?.pause()
       audioRef.current = null
+      synthRef.current?.stop()
+      synthRef.current = null
     }
-  }, [hasLicensedFile])
+  }, [])
 
   // Show invite pill after delay if user hasn't opted in or dismissed
   useEffect(() => {
@@ -82,38 +106,48 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
     setHasInteracted(true)
     setIsInviteVisible(false)
 
-    // Honest behavior: if no licensed audio file exists, inform the client
-    if (!hasLicensedFile) {
-      setIsPendingNoticeOpen(true)
-      return
+    if (hasLicensedFile === null) return // still probing
+
+    const startPlayback = async () => {
+      if (hasLicensedFile) {
+        const audio = audioRef.current
+        if (!audio) return
+        await audio.play()
+      } else {
+        synthRef.current?.stop()
+        synthRef.current = startTibetanFluteSynth(siteConfig.audio.defaultVolume)
+      }
+      setIsPlaying(true)
+      try {
+        localStorage.setItem(AUDIO_OPT_IN_KEY, 'true')
+      } catch {
+        /* intentionally ignored */
+      }
     }
 
-    const audio = audioRef.current
-    if (!audio) return
-
-    if (isPlaying) {
-      audio.pause()
+    const stopPlayback = () => {
+      if (hasLicensedFile) {
+        audioRef.current?.pause()
+      } else {
+        synthRef.current?.stop()
+        synthRef.current = null
+      }
       setIsPlaying(false)
       try {
         localStorage.setItem(AUDIO_OPT_IN_KEY, 'false')
       } catch {
         /* intentionally ignored */
       }
-    } else {
-      audio
-        .play()
-        .then(() => {
-          setIsPlaying(true)
-          try {
-            localStorage.setItem(AUDIO_OPT_IN_KEY, 'true')
-          } catch {
-            /* intentionally ignored */
-          }
-        })
-        .catch(() => {
-          setIsPlaying(false)
-        })
     }
+
+    if (isPlaying) {
+      stopPlayback()
+      return
+    }
+
+    void startPlayback().catch(() => {
+      setIsPlaying(false)
+    })
   }
 
   const openPendingNotice = () => setIsPendingNoticeOpen(true)
@@ -123,7 +157,7 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
     <AmbientAudioContext.Provider
       value={{
         isPlaying,
-        hasLicensedFile,
+        hasLicensedFile: hasLicensedFile === true,
         hasInteracted,
         isPendingNoticeOpen,
         toggleAudio,

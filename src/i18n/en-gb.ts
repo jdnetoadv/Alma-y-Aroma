@@ -86,7 +86,7 @@ export const enGB: TranslationDictionary = {
   'audio.invite': 'Allow yourself a moment of peace.',
   'audio.button': 'Enable the sound experience',
   'audio.pending':
-    'Our soundtrack is being finalised with licensed original audio. It will be available here soon.',
+    'Ambient track: soft Tibetan flute on loop, at a low volume. You can pause or resume from the sound control in the header at any time.',
   'audio.title': 'Meditative Sound Experience',
   'audio.playing': 'Meditative soundtrack playing',
   'audio.paused': 'Soundtrack paused',

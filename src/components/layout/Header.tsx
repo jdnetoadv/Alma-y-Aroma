@@ -46,9 +46,24 @@ export function Header() {
     target: string
   }> = [
     { label: t('menu.home'), kind: 'anchor', to: `/${locale}`, target: 'hero' },
-    { label: t('menu.incense'), kind: 'route', to: `/${locale}/categoria/incensos`, target: '' },
-    { label: t('menu.candles'), kind: 'route', to: `/${locale}/categoria/velas`, target: '' },
-    { label: t('menu.aromas'), kind: 'route', to: `/${locale}/categoria/aromas`, target: '' },
+    {
+      label: t('menu.incense'),
+      kind: 'route',
+      to: `/${locale}/categoria/incensos-defumacao`,
+      target: '',
+    },
+    {
+      label: t('menu.candles'),
+      kind: 'route',
+      to: `/${locale}/categoria/velas-aromaticas`,
+      target: '',
+    },
+    {
+      label: t('menu.aromas'),
+      kind: 'route',
+      to: `/${locale}/categoria/aromas-essencias`,
+      target: '',
+    },
     { label: t('menu.kits'), kind: 'route', to: `/${locale}/kits`, target: '' },
     { label: t('menu.rituals'), kind: 'anchor', to: `/${locale}`, target: 'rituais' },
     { label: t('menu.essence'), kind: 'anchor', to: `/${locale}`, target: 'essencia' },

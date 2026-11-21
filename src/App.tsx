@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { LocaleProvider } from './i18n/LocaleContext'
+import { LocaleProvider, useLocale } from './i18n/LocaleContext'
 import { AmbientAudioProvider } from './components/audio/AmbientAudioProvider'
 import Layout from './components/Layout'
 import Index from './pages/Index'
@@ -16,6 +16,8 @@ import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
 import AccountPage from './pages/AccountPage'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import { ComplianceScreen } from './pages/compliance/ComplianceScreen'
+import type { CompliancePageKey } from './pages/compliance/content'
 import NotFound from './pages/NotFound'
 import { RootRedirect } from './components/routing/RootRedirect'
 
@@ -62,6 +64,26 @@ const App = () => (
               {/* ─── Etapa 4: conta do cliente e painel admin ─── */}
               <Route path={localePath('/conta')} element={<AccountPage />} />
               <Route path={localePath('/admin')} element={<AdminDashboard />} />
+
+              {/* ─── Etapa 4: conformidade (minutas, 3 idiomas) ─── */}
+              <Route
+                path={localePath('/privacidade')}
+                element={<ComplianceRoute pageKey="privacidade" />}
+              />
+              <Route
+                path={localePath('/cookies')}
+                element={<ComplianceRoute pageKey="cookies" />}
+              />
+              <Route path={localePath('/termos')} element={<ComplianceRoute pageKey="termos" />} />
+              <Route path={localePath('/trocas')} element={<ComplianceRoute pageKey="trocas" />} />
+              <Route
+                path={localePath('/entrega')}
+                element={<ComplianceRoute pageKey="entrega" />}
+              />
+              <Route
+                path={localePath('/contato')}
+                element={<ComplianceRoute pageKey="contato" />}
+              />
             </Route>
 
             {/* Contemplative 404 Catch-All */}
@@ -72,5 +94,14 @@ const App = () => (
     </LocaleProvider>
   </BrowserRouter>
 )
+
+/**
+ * ComplianceScreen precisa do locale do contexto, que só existe dentro de
+ * LocaleProvider — daí este envoltório em vez de passar locale nas rotas.
+ */
+function ComplianceRoute({ pageKey }: { pageKey: CompliancePageKey }) {
+  const { locale } = useLocale()
+  return <ComplianceScreen locale={locale} pageKey={pageKey} />
+}
 
 export default App

@@ -129,6 +129,7 @@ export const ptBR: TranslationDictionary = {
   'footer.returns': 'Trocas e Devoluções',
   'footer.shipping': 'Frete e Entrega',
   'footer.contact': 'Atendimento',
+  'footer.cookies': 'Política de Cookies',
   'footer.comingSoonBadge': 'Em breve',
   'footer.selectLanguage': 'Idioma',
 
@@ -233,4 +234,21 @@ export const ptBR: TranslationDictionary = {
   'breadcrumb.shop': 'Loja',
   'breadcrumb.kits': 'Kits',
   'breadcrumb.sensations': 'Sensações',
+
+  // ─── Etapa 4: conformidade, consentimento e compras ───
+  'consent.title': 'A sua privacidade importa',
+  'consent.body':
+    'Usamos apenas armazenamento local essencial (idioma, carrinho, sessão e esta escolha). Nenhum cookie de publicidade.',
+  'consent.accept': 'Aceitar',
+  'consent.reject': 'Recusar',
+  'consent.more': 'Política de cookies',
+  'compliance.draftNotice':
+    'Minuta para revisão — este texto ainda não passou por revisão jurídica. Campos marcados "[a definir]" serão preenchidos na formalização da operação.',
+  'compliance.sectionsTitle': 'Nesta seção',
+  'compliance.backToShop': 'Voltar à loja',
+  'product.buyNow': 'Comprar agora',
+  'product.deliveryEstimate':
+    'Entrega estimada (ilustrativa): 3 a 12 dias úteis — prazo demonstrativo, sem promessa real.',
+  'product.demoDisclaimer': 'Compra demonstrativa: nenhuma cobrança será efetuada.',
+  'product.savePercent': 'Economize {percent}%',
 }

@@ -125,6 +125,7 @@ export const enGB: TranslationDictionary = {
   'footer.returns': 'Returns & Exchanges',
   'footer.shipping': 'Shipping & Delivery',
   'footer.contact': 'Customer Care',
+  'footer.cookies': 'Cookie Policy',
   'footer.comingSoonBadge': 'Coming soon',
   'footer.selectLanguage': 'Language',
 
@@ -229,4 +230,21 @@ export const enGB: TranslationDictionary = {
   'breadcrumb.shop': 'Shop',
   'breadcrumb.kits': 'Kits',
   'breadcrumb.sensations': 'Sensations',
+
+  // ─── Stage 4: compliance, consent and purchasing ───
+  'consent.title': 'Your privacy matters',
+  'consent.body':
+    'We use only essential local storage (language, cart, session and this choice). No advertising cookies.',
+  'consent.accept': 'Accept',
+  'consent.reject': 'Decline',
+  'consent.more': 'Cookie policy',
+  'compliance.draftNotice':
+    'Draft for review — this text has not yet undergone legal review. Fields marked "[to be defined]" will be filled in once the operation is formalised.',
+  'compliance.sectionsTitle': 'In this section',
+  'compliance.backToShop': 'Back to shop',
+  'product.buyNow': 'Buy now',
+  'product.deliveryEstimate':
+    'Estimated delivery (illustrative): 3 to 12 business days — demonstrative timeline, no real promise.',
+  'product.demoDisclaimer': 'Demonstration purchase: no charge will be made.',
+  'product.savePercent': 'Save {percent}%',
 }

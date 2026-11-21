@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Instagram, MessageCircle, Mail, CheckCircle2, AlertCircle, ArrowUp } from 'lucide-react'
 import { Logo } from '@/components/common/Logo'
 import { LanguageSelector } from '@/components/common/LanguageSelector'
@@ -166,36 +167,31 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: Policies (2 cols) - honest placeholder with "Em breve" badge */}
+          {/* Col 3: Policies (2 cols) - real links to the compliance drafts (Etapa 4) */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="font-serif text-base tracking-wider uppercase text-cream font-medium">
               {t('footer.policies')}
             </h4>
-            <ul className="space-y-2.5 text-xs font-sans text-cream/50">
-              <li className="flex items-center gap-1.5 cursor-not-allowed">
-                <span>{t('footer.privacy')}</span>
-                <span className="text-[10px] text-gold/80 italic">
-                  ({t('footer.comingSoonBadge')})
-                </span>
-              </li>
-              <li className="flex items-center gap-1.5 cursor-not-allowed">
-                <span>{t('footer.terms')}</span>
-                <span className="text-[10px] text-gold/80 italic">
-                  ({t('footer.comingSoonBadge')})
-                </span>
-              </li>
-              <li className="flex items-center gap-1.5 cursor-not-allowed">
-                <span>{t('footer.returns')}</span>
-                <span className="text-[10px] text-gold/80 italic">
-                  ({t('footer.comingSoonBadge')})
-                </span>
-              </li>
-              <li className="flex items-center gap-1.5 cursor-not-allowed">
-                <span>{t('footer.shipping')}</span>
-                <span className="text-[10px] text-gold/80 italic">
-                  ({t('footer.comingSoonBadge')})
-                </span>
-              </li>
+            <ul className="space-y-2.5 text-xs font-sans">
+              {(
+                [
+                  ['footer.privacy', 'privacidade'],
+                  ['footer.cookies', 'cookies'],
+                  ['footer.terms', 'termos'],
+                  ['footer.returns', 'trocas'],
+                  ['footer.shipping', 'entrega'],
+                  ['footer.contact', 'contato'],
+                ] as const
+              ).map(([key, path]) => (
+                <li key={path}>
+                  <Link
+                    to={`/${locale}/${path}`}
+                    className="text-cream/60 hover:text-saffron transition-colors"
+                  >
+                    {t(key)}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -1,5 +1,6 @@
 import pb from '@/lib/pocketbase/client'
 import { CatalogCategoryRecord, CatalogProductRecord } from '@/data/backendCatalog'
+import { CurrencyCode } from '@/data/types'
 import { Locale } from '@/i18n/types'
 
 /**
@@ -44,7 +45,11 @@ export interface AdminProduct {
   purposes: string[]
   price: number
   compareAtPrice: number | null
-  currency: 'BRL'
+  currency: CurrencyCode
+  weightGrams: number | null
+  lengthCm: number | null
+  widthCm: number | null
+  heightCm: number | null
   stock: number
   featured: boolean
   isNew: boolean
@@ -59,7 +64,21 @@ export async function listAdminProducts(): Promise<AdminProduct[]> {
 
 export async function updateProduct(
   id: string,
-  patch: Partial<Pick<AdminProduct, 'price' | 'compareAtPrice' | 'stock' | 'featured' | 'active'>>,
+  patch: Partial<
+    Pick<
+      AdminProduct,
+      | 'price'
+      | 'compareAtPrice'
+      | 'currency'
+      | 'weightGrams'
+      | 'lengthCm'
+      | 'widthCm'
+      | 'heightCm'
+      | 'stock'
+      | 'featured'
+      | 'active'
+    >
+  >,
 ): Promise<void> {
   await pb.collection('products').update(id, patch)
 }

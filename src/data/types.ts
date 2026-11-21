@@ -98,6 +98,9 @@ export interface CatalogKit {
   isDemonstrative: true
 }
 
+/** Moedas dos mercados configuráveis no admin (sem conversão automática). */
+export type CurrencyCode = 'BRL' | 'EUR' | 'GBP'
+
 export interface SensationNavigationItem {
   id: PurposeTag
   labelKey: 'ritual.relax' | 'ritual.meditate' | 'ritual.renew' | 'ritual.nest' | 'ritual.gift'

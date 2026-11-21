@@ -1,6 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Plus, Minus, ShoppingCart, Truck, ChevronRight, Heart, X } from 'lucide-react'
+import {
+  ArrowLeft,
+  Plus,
+  Minus,
+  ShoppingCart,
+  ShoppingBag,
+  Truck,
+  ChevronRight,
+  Heart,
+  X,
+} from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { CatalogProduct } from '@/data/types'
 import { catalogRepository, formatPrice } from '@/data/repository'
@@ -169,12 +179,29 @@ export default function ProductPage() {
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               {product.shortDescription[locale]}
             </p>
-            <p className="mt-6 text-2xl font-medium text-foreground">
-              {formatPrice(product.illustrativePrice, locale)}
-              <span className="ml-3 align-middle text-xs font-normal uppercase tracking-wider text-muted-foreground/70">
-                {t('product.demoBadge')}
-              </span>
-            </p>
+            {product.compareAtPrice && product.compareAtPrice > product.price ? (
+              <p className="mt-6 flex flex-wrap items-baseline gap-3">
+                <span className="text-2xl font-medium text-foreground">
+                  {formatPrice(product.price, locale)}
+                </span>
+                <span className="text-base text-muted-foreground line-through">
+                  {formatPrice(product.compareAtPrice, locale)}
+                </span>
+                <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  {t('product.savePercent', {
+                    percent: String(
+                      Math.round(
+                        ((product.compareAtPrice - product.price) / product.compareAtPrice) * 100,
+                      ),
+                    ),
+                  })}
+                </span>
+              </p>
+            ) : (
+              <p className="mt-6 text-2xl font-medium text-foreground">
+                {formatPrice(product.price, locale)}
+              </p>
+            )}
 
             {/* Variações */}
             {variationList.length > 0 && (
@@ -277,9 +304,28 @@ export default function ProductPage() {
                 <ShoppingCart className="mr-2 h-4 w-4" aria-hidden />
                 {t('product.addToCart')}
               </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  const variationLabel = variationList
+                    .map((v) => v.values[variationSelection[v.kind] ?? 0])
+                    .filter(Boolean)
+                    .join(' · ')
+                  cartStore.addItem(product, quantity, variationLabel || undefined)
+                  navigate(`${localePrefix}/checkout`)
+                }}
+                className="h-12 w-full text-base"
+              >
+                <ShoppingBag className="mr-2 h-4 w-4" aria-hidden />
+                {t('product.buyNow')}
+              </Button>
               <p className="flex items-center gap-2 text-xs text-muted-foreground/80">
                 <Truck className="h-3.5 w-3.5" aria-hidden />
-                {t('product.shippingInfo')}
+                {t('product.deliveryEstimate')}
+              </p>
+              <p className="text-xs italic text-muted-foreground/60">
+                {t('product.demoDisclaimer')}
               </p>
             </div>
 

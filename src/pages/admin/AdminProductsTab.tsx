@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { Locale } from '@/i18n/types'
-import { ProductCategory } from '@/data/types'
+import { CurrencyCode, ProductCategory } from '@/data/types'
 import { shopT } from '@/i18n/shopStrings'
 import { listAdminProducts, updateProduct, createProduct, AdminProduct } from '@/lib/admin/service'
 import { listAdminCategories, AdminCategory } from '@/lib/admin/service'
@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2 } from 'lucide-react'
+
+const CURRENCIES: CurrencyCode[] = ['BRL', 'EUR', 'GBP']
 
 /** Aba Produtos do painel: listar, editar (preço/estoque/destaque) e criar. */
 export default function AdminProductsTab() {
@@ -143,6 +145,22 @@ function ProductRow({
           className="h-8 w-24 bg-background text-xs"
           aria-label={t('admin.productPrice')}
         />
+        <Input
+          type="number"
+          step="0.01"
+          min="0"
+          defaultValue={product.compareAtPrice ?? ''}
+          placeholder="—"
+          onBlur={(e) => {
+            const raw = e.target.value.trim()
+            const v = raw === '' ? null : Number(raw)
+            const prev = product.compareAtPrice
+            if (v !== prev && (v === null || !Number.isNaN(v))) onPatch({ compareAtPrice: v })
+          }}
+          className="mt-1 h-8 w-24 bg-background text-xs"
+          aria-label={t('admin.productCompareAtPrice')}
+          title={t('admin.productCompareAtPrice')}
+        />
       </td>
       <td className="px-4 py-3">
         <Input
@@ -156,6 +174,55 @@ function ProductRow({
           className="h-8 w-20 bg-background text-xs"
           aria-label={t('admin.productStock')}
         />
+        <Input
+          type="number"
+          min="0"
+          defaultValue={product.weightGrams ?? ''}
+          placeholder="g"
+          onBlur={(e) => {
+            const raw = e.target.value.trim()
+            const v = raw === '' ? null : Number(raw)
+            const prev = product.weightGrams
+            if (v !== prev && (v === null || !Number.isNaN(v))) onPatch({ weightGrams: v })
+          }}
+          className="mt-1 h-8 w-20 bg-background text-xs"
+          aria-label={t('admin.productWeight')}
+          title={t('admin.productWeight')}
+        />
+        <div className="mt-1 flex gap-1">
+          {(['lengthCm', 'widthCm', 'heightCm'] as const).map((dim) => (
+            <Input
+              key={dim}
+              type="number"
+              step="0.1"
+              min="0"
+              defaultValue={product[dim] ?? ''}
+              placeholder={dim === 'lengthCm' ? 'C' : dim === 'widthCm' ? 'L' : 'A'}
+              onBlur={(e) => {
+                const raw = e.target.value.trim()
+                const v = raw === '' ? null : Number(raw)
+                const prev = product[dim]
+                if (v !== prev && (v === null || !Number.isNaN(v))) onPatch({ [dim]: v })
+              }}
+              className="h-8 w-14 bg-background text-xs"
+              aria-label={t('admin.productDimensions')}
+              title={t('admin.productDimensions')}
+            />
+          ))}
+        </div>
+        <select
+          value={product.currency}
+          onChange={(e) => onPatch({ currency: e.target.value as CurrencyCode })}
+          className="mt-1 h-8 w-20 rounded-md border border-border bg-background px-1 text-xs text-foreground"
+          aria-label={t('admin.productCurrency')}
+          title={t('admin.productCurrency')}
+        >
+          {CURRENCIES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
       </td>
       <td className="px-4 py-3">
         <input
@@ -327,7 +394,6 @@ function AdminProductForm({
       </Button>
       <span className="ml-3 text-[11px] italic text-muted-foreground/70">
         {t('admin.priceHint')}
-        {formatPrice(0, locale) === '' ? '' : ''}
       </span>
     </form>
   )

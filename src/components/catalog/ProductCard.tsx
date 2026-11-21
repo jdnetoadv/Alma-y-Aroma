@@ -104,12 +104,29 @@ export function ProductCard({ product, localePrefix, badge, className }: Product
         <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
           {product.shortDescription[locale]}
         </p>
-        <p className="mt-3 text-base font-medium text-foreground">
-          {formatPrice(product.illustrativePrice, locale)}
-          <span className="ml-2 text-xs font-normal text-muted-foreground/70">
-            {t('product.demoBadge').toLowerCase()}
-          </span>
-        </p>
+        {product.compareAtPrice && product.compareAtPrice > product.price ? (
+          <p className="mt-3 flex flex-wrap items-baseline gap-2">
+            <span className="text-base font-medium text-foreground">
+              {formatPrice(product.price, locale)}
+            </span>
+            <span className="text-sm text-muted-foreground line-through">
+              {formatPrice(product.compareAtPrice, locale)}
+            </span>
+            <span className="text-[11px] text-primary">
+              {t('product.savePercent', {
+                percent: String(
+                  Math.round(
+                    ((product.compareAtPrice - product.price) / product.compareAtPrice) * 100,
+                  ),
+                ),
+              })}
+            </span>
+          </p>
+        ) : (
+          <p className="mt-3 text-base font-medium text-foreground">
+            {formatPrice(product.price, locale)}
+          </p>
+        )}
 
         <div className="mt-4 flex flex-col gap-2 pt-2 sm:flex-row">
           <Link

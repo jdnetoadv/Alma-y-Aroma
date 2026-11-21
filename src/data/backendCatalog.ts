@@ -1,5 +1,6 @@
 import pb from '@/lib/pocketbase/client'
 import { Locale } from '@/i18n/types'
+import type { CurrencyCode } from '@/data/types'
 
 export type ProductSort = 'featured' | 'newest' | 'priceAsc' | 'priceDesc' | 'name'
 
@@ -29,7 +30,7 @@ export interface CatalogProductRecord {
   purposes: string[]
   price: number
   compareAtPrice?: number
-  currency: 'BRL'
+  currency: CurrencyCode
   stock: number
   featured: boolean
   isNew: boolean
@@ -73,9 +74,8 @@ function toUiProduct(r: CatalogProductRecord) {
     productType: r.productType,
     tags: r.tags,
     purposes: r.purposes,
-    illustrativePrice: r.compareAtPrice || r.price,
-    compareAtPrice: r.compareAtPrice,
     price: r.price,
+    compareAtPrice: r.compareAtPrice,
     currency: r.currency,
     stock: r.stock,
     isNew: r.isNew,

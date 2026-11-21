@@ -245,4 +245,19 @@ export interface TranslationDictionary {
   'breadcrumb.shop': string
   'breadcrumb.kits': string
   'breadcrumb.sensations': string
+
+  // ─── Etapa 4: conformidade, consentimento e compras ─────────────────
+  'footer.cookies': string
+  'consent.title': string
+  'consent.body': string
+  'consent.accept': string
+  'consent.reject': string
+  'consent.more': string
+  'compliance.draftNotice': string
+  'compliance.sectionsTitle': string
+  'compliance.backToShop': string
+  'product.buyNow': string
+  'product.deliveryEstimate': string
+  'product.demoDisclaimer': string
+  'product.savePercent': string
 }

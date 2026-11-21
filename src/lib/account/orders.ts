@@ -50,8 +50,7 @@ export interface CustomerOrder {
 const STATUS_ORDER =
   'demo_pending_pix,demo_pending_card,demo_confirmed,paid,shipped,delivered,canceled'
 
-const FULFILLMENT_STATUS =
-  'awaiting_supplier,supplier_confirmed,processing,shipped,delivered'
+const FULFILLMENT_STATUS = 'awaiting_supplier,supplier_confirmed,processing,shipped,delivered'
 
 export async function listMyOrders(): Promise<CustomerOrder[]> {
   if (!pb.authStore.isValid) return []
@@ -78,7 +77,7 @@ export async function listAllOrders(): Promise<CustomerOrder[]> {
   return recs.map(mapOrder)
 }
 
-export async function updateOrderStatus(id: string, status: string, trackingCode: string) {
+export async function updateOrderStatus(id: string, status: string, trackingCode?: string) {
   await pb.collection('orders').update(id, {
     status,
     ...(trackingCode !== undefined ? { trackingCode } : {}),

@@ -9,10 +9,11 @@ import {
   SupplierShipment,
   FULFILLMENT_STATUS,
   orderStatusLabel,
-  fulfillmentStatusLabel,
+  orderSummaryLine,
   STATUS_ORDER,
 } from '@/lib/account/orders'
-import { listAdminProducts } from '@/lib/admin/service'
+import pb from '@/lib/pocketbase/client'
+import { listAdminCatalogProducts } from '@/lib/admin/catalogAdmin'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 import { formatPrice } from '@/data/repository'
 import { Label } from '@/components/ui/label'
@@ -76,7 +77,7 @@ export default function AdminOrdersTab() {
               locale === 'pt-br' ? 'pt-BR' : locale === 'es' ? 'es-ES' : 'en-GB',
             )}
             {' · '}
-            {orderSummaryCount(order)}
+            {orderSummaryLine(order, locale)}
           </p>
           {order.addressSummary && (
             <p className="mt-1 text-xs text-muted-foreground">{order.addressSummary}</p>
@@ -123,16 +124,28 @@ function OrderFulfillment({
   const { locale } = useLocale()
   const t = (key: string, vars?: Record<string, string>) => shopT(locale, key, vars)
   const [suppliers, setSuppliers] = useState<Record<string, string> | null>(null)
+  const [supplierNames, setSupplierNames] = useState<Record<string, string>>({})
   const [busy, setBusy] = useState(false)
 
   useEffect(() => {
     let alive = true
-    listAdminProducts()
-      .then((products) => {
+    // productId -> supplierId (relação da coleção products), depois
+    // supplierId -> nome de exibição (tradeName || legalName || slug).
+    listAdminCatalogProducts()
+      .then(async (products) => {
         if (!alive) return
         const map: Record<string, string> = {}
-        for (const p of products) map[p.id] = p.supplier ?? ''
+        for (const p of products) map[p.id] = p.supplierId ?? ''
         setSuppliers(map)
+        const supplierIds = [...new Set(Object.values(map).filter((s) => s !== ''))]
+        if (!supplierIds.length) return
+        const recs = await pb.collection('suppliers').getFullList()
+        if (!alive) return
+        const names: Record<string, string> = {}
+        for (const s of recs) {
+          names[s.id] = s.tradeName || s.legalName || s.slug || s.id
+        }
+        setSupplierNames(names)
       })
       .catch((err) => onError(getErrorMessage(err)))
     return () => {
@@ -148,7 +161,6 @@ function OrderFulfillment({
     group.lines.push(item)
     groups.set(supplierId, group)
   }
-
   async function saveShipment(supplierId: string, shipment: SupplierShipment) {
     setBusy(true)
     onError(null)
@@ -176,7 +188,7 @@ function OrderFulfillment({
             <SupplierGroup
               key={supplierId || 'none'}
               supplierId={supplierId}
-              supplierName={suppliers[supplierId] ?? ''}
+              supplierName={supplierNames[supplierId] ?? ''}
               lines={group.lines}
               shipment={order.supplierShipments.find((s) => s.supplierId === supplierId) ?? null}
               busy={busy}
@@ -208,13 +220,16 @@ function SupplierGroup({
   const t = (key: string, vars?: Record<string, string>) => shopT(locale, key, vars)
   const [status, setStatus] = useState(shipment?.status ?? 'awaiting_supplier')
   const [tracking, setTracking] = useState(shipment?.trackingCode ?? '')
+  // Re-sincroniza os campos quando o pedido é recarregado após salvar.
+  useEffect(() => {
+    setStatus(shipment?.status ?? 'awaiting_supplier')
+    setTracking(shipment?.trackingCode ?? '')
+  }, [shipment?.status, shipment?.trackingCode])
 
   return (
     <div className="rounded-md border border-border/60 bg-card p-3">
       <p className="text-xs font-medium text-foreground">
-        {supplierId
-          ? supplierName || supplierId
-          : t('admin.fulfillment.noSupplier')}
+        {supplierId ? supplierName || supplierId : t('admin.fulfillment.noSupplier')}
       </p>
       <ul className="mt-2 space-y-1">
         {lines.map((line, idx) => (
@@ -225,9 +240,11 @@ function SupplierGroup({
           </li>
         ))}
       </ul>
-      {lines.every((_, i) => i >= 0) && null}
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <Label htmlFor={`fs-${order_shipment_key(supplierId)}`} className="text-xs text-muted-foreground">
+        <Label
+          htmlFor={`fs-${order_shipment_key(supplierId)}`}
+          className="text-xs text-muted-foreground"
+        >
           {t('admin.fulfillment.status')}
         </Label>
         <select
@@ -238,7 +255,7 @@ function SupplierGroup({
         >
           {FULFILLMENT_STATUS.split(',').map((s) => (
             <option key={s} value={s}>
-              {fulfillmentStatusLabel(locale, s)}
+              {t(`admin.fulfillment.${s}`)}
             </option>
           ))}
         </select>

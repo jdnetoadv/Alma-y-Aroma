@@ -144,4 +144,97 @@ export interface TranslationDictionary {
   'notfound.title': string
   'notfound.message': string
   'notfound.backHome': string
+
+  // ─── Etapa 2: Catálogo ───────────────────────────────────────────────
+  // Shop
+  'shop.title': string
+  'shop.subtitle': string
+  'shop.heroBadge': string
+  'shop.count': string
+  'shop.filters': string
+  'shop.filtersOpen': string
+  'shop.filtersClose': string
+  'shop.clearFilters': string
+  'shop.filterCategory': string
+  'shop.filterType': string
+  'shop.filterScent': string
+  'shop.filterPrice': string
+  'shop.filterPurpose': string
+  'shop.sortLabel': string
+  'shop.sort.name': string
+  'shop.sort.priceAsc': string
+  'shop.sort.priceDesc': string
+  'shop.sort.newest': string
+  'shop.sort.featured': string
+  'shop.priceRange.all': string
+  'shop.priceRange.under50': string
+  'shop.priceRange.50to100': string
+  'shop.priceRange.100to150': string
+  'shop.priceRange.over150': string
+  'shop.emptyTitle': string
+  'shop.emptyMessage': string
+  'shop.allCategories': string
+
+  // Product card & listing
+  'product.viewDetails': string
+  'product.addToCart': string
+  'product.cartSoon': string
+  'product.demoBadge': string
+  'product.related': string
+  'product.relatedKits': string
+  'product.quantity': string
+  'product.variations': string
+  'product.availability': string
+  'product.availableDemo': string
+  'product.shippingInfo': string
+  'product.technicalInfo': string
+  'product.technical.demoNote': string
+  'product.tech.brand': string
+  'product.tech.composition': string
+  'product.tech.weight': string
+  'product.tech.dimensions': string
+  'product.tech.contents': string
+  'product.tech.origin': string
+  'product.tech.usage': string
+  'product.tech.care': string
+  'product.tech.sku': string
+  'product.backToCategory': string
+  'product.backToShop': string
+  'product.detailTitle': string
+
+  // Categories
+  'category.heroBadge': string
+  'category.productsCount': string
+  'category.exploreAll': string
+
+  // Sensações
+  'sensation.title': string
+  'sensation.subtitle': string
+  'sensation.relax': string
+  'sensation.meditate': string
+  'sensation.renew': string
+  'sensation.acolher': string
+  'sensation.presentear': string
+  'sensation.relax.desc': string
+  'sensation.meditate.desc': string
+  'sensation.renew.desc': string
+  'sensation.acolher.desc': string
+  'sensation.presentear.desc': string
+  'sensation.backToSensations': string
+
+  // Kits pages
+  'kits.title': string
+  'kits.subtitle': string
+  'kits.experienceTitle': string
+  'kits.compositionTitle': string
+  'kits.compositionNote': string
+  'kits.priceNote': string
+  'kits.viewKit': string
+  'kits.backToKits': string
+
+  // Breadcrumb
+  'breadcrumb.home': string
+  'breadcrumb.shop': string
+  'breadcrumb.kits': string
+  'breadcrumb.sensations': string
 }

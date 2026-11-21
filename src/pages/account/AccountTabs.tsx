@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Heart, MapPin, Package, User as UserIcon } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
+import type { Locale } from '@/i18n/types'
 import { shopT } from '@/i18n/shopStrings'
 import { useAuth } from '@/lib/auth/AuthContext'
 import { useFavorites } from '@/lib/favorites/useFavorites'
@@ -19,7 +20,13 @@ import {
   setDefaultAddress,
   NewAddress,
 } from '@/lib/account/addresses'
-import { fetchProfile, saveProfile, changeOwnPassword, ProfileData } from '@/lib/account/profile'
+import {
+  fetchProfile,
+  saveProfile,
+  updateAccount,
+  changeOwnPassword,
+  ProfileData,
+} from '@/lib/account/profile'
 import { catalogRepository, formatPrice } from '@/data/repository'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 import { Button } from '@/components/ui/button'
@@ -77,7 +84,7 @@ export default function AccountTabs() {
 
 /* ------------------------------- Pedidos ------------------------------- */
 
-function OrdersTab({ locale }: { locale: string }) {
+function OrdersTab({ locale }: { locale: Locale }) {
   const t = (key: string, vars?: Record<string, string>) => shopT(locale, key, vars)
   const [orders, setOrders] = useState<CustomerOrder[] | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -110,7 +117,7 @@ function OrdersTab({ locale }: { locale: string }) {
                   : 'border-primary/40 text-primary',
               )}
             >
-              {orderStatusLabel(locale as 'pt-br' | 'es' | 'en-gb', order.status)}
+              {orderStatusLabel(locale, order.status)}
             </span>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -118,10 +125,10 @@ function OrdersTab({ locale }: { locale: string }) {
               locale === 'pt-br' ? 'pt-BR' : locale === 'es' ? 'es-ES' : 'en-GB',
             )}
             {' · '}
-            {orderSummaryLine(order, locale as 'pt-br' | 'es' | 'en-gb')}
+            {orderSummaryLine(order, locale)}
           </p>
           <p className="mt-2 text-sm font-medium text-foreground">
-            {formatPrice(order.total, locale as 'pt-br' | 'es' | 'en-gb')}
+            {formatPrice(order.total, locale)}
           </p>
         </li>
       ))}
@@ -132,6 +139,7 @@ function OrdersTab({ locale }: { locale: string }) {
 /* ------------------------------ Endereços ------------------------------ */
 
 const EMPTY_ADDRESS: NewAddress = {
+  isDefault: false,
   label: '',
   postcode: '',
   street: '',
@@ -164,7 +172,7 @@ function AddressesTab() {
     reload()
   }, [])
 
-  async function run(action: () => Promise<void>) {
+  async function run(action: () => Promise<unknown>) {
     setBusy(true)
     setError(null)
     try {
@@ -276,7 +284,7 @@ function AddressesTab() {
                 </Label>
                 <Input
                   id={`addr-${key}`}
-                  value={draft[key] ?? ''}
+                  value={String(draft[key] ?? '')}
                   onChange={(e) => setDraft({ ...draft, [key]: e.target.value })}
                   className="bg-background"
                 />
@@ -355,7 +363,7 @@ function ProfileTab() {
 
   useEffect(() => {
     if (!user) return
-    fetchProfile(user.id)
+    fetchProfile()
       .then((p) => {
         setProfile(p)
         setName(user.name || '')
@@ -372,7 +380,12 @@ function ProfileTab() {
     setBusy(true)
     setStatus(null)
     try {
-      await saveProfile(user!.id, { name, phone })
+      await updateAccount(name)
+      await saveProfile({
+        phone,
+        cpf: profile?.cpf ?? '',
+        marketingOptIn: profile?.marketingOptIn ?? false,
+      })
       setStatus({ kind: 'ok', text: t('account.saved') })
     } catch (err) {
       setStatus({ kind: 'err', text: getErrorMessage(err) })

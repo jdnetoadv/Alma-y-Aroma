@@ -14,6 +14,8 @@ import KitDetailPage from './pages/KitDetailPage'
 import SensationPage from './pages/SensationPage'
 import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
+import AccountPage from './pages/AccountPage'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import NotFound from './pages/NotFound'
 import { RootRedirect } from './components/routing/RootRedirect'
 
@@ -56,6 +58,10 @@ const App = () => (
               {/* ─── Etapa 3: carrinho e checkout (sem pagamento real) ─── */}
               <Route path={localePath('/carrinho')} element={<CartPage />} />
               <Route path={localePath('/checkout')} element={<CheckoutPage />} />
+
+              {/* ─── Etapa 4: conta do cliente e painel admin ─── */}
+              <Route path={localePath('/conta')} element={<AccountPage />} />
+              <Route path={localePath('/admin')} element={<AdminDashboard />} />
             </Route>
 
             {/* Contemplative 404 Catch-All */}

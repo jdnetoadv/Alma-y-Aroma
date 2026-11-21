@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Plus, Minus, ShoppingCart, Truck, ChevronRight, X } from 'lucide-react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft, Plus, Minus, ShoppingCart, Truck, ChevronRight, Heart, X } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { CatalogProduct } from '@/data/types'
 import { catalogRepository, formatPrice } from '@/data/repository'
@@ -10,13 +10,29 @@ import { cartStore } from '@/lib/cart/cartStore'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/hooks/use-toast'
 import { shopT } from '@/i18n/shopStrings'
+import { useFavorites } from '@/lib/favorites/useFavorites'
+import pb from '@/lib/pocketbase/client'
 import { cn } from '@/lib/utils'
 
 export default function ProductPage() {
   const { slug } = useParams()
   const { t, locale } = useLocale()
+  const navigate = useNavigate()
   const localePrefix = `/${locale}`
+  const { isFavorite, toggle } = useFavorites()
   const product = slug ? catalogRepository.getProductBySlug(slug) : undefined
+  const fav = product ? isFavorite(product.slug) : false
+
+  const handleFavorite = () => {
+    if (!product) return
+    if (!pb.authStore.isValid) {
+      navigate(`${localePrefix}/conta`)
+      return
+    }
+    toggle(product.slug).then((added) => {
+      toast({ title: shopT(locale, added ? 'fav.added' : 'fav.removed') })
+    })
+  }
 
   const [activeImage, setActiveImage] = useState(0)
   const [zoomed, setZoomed] = useState(false)
@@ -132,8 +148,23 @@ export default function ProductPage() {
             <p className="text-xs uppercase tracking-[0.25em] text-primary/80">
               {category?.title[locale] ?? product.category}
             </p>
-            <h1 className="mt-2 font-serif text-4xl leading-tight text-foreground sm:text-5xl">
-              {name}
+            <h1 className="mt-2 flex flex-wrap items-center gap-3 font-serif text-4xl leading-tight text-foreground sm:text-5xl">
+              <span>{name}</span>
+              <button
+                type="button"
+                onClick={handleFavorite}
+                aria-label={shopT(locale, fav ? 'fav.remove' : 'fav.add')}
+                aria-pressed={fav}
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/60 bg-background/70 transition-colors hover:border-primary/50"
+              >
+                <Heart
+                  className={cn(
+                    'h-4 w-4 transition-colors',
+                    fav ? 'fill-primary text-primary' : 'text-muted-foreground',
+                  )}
+                  aria-hidden
+                />
+              </button>
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               {product.shortDescription[locale]}

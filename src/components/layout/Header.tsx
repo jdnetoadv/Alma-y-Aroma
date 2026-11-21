@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X, Search } from 'lucide-react'
 import { Logo } from '@/components/common/Logo'
 import { LanguageSelector } from '@/components/common/LanguageSelector'
-import { SearchModal, CartButton } from '@/components/common/HeaderWidgets'
+import { SearchModal, CartButton, AccountButton } from '@/components/common/HeaderWidgets'
 import { AudioControl } from '@/components/audio/AudioComponents'
 import { useLocale } from '@/i18n/LocaleContext'
 
@@ -149,13 +149,16 @@ export function Header() {
               <Search className="w-4 h-4" />
             </button>
 
-            {/* 2. Cart (Em breve) */}
+            {/* 2. Cart */}
             <CartButton />
 
-            {/* 3. Music Control */}
+            {/* 3. Account (desktop e mobile) */}
+            <AccountButton />
+
+            {/* 4. Music Control */}
             <AudioControl />
 
-            {/* 4. Language Selector — MUST BE LAST AND IN TOP RIGHT CORNER */}
+            {/* 5. Language Selector — MUST BE LAST AND IN TOP RIGHT CORNER */}
             <LanguageSelector variant={isScrolled ? 'dark' : 'light'} align="right" />
           </div>
         </div>

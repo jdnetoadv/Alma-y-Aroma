@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Search, ShoppingBag, X, ArrowUpRight, ArrowRight } from 'lucide-react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { LogOut, Search, ShoppingBag, User, X, ArrowUpRight, ArrowRight } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { searchCatalog } from '@/data/repository'
 import { formatPrice } from '@/data/repository'
 import { useCartStore } from '@/lib/cart/useCartStore'
+import { useAuth } from '@/lib/auth/AuthContext'
 import { shopT } from '@/i18n/shopStrings'
 import {
   Dialog,
@@ -176,5 +177,80 @@ export function CartButton() {
         </span>
       )}
     </Link>
+  )
+}
+
+/**
+ * Ícone de conta — Etapa 4: quando deslogado, link direto para
+ * /{locale}/conta; quando logado, abre um dropdown discreto com
+ * "Minha conta" e "Sair" (sessão em pb.authStore via useAuth).
+ */
+export function AccountButton() {
+  const { locale } = useLocale()
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (e: PointerEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  const accountLabel = shopT(locale, 'account.account')
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <button
+        type="button"
+        aria-label={accountLabel}
+        aria-haspopup={user ? 'menu' : undefined}
+        aria-expanded={user ? open : undefined}
+        onClick={() => (user ? setOpen((v) => !v) : navigate(`/${locale}/conta`))}
+        className="inline-flex items-center p-2 rounded-full text-espresso/80 hover:text-saffron hover:bg-clay/30 transition-colors focus:outline-none focus:ring-2 focus:ring-saffron/60"
+      >
+        <User className="w-4 h-4" aria-hidden />
+      </button>
+
+      {user && open && (
+        <div
+          role="menu"
+          className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-md border border-clay/60 bg-cream shadow-md"
+        >
+          <Link
+            to={`/${locale}/conta`}
+            role="menuitem"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 px-3 py-2.5 text-xs font-sans text-espresso transition-colors hover:bg-clay/20 hover:text-saffron"
+          >
+            <User className="h-3.5 w-3.5" aria-hidden />
+            {accountLabel}
+          </Link>
+          <button
+            type="button"
+            role="menuitem"
+            onClick={() => {
+              setOpen(false)
+              logout()
+            }}
+            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-xs font-sans text-espresso transition-colors hover:bg-clay/20 hover:text-destructive"
+          >
+            <LogOut className="h-3.5 w-3.5" aria-hidden />
+            {shopT(locale, 'account.logout')}
+          </button>
+        </div>
+      )}
+    </div>
   )
 }

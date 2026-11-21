@@ -1,11 +1,13 @@
-import { Link } from 'react-router-dom'
-import { ShoppingCart } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Heart, ShoppingCart } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { CatalogProduct } from '@/data/types'
 import { formatPrice } from '@/data/repository'
 import { cartStore } from '@/lib/cart/cartStore'
 import { toast } from '@/hooks/use-toast'
 import { shopT } from '@/i18n/shopStrings'
+import { useFavorites } from '@/lib/favorites/useFavorites'
+import pb from '@/lib/pocketbase/client'
 import { cn } from '@/lib/utils'
 
 interface ProductCardProps {
@@ -21,6 +23,19 @@ interface ProductCardProps {
  */
 export function ProductCard({ product, localePrefix, badge, className }: ProductCardProps) {
   const { t, locale } = useLocale()
+  const navigate = useNavigate()
+  const { isFavorite, toggle } = useFavorites()
+  const fav = isFavorite(product.slug)
+
+  const handleFavorite = () => {
+    if (!pb.authStore.isValid) {
+      navigate(`${localePrefix}/conta`)
+      return
+    }
+    toggle(product.slug).then((added) => {
+      toast({ title: shopT(locale, added ? 'fav.added' : 'fav.removed') })
+    })
+  }
 
   return (
     <article
@@ -48,6 +63,25 @@ export function ProductCard({ product, localePrefix, badge, className }: Product
             {badge}
           </span>
         )}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleFavorite()
+          }}
+          aria-label={shopT(locale, fav ? 'fav.remove' : 'fav.add')}
+          aria-pressed={fav}
+          className="absolute right-3 bottom-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/85 backdrop-blur transition-colors hover:bg-background"
+        >
+          <Heart
+            className={cn(
+              'h-4 w-4 transition-colors',
+              fav ? 'fill-primary text-primary' : 'text-muted-foreground',
+            )}
+            aria-hidden
+          />
+        </button>
         {product.isNew && (
           <span className="absolute bottom-3 left-3 rounded-full bg-accent px-2.5 py-1 text-[11px] font-medium uppercase tracking-wider text-accent-foreground">
             {t('shop.sort.newest')}

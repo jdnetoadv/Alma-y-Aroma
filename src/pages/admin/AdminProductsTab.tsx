@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocale } from '@/i18n/LocaleContext'
+import { Locale } from '@/i18n/types'
+import { ProductCategory } from '@/data/types'
 import { shopT } from '@/i18n/shopStrings'
 import { listAdminProducts, updateProduct, createProduct, AdminProduct } from '@/lib/admin/service'
 import { listAdminCategories, AdminCategory } from '@/lib/admin/service'
@@ -115,10 +117,10 @@ function ProductRow({
   categories: AdminCategory[]
   busy: boolean
   onPatch: (v: Partial<AdminProduct>) => void
-  locale: string
+  locale: Locale
 }) {
   const t = (key: string) => shopT(locale, key)
-  const cat = catalogRepository.getCategory(product.categoryId)
+  const cat = catalogRepository.getCategory(product.categoryId as ProductCategory)
   const catTitle = cat?.title[locale] ?? cat?.title['pt-br'] ?? product.categoryId
 
   return (

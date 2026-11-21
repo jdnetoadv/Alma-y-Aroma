@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { locale } = useLocale()
 
   useEffect(() => {
-    pb.authStore.onChange(() => {
+    const unsubscribe = pb.authStore.onChange(() => {
       const model = pb.authStore.record
       setUser(
         model
@@ -32,6 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       )
     }, true)
     setReady(true)
+    return unsubscribe
   }, [])
 
   const login = async (email: string, password: string) => {

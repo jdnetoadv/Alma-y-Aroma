@@ -57,6 +57,10 @@ export interface CatalogProduct {
   longDescription: LocalizedText
   /** Preço ilustrativo em reais — produto demonstrativo, não comercial */
   illustrativePrice: number
+  /** Preço vigente (o "preço novo"). No fallback local equivale a illustrativePrice. */
+  price?: number
+  /** Preço antigo riscado, exibido quando maior que `price` (promoção). */
+  compareAtPrice?: number
   currency: 'BRL'
   images: string[]
   variations: ProductVariation[]

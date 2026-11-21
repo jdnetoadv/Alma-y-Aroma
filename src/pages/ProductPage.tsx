@@ -179,10 +179,12 @@ export default function ProductPage() {
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               {product.shortDescription[locale]}
             </p>
-            {product.compareAtPrice && product.compareAtPrice > product.price ? (
+            {product.price != null &&
+            product.compareAtPrice != null &&
+            product.compareAtPrice > product.price ? (
               <p className="mt-6 flex flex-wrap items-baseline gap-3">
                 <span className="text-2xl font-medium text-foreground">
-                  {formatPrice(product.price, locale)}
+                  {formatPrice(product.price ?? product.illustrativePrice, locale)}
                 </span>
                 <span className="text-base text-muted-foreground line-through">
                   {formatPrice(product.compareAtPrice, locale)}
@@ -199,7 +201,7 @@ export default function ProductPage() {
               </p>
             ) : (
               <p className="mt-6 text-2xl font-medium text-foreground">
-                {formatPrice(product.price, locale)}
+                {formatPrice(product.price ?? product.illustrativePrice, locale)}
               </p>
             )}
 

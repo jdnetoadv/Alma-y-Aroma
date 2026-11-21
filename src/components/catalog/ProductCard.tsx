@@ -104,10 +104,12 @@ export function ProductCard({ product, localePrefix, badge, className }: Product
         <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
           {product.shortDescription[locale]}
         </p>
-        {product.compareAtPrice && product.compareAtPrice > product.price ? (
+        {product.price != null &&
+        product.compareAtPrice != null &&
+        product.compareAtPrice > product.price ? (
           <p className="mt-3 flex flex-wrap items-baseline gap-2">
             <span className="text-base font-medium text-foreground">
-              {formatPrice(product.price, locale)}
+              {formatPrice(product.price ?? product.illustrativePrice, locale)}
             </span>
             <span className="text-sm text-muted-foreground line-through">
               {formatPrice(product.compareAtPrice, locale)}
@@ -124,7 +126,7 @@ export function ProductCard({ product, localePrefix, badge, className }: Product
           </p>
         ) : (
           <p className="mt-3 text-base font-medium text-foreground">
-            {formatPrice(product.price, locale)}
+            {formatPrice(product.price ?? product.illustrativePrice, locale)}
           </p>
         )}
 

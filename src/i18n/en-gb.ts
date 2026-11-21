@@ -11,6 +11,7 @@ export const enGB: TranslationDictionary = {
   'menu.essence': 'Our Essence',
 
   // Hero
+  'hero.slogan': 'Essences that awaken the senses.',
   'hero.title': 'Turn moments into rituals of peace.',
   'hero.subtitle': 'Aromas, essences and small rituals to reconnect you with what truly matters.',
   'hero.cta': 'Explore the collection',

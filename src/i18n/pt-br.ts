@@ -11,6 +11,7 @@ export const ptBR: TranslationDictionary = {
   'menu.essence': 'Nossa Essência',
 
   // Hero
+  'hero.slogan': 'Essências que despertam sentidos.',
   'hero.title': 'Transforme momentos em rituais de paz.',
   'hero.subtitle':
     'Aromas, essências e pequenos rituais para reconectar você ao que realmente importa.',

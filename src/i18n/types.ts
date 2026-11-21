@@ -41,6 +41,7 @@ export interface TranslationDictionary {
   'menu.essence': string
 
   // Hero
+  'hero.slogan': string
   'hero.title': string
   'hero.subtitle': string
   'hero.cta': string

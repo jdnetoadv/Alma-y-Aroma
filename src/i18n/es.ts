@@ -11,6 +11,7 @@ export const es: TranslationDictionary = {
   'menu.essence': 'Nuestra Esencia',
 
   // Hero
+  'hero.slogan': 'Esencias que despiertan los sentidos.',
   'hero.title': 'Transforma los momentos en rituales de paz.',
   'hero.subtitle':
     'Aromas, esencias y pequeños rituales para reconectarte con lo que realmente importa.',

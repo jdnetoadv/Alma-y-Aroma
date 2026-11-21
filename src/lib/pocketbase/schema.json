@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T19:43:21.509Z",
+  "generatedAt": "2026-11-21T20:18:26.083Z",
   "collections": [
     {
       "name": "users",
@@ -266,6 +266,36 @@
         {
           "name": "active",
           "type": "bool",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "weightGrams",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "lengthCm",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "widthCm",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "heightCm",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "pricesByCurrency",
+          "type": "json",
           "required": false,
           "system": false
         }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T20:29:52.380Z",
+  "generatedAt": "2026-11-21T21:06:12.070Z",
   "collections": [
     {
       "name": "users",
@@ -143,7 +143,7 @@
       "apiRules": {
         "list": "active = true || @collection.admins.user ?= @request.auth.id",
         "view": "active = true || @collection.admins.user ?= @request.auth.id",
-        "create": "",
+        "create": "@collection.admins.user ?= @request.auth.id",
         "update": "@collection.admins.user ?= @request.auth.id",
         "delete": "@collection.admins.user ?= @request.auth.id"
       },
@@ -298,6 +298,113 @@
           "type": "json",
           "required": false,
           "system": false
+        },
+        {
+          "name": "thematicCollections",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "collections"
+        },
+        {
+          "name": "videos",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "costPrice",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "supplierFreight",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "estimatedTaxes",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "variableCosts",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "paymentFeesPct",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "commissionPct",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "targetMarginPct",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "supplier",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "suppliers"
+        },
+        {
+          "name": "countryOrigin",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "supplierAvailability",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["available", "low_stock", "backorder", "unavailable"]
+        },
+        {
+          "name": "processingDays",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "deliveryDays",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "enabledCountries",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["BR", "ES", "EU", "GB"]
+        },
+        {
+          "name": "regulatoryNotes",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "publishStatus",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["draft", "published", "archived"]
         }
       ],
       "indexes": ["CREATE UNIQUE INDEX idx_products_slug ON products (slug)"]
@@ -459,6 +566,25 @@
         },
         {
           "name": "items",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "fulfillmentStatus",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": [
+            "awaiting_supplier",
+            "supplier_confirmed",
+            "processing",
+            "shipped",
+            "delivered"
+          ]
+        },
+        {
+          "name": "supplierShipments",
           "type": "json",
           "required": false,
           "system": false
@@ -690,6 +816,192 @@
         }
       ],
       "indexes": ["CREATE UNIQUE INDEX idx_admins_user ON admins (user)"]
+    },
+    {
+      "name": "collections",
+      "type": "base",
+      "apiRules": {
+        "list": "active = true",
+        "view": "active = true",
+        "create": "@collection.admins.user ?= @request.auth.id",
+        "update": "@collection.admins.user ?= @request.auth.id",
+        "delete": "@collection.admins.user ?= @request.auth.id"
+      },
+      "fields": [
+        {
+          "name": "slug",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "title",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "description",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "heroImage",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "sortOrder",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "active",
+          "type": "bool",
+          "required": false,
+          "system": false
+        }
+      ],
+      "indexes": ["CREATE UNIQUE INDEX idx_collections_slug ON collections (slug)"]
+    },
+    {
+      "name": "suppliers",
+      "type": "base",
+      "apiRules": {
+        "list": "@collection.admins.user ?= @request.auth.id",
+        "view": "@collection.admins.user ?= @request.auth.id",
+        "create": "@collection.admins.user ?= @request.auth.id",
+        "update": "@collection.admins.user ?= @request.auth.id",
+        "delete": "@collection.admins.user ?= @request.auth.id"
+      },
+      "fields": [
+        {
+          "name": "slug",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "legalName",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "tradeName",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "country",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "region",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "contactName",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "contactEmail",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "contactPhone",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "website",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "categories",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "modality",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": [
+            "national_direct",
+            "international_direct",
+            "wholesale_distributor",
+            "own_brand",
+            "fulfillment_partner"
+          ]
+        },
+        {
+          "name": "commercialTerms",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "processingDays",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "deliveryTerms",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "returnPolicy",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "taxInfo",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "homologationStatus",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["pending", "approved", "blocked"]
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "active",
+          "type": "bool",
+          "required": false,
+          "system": false
+        }
+      ],
+      "indexes": ["CREATE UNIQUE INDEX idx_suppliers_slug ON suppliers (slug)"]
     }
   ]
 }

@@ -29,14 +29,38 @@ const DRONE_LEVEL = 0.045
 const NOTE_LEVEL = 0.16
 const FADE_IN_S = 2.5
 
-export function startTibetanFluteSynth(volume: number): SynthHandle {
+export async function startTibetanFluteSynth(volume: number): Promise<SynthHandle> {
   const AudioCtx: typeof AudioContext =
     window.AudioContext ??
     (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+  if (!AudioCtx) {
+    throw new Error('Web Audio API não suportada neste navegador')
+  }
 
   const ctx = new AudioCtx()
+
+  // Autoplay policy: contextos criados fora de um gesto efetivo (ou em
+  // Safari/iOS, mesmo dentro dele) nascem "suspended" — osciladores rodando
+  // num contexto suspenso produzem silêncio absoluto. Resume() PRECISA
+  // acontecer dentro da cadeia síncrona do clique e o estado é conferido:
+  // ícone "tocando" sem som é o pior cenário possível.
+  const readState = (): AudioContextState => ctx.state
+  if (readState() !== 'running') {
+    try {
+      await ctx.resume()
+    } catch (err) {
+      console.error('[tibetanSynth] ctx.resume() falhou:', err)
+      void ctx.close().catch(() => {})
+      throw new Error('AudioContext não pôde ser retomado (política de autoplay do navegador)')
+    }
+    if (readState() !== 'running') {
+      void ctx.close().catch(() => {})
+      throw new Error(`AudioContext seguiu em "${readState()}" após resume()`)
+    }
+  }
+
   const master = ctx.createGain()
-  master.gain.value = 0
+  master.gain.setValueAtTime(0.0001, ctx.currentTime)
   master.connect(ctx.destination)
   master.gain.linearRampToValueAtTime(volume, ctx.currentTime + FADE_IN_S)
 
@@ -156,6 +180,7 @@ export function startTibetanFluteSynth(volume: number): SynthHandle {
 
   return {
     stop: () => {
+      if (stopped) return
       stopped = true
       for (const id of timers) window.clearTimeout(id)
       try {

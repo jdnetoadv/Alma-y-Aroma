@@ -1,96 +1,89 @@
 import { Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useLocale } from '@/i18n/LocaleContext'
-import { BrandSeal } from '@/components/common/BrandSeal'
+import bannerImg from '@/assets/banner-spa-luxuoso-alma-y-aroma-f5890.png'
 
 export function HeroSection() {
   const { t, locale } = useLocale()
 
-  // Curated imagery: contemplative Buddhist temple gate nestled in the forest —
-  // weathered wood, deep greens, autumn-orange foliage and soft natural light.
-  // Served warm-cacheable from the image CDN, responsive via srcset
-  // (1920w desktop, 960w mobile) to keep the hero fast on every device.
-  const heroImageAlt = ''
-  const heroImageSrc =
-    'https://img.usecurling.com/p/1920/1080?q=temple%20wooden%20gate%20autumn%20forest'
-  const heroImageMobileSrc =
-    'https://img.usecurling.com/p/960/1080?q=temple%20wooden%20gate%20autumn%20forest'
+  // Banner oficial da boutique (fotografia de ambiente quente: difusor, vela,
+  // Buda dourado e lavanda sobre fundo vinho). A arte JÁ contém emblema,
+  // wordmark, slogan e a linha de categorias — o overlay HTML fica reduzido
+  // ao essencial (badge + CTAs discretos) para não duplicar texto.
+  // Desktop usa a arte inteira; no mobile o crop vertical foca o lado direito
+  // (emblema/slogan) via object-position, com overlay reforçado na base.
+  const heroImageAlt =
+    locale === 'pt-br'
+      ? 'Banner Alma y Aroma: difusor de varetas, vela acesa, estátua de Buda dourada e lavanda sobre ambiente vinho, com o emblema dourado da marca e o slogan “Essências que despertam sentidos.”'
+      : locale === 'es'
+        ? 'Banner de Alma y Aroma: difusor de varillas, vela encendida, Buda dorado y lavanda en un ambiente vino, con el emblema dorado de la marca y el eslogan “Essências que despertam sentidos.”'
+        : 'Alma y Aroma banner: reed diffuser, lit candle, golden Buddha statue and lavender in a warm wine setting, with the brand’s golden emblem and the tagline “Essências que despertam sentidos.”'
 
   return (
     <section
       id="hero"
-      aria-label="Apresentação ALMA Y AROMA"
-      className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-wine text-cream"
+      aria-label="ALMA Y AROMA"
+      className="relative flex flex-col overflow-hidden bg-wine-deep text-cream"
     >
-      {/* Background Media with Respiração subtle breathing animation */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Photographic temple-in-the-forest backdrop (static image, no video) */}
-        <div className="absolute inset-0 animate-breath will-change-transform">
-          <img
-            src={heroImageSrc}
-            srcSet={`${heroImageMobileSrc} 960w, ${heroImageSrc} 1920w`}
-            sizes="100vw"
-            alt={heroImageAlt}
-            aria-hidden="true"
-            fetchPriority="high"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </div>
+      {/* Banner fotográfico (16:9 em desktop; crop vertical elegante no mobile,
+          focado no emblema/slogan à direita da arte) */}
+      <div className="relative w-full min-h-[78vh] sm:min-h-[88vh] lg:min-h-screen">
+        <img
+          src={bannerImg}
+          alt={heroImageAlt}
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-[68%_center] sm:object-center animate-breath will-change-transform"
+        />
 
-        {/* Cinematic Scrim: deep wine gradient from top and bottom, plus a soft
-            dark wash, keeps cream text at WCAG AA contrast over the forest tones
-            on every language and on mobile */}
-        <div className="absolute inset-0 bg-gradient-to-t from-wine-deep via-wine-deep/60 to-wine-deep/35" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(59,23,21,0.78)_100%)]" />
+        {/* Overlay vinho sutil: garante contraste dos CTAs sem apagar a arte */}
+        <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/85 via-wine-deep/25 to-wine-deep/40 sm:from-wine-deep/70 sm:via-transparent sm:to-wine-deep/30" />
+
+        {/* CTAs discretos na base do banner (o texto de marca vive na imagem) */}
+        <div className="absolute inset-x-0 bottom-0 z-10 px-6 pb-14 sm:pb-16">
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/40 bg-wine-deep/55 backdrop-blur-sm text-gold-light animate-fade-in">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span className="font-sans text-[11px] uppercase tracking-[0.2em] font-medium">
+                {t('hero.badge')}
+              </span>
+            </div>
+
+            {/* Título acessível (o wordmark/slogan visível vivem na arte) */}
+            <h1 className="sr-only">{t('hero.title')}</h1>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
+              <Link
+                to={`/${locale}/loja`}
+                className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-sm bg-gold hover:bg-gold-hover text-wine-deep font-sans text-xs uppercase tracking-[0.16em] font-semibold transition-all duration-300 shadow-elevation hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-gold-light focus:ring-offset-2 focus:ring-offset-wine-deep"
+              >
+                <span>{t('hero.cta')}</span>
+                <span className="ml-2 w-1.5 h-1.5 rounded-full bg-wine-deep/70 group-hover:scale-125 transition-transform" />
+              </Link>
+              <Link
+                to={`/${locale}/sensacoes`}
+                className="inline-flex items-center justify-center px-8 py-3.5 rounded-sm border border-gold/50 bg-wine-deep/40 backdrop-blur-sm text-cream hover:bg-wine-deep/60 hover:border-gold font-sans text-xs uppercase tracking-[0.16em] font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/60 focus:ring-offset-2 focus:ring-offset-wine-deep"
+              >
+                {t('hero.ctaSecondary')}
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Hero Content Overlay */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 text-center pt-24 sm:pt-28 pb-20">
-        {/* Selo circular da marca (vinho/dourado) — discreto acima do badge */}
-        <div className="mb-8 flex justify-center animate-fade-in">
-          <BrandSeal
-            title="Alma y Aroma"
-            className="h-20 w-20 sm:h-24 sm:w-24 drop-shadow-[0_2px_12px_rgba(59,23,21,0.6)]"
-          />
-        </div>
-
-        {/* Subtle decorative badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/40 bg-wine-deep/50 backdrop-blur-sm text-gold-light mb-8 animate-fade-in">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span className="font-sans text-[11px] uppercase tracking-[0.2em] font-medium">
-            Boutique Virtual de Bem-Estar
+      {/* Faixa inferior vinho: repete a linha de categorias como texto real
+          (traduzida nos 3 idiomas; na imagem ela é parte da arte) */}
+      <div className="relative bg-wine-deep border-t border-gold/25">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:py-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
+          <p className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.22em] text-gold-light">
+            {t('hero.categories')}
+          </p>
+          <span className="hidden sm:inline text-gold/50" aria-hidden>
+            •
+          </span>
+          <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-cream/60">
+            {t('hero.scroll')}
           </span>
         </div>
-
-        {/* Main Hero Title (verbatim) */}
-        <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-tight text-cream leading-[1.12] mb-6 animate-fade-in-up">
-          {t('hero.title')}
-        </h1>
-
-        {/* Subtitle (verbatim) */}
-        <p className="font-sans text-sm sm:text-base md:text-lg text-cream/85 max-w-2xl mx-auto font-light leading-relaxed mb-10 animate-fade-in-up delay-100">
-          {t('hero.subtitle')}
-        </p>
-
-        {/* Primary CTA — abre a loja (catálogo demonstrativo) */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-200">
-          <Link
-            to={`/${locale}/loja`}
-            className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-sm bg-saffron hover:bg-saffron-light text-wine-deep font-sans text-xs uppercase tracking-[0.16em] font-semibold transition-all duration-300 shadow-elevation hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-saffron focus:ring-offset-2 focus:ring-offset-wine-deep"
-          >
-            <span>{t('hero.cta')}</span>
-            <span className="ml-2 w-1.5 h-1.5 rounded-full bg-wine-deep/70 group-hover:scale-125 transition-transform" />
-          </Link>
-        </div>
-      </div>
-
-      {/* Delicate Scroll Down Indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-cream/60 pointer-events-none animate-pulse">
-        <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-cream/50">
-          {t('hero.scroll')}
-        </span>
-        <div className="w-px h-8 bg-gradient-to-b from-gold/60 to-transparent" />
       </div>
     </section>
   )

@@ -16,6 +16,9 @@ export const ptBR: TranslationDictionary = {
     'Aromas, essências e pequenos rituais para reconectar você ao que realmente importa.',
   'hero.cta': 'Explorar coleção',
   'hero.scroll': 'Deslize para contemplar',
+  'hero.badge': 'Nova boutique',
+  'hero.ctaSecondary': 'Descobrir sensações',
+  'hero.categories': 'Aromaterapia | Bem-estar | Casa | Presentes',
 
   // Collections
   'collections.title': 'Nossas Coleções',

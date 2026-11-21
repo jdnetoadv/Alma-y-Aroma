@@ -8,8 +8,8 @@ import heroBanner from '@/assets/difusor-alma-y-aroma-ao-entardecer-e7ed7.png'
  * lavanda e o emblema/wordmark ALMA Y AROMA já gravados na arte) é a camada
  * de fundo, sem desfoque. Os textos são HTML traduzidos (i18n pt-BR / es-ES /
  * en-GB) sobrepostos à imagem; só o texto muda ao trocar de idioma.
- * O enquadramento fica no centro; o conteúdo é ancorado na metade inferior
- * para não cobrir o emblema, que está na parte superior da arte.
+ * A marca (emblema + nome da arte) é centralizada horizontalmente; o conteúdo
+ * é ancorado na base para não cobrir o emblema, que fica na parte superior.
  */
 export function HeroSection() {
   const { t, locale } = useLocale()
@@ -20,12 +20,17 @@ export function HeroSection() {
       aria-label="ALMA Y AROMA"
       className="relative flex flex-col overflow-hidden bg-wine-deep text-cream"
     >
-      {/* Fundo do hero: o banner centralizado; em mobile desloca para a
-          direita da arte para manter difusor, Buda e emblema visíveis. */}
+      {/* Fundo do hero: o emblema/nome da arte fica em ~75% da largura da
+          imagem. A camada é mais larga que a viewport (220%) e deslocada para
+          que esse ponto caia exatamente no centro horizontal da página. */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-cover bg-no-repeat bg-[position:60%_center] sm:bg-center"
-        style={{ backgroundImage: `url(${heroBanner})` }}
+        className="absolute top-0 bottom-0 bg-cover bg-no-repeat bg-center"
+        style={{
+          backgroundImage: `url(${heroBanner})`,
+          left: '-115%',
+          width: '220%',
+        }}
       />
       {/* Escurecimento suave: base e laterais mais fortes para a leitura do
           texto; o centro/topo (emblema) permanece quase intacto. */}

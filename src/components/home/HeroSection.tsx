@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
-import { ChevronDown, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 
 export function HeroSection() {
   const { t } = useLocale()
-  const [videoLoaded, setVideoLoaded] = useState(false)
 
   const handleCtaClick = () => {
     const el = document.getElementById('colecoes')
@@ -13,12 +11,15 @@ export function HeroSection() {
     }
   }
 
-  // Curated imagery: ethereal incense smoke rising against dark organic texture, warm candle glow
-  // Poster: serene high-res contemplative incense & candle still from Unsplash
-  // Looping MP4 ambient video from Pexels (licensed for commercial use, CC0 equivalent)
-  const posterUrl = 'https://img.usecurling.com/p/1920/1080?q=incense%20smoke%20candle&color=black'
-  const videoSrc =
-    'https://assets.mixkit.co/videos/preview/mixkit-smoke-from-an-incense-stick-42672-large.mp4'
+  // Curated imagery: contemplative Buddhist temple gate nestled in the forest —
+  // weathered wood, deep greens, autumn-orange foliage and soft natural light.
+  // Served warm-cacheable from the image CDN, responsive via srcset
+  // (1920w desktop, 960w mobile) to keep the hero fast on every device.
+  const heroImageAlt = ''
+  const heroImageSrc =
+    'https://img.usecurling.com/p/1920/1080?q=temple%20wooden%20gate%20autumn%20forest'
+  const heroImageMobileSrc =
+    'https://img.usecurling.com/p/960/1080?q=temple%20wooden%20gate%20autumn%20forest'
 
   return (
     <section
@@ -28,38 +29,30 @@ export function HeroSection() {
     >
       {/* Background Media with Respiração subtle breathing animation */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Still poster image as instant background */}
-        <div
-          className="absolute inset-0 bg-cover bg-center animate-breath transition-opacity duration-1000"
-          style={{
-            backgroundImage: `url('${posterUrl}')`,
-            opacity: videoLoaded ? 0.35 : 0.85,
-          }}
-        />
+        {/* Photographic temple-in-the-forest backdrop (static image, no video) */}
+        <div className="absolute inset-0 animate-breath will-change-transform">
+          <img
+            src={heroImageSrc}
+            srcSet={`${heroImageMobileSrc} 960w, ${heroImageSrc} 1920w`}
+            sizes="100vw"
+            alt={heroImageAlt}
+            aria-hidden="true"
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
 
-        {/* Ambient video background (subtle smoke loop) */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster={posterUrl}
-          onCanPlayThrough={() => setVideoLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover animate-breath transition-opacity duration-1000 ${
-            videoLoaded ? 'opacity-40' : 'opacity-0'
-          }`}
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
-
-        {/* Cinematic Scrim: Deep wine gradient fading from top and bottom for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-wine-deep via-wine/60 to-wine/40" />
-        <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-wine-deep/70" />
+        {/* Cinematic Scrim: deep wine gradient from top and bottom, plus a soft
+            dark wash, keeps cream text at WCAG AA contrast over the forest tones
+            on every language and on mobile */}
+        <div className="absolute inset-0 bg-gradient-to-t from-wine-deep via-wine-deep/60 to-wine-deep/35" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(59,23,21,0.78)_100%)]" />
       </div>
 
       {/* Hero Content Overlay */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 text-center pt-24 sm:pt-28 pb-20">
-        {/* Subtle decorative smoke wisp badge */}
+        {/* Subtle decorative badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/40 bg-wine-deep/50 backdrop-blur-sm text-gold-light mb-8 animate-fade-in">
           <Sparkles className="w-3.5 h-3.5" />
           <span className="font-sans text-[11px] uppercase tracking-[0.2em] font-medium">

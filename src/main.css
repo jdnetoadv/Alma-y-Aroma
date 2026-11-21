@@ -281,6 +281,17 @@
     animation: breath 20s ease-in-out infinite;
   }
 
+  /* Respeita prefers-reduced-motion: sem animação contínua de fundo */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-breath,
+    .animate-smoke,
+    .animate-candle-glow,
+    .animate-float,
+    .animate-pulse {
+      animation: none;
+    }
+  }
+
   .animate-smoke {
     animation: smoke-drift 6s ease-in-out infinite;
   }

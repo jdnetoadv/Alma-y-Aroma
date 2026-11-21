@@ -1,6 +1,7 @@
 import { Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useLocale } from '@/i18n/LocaleContext'
+import { BrandSeal } from '@/components/common/BrandSeal'
 
 export function HeroSection() {
   const { t, locale } = useLocale()
@@ -46,6 +47,14 @@ export function HeroSection() {
 
       {/* Hero Content Overlay */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 text-center pt-24 sm:pt-28 pb-20">
+        {/* Selo circular da marca (vinho/dourado) — discreto acima do badge */}
+        <div className="mb-8 flex justify-center animate-fade-in">
+          <BrandSeal
+            title="Alma y Aroma"
+            className="h-20 w-20 sm:h-24 sm:w-24 drop-shadow-[0_2px_12px_rgba(59,23,21,0.6)]"
+          />
+        </div>
+
         {/* Subtle decorative badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/40 bg-wine-deep/50 backdrop-blur-sm text-gold-light mb-8 animate-fade-in">
           <Sparkles className="w-3.5 h-3.5" />

@@ -7,6 +7,7 @@ import { getErrorMessage } from '@/lib/pocketbase/errors'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { BrandSeal } from '@/components/common/BrandSeal'
 
 /**
  * Formulários de acesso da área do cliente — Etapa 4. Login, cadastro
@@ -66,6 +67,8 @@ export default function AccountAuthForms() {
   if (user) {
     return (
       <div className="rounded-lg border border-border/60 bg-card p-8 text-center">
+        {/* Selo circular da marca (vinho/dourado), discreto */}
+        <BrandSeal title="Alma y Aroma" className="mx-auto mb-5 h-16 w-16 opacity-90" />
         <p className="font-serif text-2xl text-foreground">
           {t('account.welcome', { name: user.name || user.email })}
         </p>
@@ -85,6 +88,8 @@ export default function AccountAuthForms() {
 
   return (
     <div className="mx-auto max-w-md rounded-lg border border-border/60 bg-card p-8">
+      {/* Selo circular da marca (vinho/dourado), discreto */}
+      <BrandSeal title="Alma y Aroma" className="mb-6 h-16 w-16 opacity-90" />
       <h2 className="font-serif text-2xl text-foreground">
         {mode === 'signup'
           ? t('account.signup')

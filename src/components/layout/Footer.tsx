@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Instagram, MessageCircle, Mail, CheckCircle2, AlertCircle, ArrowUp } from 'lucide-react'
 import { Logo } from '@/components/common/Logo'
+import { BrandSeal } from '@/components/common/BrandSeal'
 import { LanguageSelector } from '@/components/common/LanguageSelector'
 import { useLocale } from '@/i18n/LocaleContext'
 import { siteConfig } from '@/config/site'
@@ -81,7 +82,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-cream/10">
           {/* Col 1: Brand & Manifesto (5 cols) */}
           <div className="lg:col-span-5 space-y-5">
-            <Logo variant="light" showTagline />
+            <div className="flex items-center gap-4">
+              <BrandSeal title="Alma y Aroma" className="h-16 w-16 flex-shrink-0" />
+              <Logo variant="light" showTagline />
+            </div>
             <p className="font-sans text-xs text-cream/70 leading-relaxed max-w-sm pt-2">
               {t('essence.p2')}
             </p>

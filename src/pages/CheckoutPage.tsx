@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { MapPin, Truck, CreditCard, Check, ShieldCheck } from 'lucide-react'
+import { MapPin, Truck, CreditCard, ShieldCheck } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { shopT } from '@/i18n/shopStrings'
 import { useCartStore } from '@/lib/cart/useCartStore'
@@ -14,6 +14,7 @@ import {
 } from '@/lib/shipping'
 import { formatPrice } from '@/data/repository'
 import { CatalogBreadcrumb } from '@/components/catalog/CatalogShared'
+import { BrandSeal } from '@/components/common/BrandSeal'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -144,9 +145,11 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen">
         <div className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/15">
-            <Check className="h-8 w-8 text-primary" aria-hidden />
-          </span>
+          {/* Selo circular da marca (vinho/dourado) como marcação de sucesso */}
+          <BrandSeal
+            title="Alma y Aroma"
+            className="mx-auto h-24 w-24 drop-shadow-[0_2px_12px_rgba(59,23,21,0.35)]"
+          />
           <h1 className="mt-6 font-serif text-4xl text-foreground">{t('order.successTitle')}</h1>
           <p className="mt-3 text-muted-foreground">{t('order.successSubtitle')}</p>
 

@@ -8,6 +8,11 @@ interface LogoProps {
   showTagline?: boolean
 }
 
+/**
+ * Logomarca ALMA Y AROMA (imagem 3 do plano de branding) — emblema dourado de
+ * chama/folha dentro de círculo + tipografia serifada em tom vinho. Renderizada
+ * como SVG inline com fundo transparente, legível sobre marfim e sobre escuro.
+ */
 export function Logo({ variant = 'dark', className = '', showTagline = false }: LogoProps) {
   const { locale, t } = useLocale()
   const isLight = variant === 'light'
@@ -23,44 +28,54 @@ export function Logo({ variant = 'dark', className = '', showTagline = false }: 
         }
       }}
       className={`group flex items-center gap-3 select-none outline-none ${className}`}
-      aria-label="ALMA Y AROMA — Página Inicial"
+      aria-label="Alma y Aroma"
     >
-      {/* Símbolo sutil de fumaça / luz com transição e drift suave no hover */}
+      {/* Emblema dourado de chama/folha dentro de círculo (da logomarca entregue) */}
       <div className="relative w-7 h-9 flex items-center justify-center flex-shrink-0">
         <svg
           viewBox="0 0 32 40"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full text-gold transform transition-transform duration-700 ease-out group-hover:-translate-y-1"
+          className="w-full h-full transform transition-transform duration-700 ease-out group-hover:-translate-y-1"
           aria-hidden="true"
         >
-          {/* Base candle / incense glow base */}
-          <circle cx="16" cy="35" r="1.5" fill="currentColor" opacity="0.8" />
-
-          {/* Main smoke wisp ascending */}
-          <path
-            d="M16 33C16 33 13 27 14 21C15 15 20 13 18 7C17 4.5 15.5 3 15 2"
+          {/* Círculo dourado */}
+          <circle
+            cx="16"
+            cy="20"
+            r="15"
             stroke="currentColor"
-            strokeWidth="1.3"
-            strokeLinecap="round"
-            className="transition-all duration-700 ease-in-out group-hover:stroke-gold-light"
+            strokeWidth="1.2"
+            className="text-gold"
           />
-          {/* Secondary smoke wisp */}
+          {/* Chama/folha central */}
           <path
-            d="M16.5 30C16.5 30 18.5 24 17.5 19C16.5 14 13.5 11 15 5"
+            d="M16 30.5C14.4 25.8 13.6 21.6 14.3 17.4C15 13.2 16.6 10.4 17 8.2"
             stroke="currentColor"
-            strokeWidth="1"
+            strokeWidth="1.4"
             strokeLinecap="round"
+            className="text-gold transition-all duration-700 ease-in-out group-hover:stroke-gold-light"
+          />
+          <path
+            d="M16.8 30.5C18.6 25.8 19.4 21.6 18.7 17.4C18 13.2 16.9 10.4 17 8.2"
+            stroke="currentColor"
+            strokeWidth="1.1"
+            strokeLinecap="round"
+            opacity="0.75"
+            className="text-gold-light transition-all duration-700 ease-in-out group-hover:stroke-gold"
+          />
+          {/* Folhas laterais */}
+          <path
+            d="M16 30.5C12.8 30.2 10.2 28.6 8.7 26.6C11.4 27.2 14 28.5 16 30.5Z"
+            fill="currentColor"
+            opacity="0.85"
+            className="text-gold"
+          />
+          <path
+            d="M16 30.5C19.2 30.2 21.8 28.6 23.3 26.6C20.6 27.2 18 28.5 16 30.5Z"
+            fill="currentColor"
             opacity="0.65"
-            className="transition-all duration-700 ease-in-out group-hover:stroke-gold"
-          />
-          {/* Delicate third curve */}
-          <path
-            d="M15 25C15 25 13 22 13 17C13 13 15.5 10.5 16 8"
-            stroke="currentColor"
-            strokeWidth="0.8"
-            strokeLinecap="round"
-            opacity="0.4"
+            className="text-gold-light"
           />
         </svg>
       </div>

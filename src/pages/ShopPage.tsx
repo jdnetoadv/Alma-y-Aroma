@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SlidersHorizontal, X } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
+import { Locale } from '@/i18n/types'
 import { CatalogProduct, ProductCategory, PurposeTag, ScentFamily } from '@/data/types'
-import { catalogRepository } from '@/data/repository'
+import { catalogRepository, searchCatalog } from '@/data/repository'
 import { ProductCard } from '@/components/catalog/ProductCard'
 import { CatalogBreadcrumb, CollectionHeader } from '@/components/catalog/CatalogShared'
 import {
@@ -54,20 +55,21 @@ export function applyCatalogFilters(
   items: CatalogProduct[],
   filters: CatalogFilters,
   sort: SortOption,
+  locale: Locale = 'pt-br',
 ): CatalogProduct[] {
   const filtered = items.filter(
     (p) =>
       (filters.category === 'all' || p.category === filters.category) &&
       (filters.scent === 'all' || p.scentFamily === filters.scent) &&
       (filters.purpose === 'all' || p.purposes.includes(filters.purpose)) &&
-      (filters.productType === 'all' || p.productType['pt-br'] === filters.productType) &&
+      (filters.productType === 'all' || p.productType[locale] === filters.productType) &&
       matchesPrice(p.illustrativePrice, filters.price),
   )
 
   const sorted = [...filtered]
   switch (sort) {
     case 'name':
-      sorted.sort((a, b) => a.name['pt-br'].localeCompare(b.name['pt-br'], 'pt-BR'))
+      sorted.sort((a, b) => a.name[locale].localeCompare(b.name[locale], locale))
       break
     case 'priceAsc':
       sorted.sort((a, b) => a.illustrativePrice - b.illustrativePrice)
@@ -105,6 +107,7 @@ export default function ShopPage() {
   const { t, locale } = useLocale()
   const [searchParams] = useSearchParams()
   const localePrefix = `/${locale}`
+  const searchQuery = (searchParams.get('q') ?? '').trim()
 
   const [filters, setFilters] = useState<CatalogFilters>(() => ({
     ...DEFAULT_FILTERS,
@@ -115,9 +118,16 @@ export default function ShopPage() {
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   const allProducts = catalogRepository.listProducts()
+  const searchResults = useMemo(
+    () => (searchQuery ? searchCatalog(searchQuery, locale) : null),
+    [searchQuery, locale],
+  )
   const productTypes = useMemo(
-    () => Array.from(new Set(allProducts.map((p) => p.productType['pt-br']))),
-    [allProducts],
+    () =>
+      Array.from(new Set(allProducts.map((p) => p.productType[locale]))).sort((a, b) =>
+        a.localeCompare(b, locale),
+      ),
+    [allProducts, locale],
   )
   const scentFamilies: ScentFamily[] = [
     'floral-herbal',
@@ -128,8 +138,8 @@ export default function ShopPage() {
   ]
 
   const visibleProducts = useMemo(
-    () => applyCatalogFilters(allProducts, filters, sort),
-    [allProducts, filters, sort],
+    () => applyCatalogFilters(searchResults ?? allProducts, filters, sort, locale),
+    [allProducts, searchResults, filters, sort, locale],
   )
 
   const activeFilterCount =
@@ -309,6 +319,11 @@ export default function ShopPage() {
       <div className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
         <div className="mb-8 flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
+            {searchResults !== null && (
+              <span className="font-medium text-foreground">
+                {t('shop.searchResultsFor').replace('{query}', searchQuery)} ·{' '}
+              </span>
+            )}
             {visibleProducts.length} {t('shop.count')}
           </p>
           <div className="flex items-center gap-3">

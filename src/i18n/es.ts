@@ -100,8 +100,11 @@ export const es: TranslationDictionary = {
   'cart.message':
     'Nuestra boutique virtual contará con catálogo de compras y pasarela en la siguiente etapa. Gracias por tu visita.',
   'search.placeholder': '¿Qué deseas encontrar hoy?',
-  'search.soon':
-    'El catálogo de búsqueda estará disponible muy pronto. Mientras tanto, explora nuestras secciones:',
+  'search.hint':
+    'Busca por nombre, tipo de producto, familia olfativa, finalidad o característica — en cualquier idioma.',
+  'search.results': 'Resultados del catálogo',
+  'search.noResults': 'Ningún producto encontrado para esta búsqueda.',
+  'search.viewAll': 'Ver todos los resultados en la tienda',
   'search.quickLinks': 'Secciones recomendadas',
   'search.close': 'Cerrar',
 
@@ -167,6 +170,7 @@ export const es: TranslationDictionary = {
   'shop.emptyTitle': 'Ningún producto encontrado',
   'shop.emptyMessage': 'Prueba otra búsqueda o limpia los filtros para ver el catálogo completo.',
   'shop.allCategories': 'Todas las categorías',
+  'shop.searchResultsFor': 'Resultados para "{query}"',
 
   'product.viewDetails': 'Ver detalles',
   'product.addToCart': 'Añadir al carrito',
@@ -175,7 +179,11 @@ export const es: TranslationDictionary = {
   'product.related': 'También te puede encantar',
   'product.relatedKits': 'Kits que contienen este producto',
   'product.quantity': 'Cantidad',
-  'product.variations': 'Variantes',
+  'product.variations': 'Variedades',
+  'variation.aroma': 'Aroma',
+  'variation.tamanho': 'Tamaño',
+  'variation.formato': 'Formato',
+  'variation.kit': 'Kit',
   'product.availability': 'Disponibilidad',
   'product.availableDemo': 'Disponible (demostrativo)',
   'product.shippingInfo': 'Envío: por configurar más adelante.',

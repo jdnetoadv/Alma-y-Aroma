@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X, Search } from 'lucide-react'
 import { Logo } from '@/components/common/Logo'
 import { LanguageSelector } from '@/components/common/LanguageSelector'
@@ -10,6 +10,7 @@ import { useLocale } from '@/i18n/LocaleContext'
 export function Header() {
   const { t, locale } = useLocale()
   const location = useLocation()
+  const navigate = useNavigate()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -36,20 +37,35 @@ export function Header() {
     }
   }, [isMobileMenuOpen])
 
-  // Navigation menu items mapped to homepage section anchors
-  const navItems = [
-    { label: t('menu.home'), anchor: 'hero' },
-    { label: t('menu.incense'), anchor: 'colecoes' },
-    { label: t('menu.candles'), anchor: 'colecoes' },
-    { label: t('menu.aromas'), anchor: 'colecoes' },
-    { label: t('menu.rituals'), anchor: 'rituais' },
-    { label: t('menu.kits'), anchor: 'colecoes' },
-    { label: t('menu.essence'), anchor: 'essencia' },
+  // Etapa 2: itens de catálogo direcionam às categorias da loja; "Início",
+  // "Nossa Essência" e "Rituais" continuam rolando até seções da homepage.
+  const navItems: Array<{
+    label: string
+    kind: 'anchor' | 'route'
+    to: string
+    target: string
+  }> = [
+    { label: t('menu.home'), kind: 'anchor', to: `/${locale}`, target: 'hero' },
+    { label: t('menu.incense'), kind: 'route', to: `/${locale}/categoria/incensos`, target: '' },
+    { label: t('menu.candles'), kind: 'route', to: `/${locale}/categoria/velas`, target: '' },
+    { label: t('menu.aromas'), kind: 'route', to: `/${locale}/categoria/aromas`, target: '' },
+    { label: t('menu.kits'), kind: 'route', to: `/${locale}/kits`, target: '' },
+    { label: t('menu.rituals'), kind: 'anchor', to: `/${locale}`, target: 'rituais' },
+    { label: t('menu.essence'), kind: 'anchor', to: `/${locale}`, target: 'essencia' },
   ]
 
-  const handleNavClick = (anchor: string) => {
+  const handleNavClick = (item: (typeof navItems)[number]) => {
     setIsMobileMenuOpen(false)
-    const el = document.getElementById(anchor)
+    if (item.kind === 'route') {
+      navigate(item.to)
+      return
+    }
+    if (location.pathname !== item.to) {
+      // Em uma página interna: volta à homepage antes de rolar
+      navigate(item.to)
+      return
+    }
+    const el = document.getElementById(item.target)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' })
     }
@@ -89,7 +105,7 @@ export function Header() {
               <button
                 key={item.label}
                 type="button"
-                onClick={() => handleNavClick(item.anchor)}
+                onClick={() => handleNavClick(item)}
                 className={`relative font-sans text-xs uppercase tracking-[0.14em] font-medium transition-colors group py-1 ${
                   isScrolled
                     ? 'text-espresso/85 hover:text-saffron'
@@ -159,7 +175,7 @@ export function Header() {
               <button
                 key={item.label}
                 type="button"
-                onClick={() => handleNavClick(item.anchor)}
+                onClick={() => handleNavClick(item)}
                 style={{ animationDelay: `${index * 50}ms` }}
                 className="text-left font-serif text-2xl sm:text-3xl text-espresso hover:text-saffron transition-colors py-1 border-b border-clay/30 animate-fade-in-up"
               >

@@ -1,18 +1,12 @@
-import React, { useState } from 'react'
-import { Sparkles, ArrowRight, X } from 'lucide-react'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { catalogRepository } from '@/data/repository'
+import { ProductCategory } from '@/data/types'
 
 export interface CollectionItem {
-  id: string
+  id: ProductCategory
   titleKey:
     | 'col.1.title'
     | 'col.2.title'
@@ -26,10 +20,10 @@ export interface CollectionItem {
 }
 
 export function CollectionsSection() {
-  const { t } = useLocale()
-  const [activeModalItem, setActiveModalItem] = useState<CollectionItem | null>(null)
+  const { t, locale } = useLocale()
 
-  // 6 specific boutique categories with sophisticated curated imagery matching palette
+  // 6 specific boutique categories with sophisticated curated imagery matching palette.
+  // Cada card direciona à página de categoria correspondente na loja (Etapa 2).
   const collections: CollectionItem[] = [
     {
       id: 'incensos',
@@ -75,6 +69,12 @@ export function CollectionsSection() {
     },
   ]
 
+  const hrefFor = (id: ProductCategory): string => {
+    const category = catalogRepository.getCategory(id)
+    const slug = category?.slug ?? id
+    return `/${locale}/categoria/${slug}`
+  }
+
   return (
     <section
       id="colecoes"
@@ -99,10 +99,11 @@ export function CollectionsSection() {
         {/* 6 Categories Grid: 3x2 desktop, 2x3 tablet, single col mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
           {collections.map((item, index) => (
-            <article
+            <Link
               key={item.id}
-              className="group cursor-pointer bg-cream-100 rounded-sm overflow-hidden border border-clay/70 shadow-subtle hover:shadow-elevation transition-all duration-500 hover:-translate-y-1 flex flex-col"
-              onClick={() => setActiveModalItem(item)}
+              to={hrefFor(item.id)}
+              className="group bg-cream-100 rounded-sm overflow-hidden border border-clay/70 shadow-subtle hover:shadow-elevation transition-all duration-500 hover:-translate-y-1 flex flex-col focus:outline-none focus:ring-2 focus:ring-saffron"
+              aria-label={`${t('collections.viewCollection')} — ${t(item.titleKey)}`}
             >
               {/* Image Container with hover zoom */}
               <div className="relative overflow-hidden aspect-[4/5] bg-clay/30">
@@ -139,64 +140,10 @@ export function CollectionsSection() {
                   <ArrowRight className="w-3.5 h-3.5 transform transition-transform group-hover:translate-x-1" />
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>
-
-      {/* Honest "Em breve" Editorial Overlay for Category */}
-      <Dialog
-        open={Boolean(activeModalItem)}
-        onOpenChange={(open) => !open && setActiveModalItem(null)}
-      >
-        <DialogContent className="max-w-lg bg-cream border-clay text-espresso p-6 sm:p-8">
-          {activeModalItem && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="font-serif text-xs uppercase tracking-[0.2em] text-gold">
-                  Coleção Alma y Aroma
-                </span>
-                <Badge className="bg-clay/60 text-wine-deep hover:bg-clay/70 text-[11px] font-sans">
-                  {t('cart.soon')}
-                </Badge>
-              </div>
-
-              <div className="overflow-hidden rounded-sm aspect-[16/9] bg-clay/30 my-2">
-                <img
-                  src={activeModalItem.imageUrl}
-                  alt={t(activeModalItem.titleKey)}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <DialogHeader className="text-left space-y-2">
-                <DialogTitle className="font-serif text-2xl sm:text-3xl font-normal text-espresso">
-                  {t(activeModalItem.titleKey)}
-                </DialogTitle>
-                <DialogDescription className="font-sans text-xs sm:text-sm text-espresso/80 leading-relaxed">
-                  {t(activeModalItem.descKey)}
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="p-3.5 rounded bg-clay/30 border border-clay/60">
-                <p className="font-serif italic text-xs text-espresso/90 leading-relaxed">
-                  {t('collections.modal.soon')}
-                </p>
-              </div>
-
-              <div className="pt-2 flex justify-end">
-                <Button
-                  type="button"
-                  onClick={() => setActiveModalItem(null)}
-                  className="bg-wine hover:bg-wine-light text-cream text-xs uppercase tracking-wider rounded-sm"
-                >
-                  {t('collections.modal.close')}
-                </Button>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </section>
   )
 }

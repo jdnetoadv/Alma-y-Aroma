@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Plus, Minus, Lock, Truck, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Plus, Minus, Lock, Truck, ChevronRight, X } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
+import { CatalogProduct } from '@/data/types'
 import { catalogRepository, formatPrice } from '@/data/repository'
 import { ProductCard } from '@/components/catalog/ProductCard'
 import { CatalogBreadcrumb } from '@/components/catalog/CatalogShared'
@@ -16,14 +17,19 @@ export default function ProductPage() {
 
   const [activeImage, setActiveImage] = useState(0)
   const [zoomed, setZoomed] = useState(false)
-  const [variation, setVariation] = useState<string | null>(null)
+  /** Índice selecionado em cada grupo de variação (kind → índice em values). */
+  const [variationSelection, setVariationSelection] = useState<Record<string, number>>({})
   const [quantity, setQuantity] = useState(1)
   const [showTech, setShowTech] = useState(false)
 
   useEffect(() => {
     setActiveImage(0)
     setZoomed(false)
-    setVariation(product?.variations?.[0]?.id ?? null)
+    const initial: Record<string, number> = {}
+    product?.variations?.forEach((v) => {
+      initial[v.kind] = 0
+    })
+    setVariationSelection(initial)
     setQuantity(1)
     setShowTech(false)
   }, [product?.id])
@@ -49,14 +55,14 @@ export default function ProductPage() {
   const gallery = product.images
   const variationList = product.variations ?? []
   const techRows: { label: string; value?: string }[] = [
-    { label: t('product.tech.brand'), value: product.technical?.brand },
-    { label: t('product.tech.composition'), value: product.technical?.composition },
-    { label: t('product.tech.weight'), value: product.technical?.weight },
-    { label: t('product.tech.dimensions'), value: product.technical?.dimensions },
-    { label: t('product.tech.contents'), value: product.technical?.contents },
-    { label: t('product.tech.origin'), value: product.technical?.origin },
-    { label: t('product.tech.usage'), value: product.technical?.usage },
-    { label: t('product.tech.care'), value: product.technical?.care },
+    { label: t('product.tech.brand'), value: product.technical?.brand?.[locale] },
+    { label: t('product.tech.composition'), value: product.technical?.composition?.[locale] },
+    { label: t('product.tech.weight'), value: product.technical?.weight?.[locale] },
+    { label: t('product.tech.dimensions'), value: product.technical?.dimensions?.[locale] },
+    { label: t('product.tech.contents'), value: product.technical?.contents?.[locale] },
+    { label: t('product.tech.origin'), value: product.technical?.origin?.[locale] },
+    { label: t('product.tech.usage'), value: product.technical?.usage?.[locale] },
+    { label: t('product.tech.care'), value: product.technical?.care?.[locale] },
     { label: t('product.tech.sku'), value: product.sku },
   ]
   const kitIds = catalogRepository.listKits().filter((k) => k.productIds.includes(product.id))
@@ -142,21 +148,36 @@ export default function ProductPage() {
                 <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
                   {t('product.variations')}
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="space-y-4">
                   {variationList.map((v) => (
-                    <button
-                      key={v.id}
-                      type="button"
-                      onClick={() => setVariation(v.id)}
-                      className={cn(
-                        'rounded-md border px-4 py-2 text-sm transition-colors',
-                        variation === v.id
-                          ? 'border-primary bg-primary/10 text-foreground'
-                          : 'border-border/60 text-muted-foreground hover:border-primary/50',
-                      )}
-                    >
-                      {v.label[locale]}
-                    </button>
+                    <div key={v.kind}>
+                      <p className="mb-2 text-[11px] uppercase tracking-wider text-muted-foreground/80">
+                        {t(`variation.${v.kind}` as 'variation.aroma')}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {v.values.map((value, i) => {
+                          const selected = (variationSelection[v.kind] ?? 0) === i
+                          return (
+                            <button
+                              key={value + i}
+                              type="button"
+                              onClick={() =>
+                                setVariationSelection((prev) => ({ ...prev, [v.kind]: i }))
+                              }
+                              aria-pressed={selected}
+                              className={cn(
+                                'rounded-md border px-4 py-2 text-sm transition-colors',
+                                selected
+                                  ? 'border-primary bg-primary/10 text-foreground'
+                                  : 'border-border/60 text-muted-foreground hover:border-primary/50',
+                              )}
+                            >
+                              {value}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -349,6 +370,8 @@ export default function ProductPage() {
 }
 
 /** Meta noindex para páginas de produto demonstrativo. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type CatalogProductImport = CatalogProduct
 function NoindexTag() {
   useEffect(() => {
     const meta = document.createElement('meta')

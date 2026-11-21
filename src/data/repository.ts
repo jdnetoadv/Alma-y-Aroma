@@ -130,6 +130,10 @@ export const catalogRepository: CatalogRepository = new StaticCatalogRepository(
 
 export { categories, products, kits, sensations }
 
+/** Busca textual do catálogo (nome, categoria, tipo, família, tags, palavras-chave). */
+export const searchCatalog = (query: string, locale: Locale): CatalogProduct[] =>
+  catalogRepository.search(query, locale)
+
 export function formatPrice(value: number, locale: Locale): string {
   const intlLocale = locale === 'pt-br' ? 'pt-BR' : locale === 'es' ? 'es-ES' : 'en-GB'
   return new Intl.NumberFormat(intlLocale, {

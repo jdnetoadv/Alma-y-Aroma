@@ -111,7 +111,10 @@ export interface TranslationDictionary {
   'cart.soon': string
   'cart.message': string
   'search.placeholder': string
-  'search.soon': string
+  'search.hint': string
+  'search.results': string
+  'search.noResults': string
+  'search.viewAll': string
   'search.quickLinks': string
   'search.close': string
 
@@ -151,6 +154,7 @@ export interface TranslationDictionary {
   'shop.subtitle': string
   'shop.heroBadge': string
   'shop.count': string
+  'shop.searchResultsFor': string
   'shop.filters': string
   'shop.filtersOpen': string
   'shop.filtersClose': string
@@ -185,6 +189,10 @@ export interface TranslationDictionary {
   'product.quantity': string
   'product.variations': string
   'product.availability': string
+  'variation.aroma': string
+  'variation.tamanho': string
+  'variation.formato': string
+  'variation.kit': string
   'product.availableDemo': string
   'product.shippingInfo': string
   'product.technicalInfo': string

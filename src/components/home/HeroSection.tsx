@@ -1,15 +1,9 @@
 import { Sparkles } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useLocale } from '@/i18n/LocaleContext'
 
 export function HeroSection() {
-  const { t } = useLocale()
-
-  const handleCtaClick = () => {
-    const el = document.getElementById('colecoes')
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
+  const { t, locale } = useLocale()
 
   // Curated imagery: contemplative Buddhist temple gate nestled in the forest —
   // weathered wood, deep greens, autumn-orange foliage and soft natural light.
@@ -70,16 +64,15 @@ export function HeroSection() {
           {t('hero.subtitle')}
         </p>
 
-        {/* Primary CTA (verbatim) */}
+        {/* Primary CTA — abre a loja (catálogo demonstrativo) */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-200">
-          <button
-            type="button"
-            onClick={handleCtaClick}
+          <Link
+            to={`/${locale}/loja`}
             className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-sm bg-saffron hover:bg-saffron-light text-wine-deep font-sans text-xs uppercase tracking-[0.16em] font-semibold transition-all duration-300 shadow-elevation hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-saffron focus:ring-offset-2 focus:ring-offset-wine-deep"
           >
             <span>{t('hero.cta')}</span>
             <span className="ml-2 w-1.5 h-1.5 rounded-full bg-wine-deep/70 group-hover:scale-125 transition-transform" />
-          </button>
+          </Link>
         </div>
       </div>
 

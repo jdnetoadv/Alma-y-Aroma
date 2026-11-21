@@ -94,8 +94,11 @@ export const enGB: TranslationDictionary = {
   'cart.message':
     'Our online boutique will feature checkout and an expansive shopping catalogue in the next stage. Thank you for your patience.',
   'search.placeholder': 'What would you like to explore?',
-  'search.soon':
-    'The full search catalogue will be available soon. In the meantime, explore our curated spaces:',
+  'search.hint':
+    'Search by name, product type, scent family, purpose or characteristic — in any language.',
+  'search.results': 'Catalogue results',
+  'search.noResults': 'No products found for this search.',
+  'search.viewAll': 'See all results in the shop',
   'search.quickLinks': 'Recommended sections',
   'search.close': 'Close',
 
@@ -160,6 +163,7 @@ export const enGB: TranslationDictionary = {
   'shop.emptyTitle': 'No products found',
   'shop.emptyMessage': 'Try another search or clear the filters to see the full catalogue.',
   'shop.allCategories': 'All categories',
+  'shop.searchResultsFor': 'Results for "{query}"',
 
   'product.viewDetails': 'View details',
   'product.addToCart': 'Add to cart',
@@ -169,6 +173,10 @@ export const enGB: TranslationDictionary = {
   'product.relatedKits': 'Kits that include this product',
   'product.quantity': 'Quantity',
   'product.variations': 'Variations',
+  'variation.aroma': 'Scent',
+  'variation.tamanho': 'Size',
+  'variation.formato': 'Format',
+  'variation.kit': 'Kit',
   'product.availability': 'Availability',
   'product.availableDemo': 'Available (demonstrative)',
   'product.shippingInfo': 'Shipping: to be configured later.',

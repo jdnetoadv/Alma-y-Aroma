@@ -14,8 +14,18 @@ import AdminProductsTab from './AdminProductsTab'
 import AdminCategoriesTab from './AdminCategoriesTab'
 import AdminOrdersTab from './AdminOrdersTab'
 import AdminCouponsTab from './AdminCouponsTab'
+import AdminPricingTab from './AdminPricingTab'
+import AdminSuppliersTab from './AdminSuppliersTab'
+import AdminCollectionsTab from './AdminCollectionsTab'
 
-type AdminTab = 'products' | 'categories' | 'orders' | 'coupons'
+type AdminTab =
+  | 'products'
+  | 'categories'
+  | 'orders'
+  | 'coupons'
+  | 'pricing'
+  | 'suppliers'
+  | 'collections'
 
 /**
  * Painel administrativo — Etapa 4. Protegido por useAdminSession (coleção
@@ -53,6 +63,9 @@ export default function AdminDashboard() {
     { id: 'categories', label: t('admin.tabCategories') },
     { id: 'orders', label: t('admin.tabOrders') },
     { id: 'coupons', label: t('admin.tabCoupons') },
+    { id: 'pricing', label: t('admin.tabPricing') },
+    { id: 'suppliers', label: t('admin.tabSuppliers') },
+    { id: 'collections', label: t('admin.tabCollections') },
   ]
 
   return (
@@ -102,6 +115,9 @@ export default function AdminDashboard() {
         {tab === 'categories' && <AdminCategoriesTab />}
         {tab === 'orders' && <AdminOrdersTab />}
         {tab === 'coupons' && <AdminCouponsTab />}
+        {tab === 'pricing' && <AdminPricingTab />}
+        {tab === 'suppliers' && <AdminSuppliersTab />}
+        {tab === 'collections' && <AdminCollectionsTab />}
       </div>
     </div>
   )

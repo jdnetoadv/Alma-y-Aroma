@@ -4,6 +4,8 @@ import { CollectionsSection } from '@/components/home/CollectionsSection'
 import { EssenceSection } from '@/components/home/EssenceSection'
 import { RitualsSection } from '@/components/home/RitualsSection'
 import { MomentSection } from '@/components/home/MomentSection'
+import { useHomeShelves, HomeShelfSection } from '@/components/home/HomeShelves'
+import { useCatalogReady } from '@/data/repository'
 
 export default function Index() {
   // Handle hash navigation if present when page mounts or hash changes
@@ -20,6 +22,11 @@ export default function Index() {
     }
   }, [])
 
+  // Etapa 5: vitrines dinâmicas — renderizam depois que o catálogo do
+  // backend (ou fallback local) está pronto.
+  const ready = useCatalogReady()
+  const shelves = useHomeShelves(ready)
+
   return (
     <div className="w-full">
       {/* 1. Cinematic Hero */}
@@ -28,13 +35,19 @@ export default function Index() {
       {/* 2. Nossas Coleções (6 Categories) */}
       <CollectionsSection />
 
-      {/* 3. Nossa Essência (Verbatim Manifesto) */}
+      {/* 3. Vitrines dinâmicas (Etapa 5): seleção editorial, novidades,
+          presentes e rituais — produtos reais do repositório central. */}
+      {shelves.map((shelf) => (
+        <HomeShelfSection key={shelf.id} shelf={shelf} />
+      ))}
+
+      {/* 4. Nossa Essência (Verbatim Manifesto) */}
       <EssenceSection />
 
-      {/* 4. Encontre seu Ritual (5 Options) */}
+      {/* 5. Encontre seu Ritual (5 Options) */}
       <RitualsSection />
 
-      {/* 5. Um Momento para Você (Editorial Break) */}
+      {/* 6. Um Momento para Você (Editorial Break) */}
       <MomentSection />
     </div>
   )

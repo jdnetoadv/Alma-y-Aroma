@@ -1,7 +1,6 @@
 import pb from '@/lib/pocketbase/client'
 import { CatalogCategoryRecord, CatalogProductRecord } from '@/data/backendCatalog'
 import { Locale } from '@/i18n/types'
-import { toUiCategory, toUiProduct } from '@/data/backendCatalogExports'
 
 /**
  * Serviços do painel admin — Etapa 4. Todas as operações passam pelas
@@ -193,7 +192,18 @@ export async function refreshCatalog(): Promise<void> {
 }
 
 export function isAdminAuthenticated(): boolean {
-  return pb.authStore.isValid && Boolean(pb.authStore.record?.isAdmin)
+  return pb.authStore.isValid && Boolean(pb.authStore.record?.id)
+}
+
+/** true quando o usuário autenticado está vinculado à coleção `admins`. */
+export async function checkIsAdmin(): Promise<boolean> {
+  if (!pb.authStore.isValid || !pb.authStore.record?.id) return false
+  try {
+    const rec = await pb.collection('admins').getFirstListItem(`user="${pb.authStore.record.id}"`)
+    return Boolean(rec?.id)
+  } catch {
+    return false
+  }
 }
 
 export async function adminLogin(email: string, password: string) {

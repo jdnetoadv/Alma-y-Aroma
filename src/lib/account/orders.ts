@@ -16,6 +16,18 @@ export interface OrderItemLine {
   lineTotal: number
 }
 
+/**
+ * Etapa 5 — dropshipping manual: uma entrada por fornecedor em
+ * `orders.supplierShipments` (JSON). O encaminhamento ao fornecedor é
+ * manual (fora do app); aqui registramos status e código de rastreamento.
+ */
+export interface SupplierShipment {
+  supplierId: string
+  status: string
+  trackingCode: string
+  updatedAt: string
+}
+
 export interface CustomerOrder {
   id: string
   code: string
@@ -31,10 +43,15 @@ export interface CustomerOrder {
   created: string
   addressSummary: string
   items: OrderItemLine[]
+  fulfillmentStatus: string
+  supplierShipments: SupplierShipment[]
 }
 
 const STATUS_ORDER =
   'demo_pending_pix,demo_pending_card,demo_confirmed,paid,shipped,delivered,canceled'
+
+const FULFILLMENT_STATUS =
+  'awaiting_supplier,supplier_confirmed,processing,shipped,delivered'
 
 export async function listMyOrders(): Promise<CustomerOrder[]> {
   if (!pb.authStore.isValid) return []
@@ -43,6 +60,17 @@ export async function listMyOrders(): Promise<CustomerOrder[]> {
     filter: `user="${pb.authStore.record?.id ?? ''}"`,
   })
   return recs.map(mapOrder)
+}
+
+export async function updateOrderFulfillment(
+  id: string,
+  supplierShipments: SupplierShipment[],
+  fulfillmentStatus?: string,
+): Promise<void> {
+  await pb.collection('orders').update(id, {
+    supplierShipments,
+    ...(fulfillmentStatus ? { fulfillmentStatus } : {}),
+  })
 }
 
 export async function listAllOrders(): Promise<CustomerOrder[]> {
@@ -65,6 +93,13 @@ function mapOrder(r: Record<string, unknown>): CustomerOrder {
   } catch {
     items = []
   }
+  let shipments: SupplierShipment[] = []
+  try {
+    const rawSh = r.supplierShipments
+    shipments = Array.isArray(rawSh) ? rawSh : JSON.parse(String(rawSh ?? '[]'))
+  } catch {
+    shipments = []
+  }
   return {
     id: String(r.id),
     code: String(r.code ?? ''),
@@ -82,6 +117,8 @@ function mapOrder(r: Record<string, unknown>): CustomerOrder {
       .filter(Boolean)
       .join(', '),
     items,
+    fulfillmentStatus: String(r.fulfillmentStatus ?? 'awaiting_supplier'),
+    supplierShipments: shipments,
   }
 }
 
@@ -124,3 +161,5 @@ export function orderSummaryLine(order: CustomerOrder, locale: Locale): string {
 }
 
 export { STATUS_ORDER }
+
+export { FULFILLMENT_STATUS }

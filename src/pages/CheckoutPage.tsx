@@ -140,38 +140,45 @@ export default function CheckoutPage() {
     }
   }
 
-  // ─── Confirmação ───
+  // ─── Confirmação ─── (estilo vinho/dourado do banner, coerente com o hero)
   if (placed) {
     return (
-      <div className="min-h-screen">
-        <div className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
+      <div className="relative min-h-screen overflow-hidden bg-wine-deep">
+        {/* Atmosfera quente do banner: halo âmbar + brilho superior dourado */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_10%,rgba(208,120,50,0.22),transparent_70%)]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent"
+        />
+        <div className="relative mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
           {/* Selo circular da marca (vinho/dourado) como marcação de sucesso */}
           <BrandSeal
             title="Alma y Aroma"
-            className="mx-auto h-24 w-24 drop-shadow-[0_2px_12px_rgba(59,23,21,0.35)]"
+            className="mx-auto h-24 w-24 drop-shadow-[0_2px_18px_rgba(180,154,103,0.45)]"
           />
-          <h1 className="mt-6 font-serif text-4xl text-foreground">{t('order.successTitle')}</h1>
-          <p className="mt-3 text-muted-foreground">{t('order.successSubtitle')}</p>
+          <h1 className="mt-6 font-serif text-4xl text-cream">{t('order.successTitle')}</h1>
+          <p className="mt-3 text-cream/70">{t('order.successSubtitle')}</p>
 
-          <div className="mt-8 rounded-lg border border-border/60 bg-card p-6 text-left">
+          <div className="mt-8 rounded-lg border border-gold/30 bg-wine/40 p-6 text-left shadow-[0_8px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm">
             <dl className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">{t('order.code')}</dt>
-                <dd className="font-medium text-foreground">{placed.code}</dd>
+                <dt className="text-cream/60">{t('order.code')}</dt>
+                <dd className="font-medium text-cream">{placed.code}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">{t('order.status')}</dt>
-                <dd className="text-foreground">
-                  {shopT(locale, `order.status.${placed.status}`)}
-                </dd>
+                <dt className="text-cream/60">{t('order.status')}</dt>
+                <dd className="text-cream">{shopT(locale, `order.status.${placed.status}`)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">{t('cart.total')}</dt>
-                <dd className="text-foreground">{formatPrice(placed.total, locale)}</dd>
+                <dt className="text-cream/60">{t('cart.total')}</dt>
+                <dd className="text-gold-light">{formatPrice(placed.total, locale)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">{t('checkout.paymentTitle')}</dt>
-                <dd className="text-foreground">
+                <dt className="text-cream/60">{t('checkout.paymentTitle')}</dt>
+                <dd className="text-cream">
                   {placed.paymentMethod === 'pix'
                     ? t('checkout.paymentPix')
                     : placed.paymentMethod === 'international_card'
@@ -180,17 +187,21 @@ export default function CheckoutPage() {
                 </dd>
               </div>
             </dl>
-            <p className="mt-5 flex items-start gap-2 border-t border-border/40 pt-4 text-xs italic text-muted-foreground">
-              <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+            <p className="mt-5 flex items-start gap-2 border-t border-gold/20 pt-4 text-xs italic text-cream/60">
+              <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" aria-hidden />
               {t('order.demoNote')}
             </p>
           </div>
 
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Button asChild className="bg-primary hover:bg-primary/90">
+            <Button asChild className="bg-gold text-wine-deep hover:bg-gold-hover">
               <Link to={`${localePrefix}/loja`}>{t('order.continue')}</Link>
             </Button>
-            <Button asChild variant="outline">
+            <Button
+              asChild
+              variant="outline"
+              className="border-gold/50 bg-transparent text-cream hover:bg-gold/10 hover:text-cream"
+            >
               <Link to={`${localePrefix}`}>{t('breadcrumb.home')}</Link>
             </Button>
           </div>

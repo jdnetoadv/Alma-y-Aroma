@@ -74,7 +74,11 @@ export function Footer() {
 
   return (
     <footer className="bg-wine-deep text-cream/90 relative overflow-hidden border-t border-wine/40">
-      {/* Decorative ambient smoke curve at top */}
+      {/* Atmosfera quente do banner: halo âmbar difuso + filete dourado no topo */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(208,120,50,0.14),transparent_70%)]"
+      />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-12">

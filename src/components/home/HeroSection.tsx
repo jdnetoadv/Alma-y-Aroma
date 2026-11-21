@@ -20,16 +20,23 @@ export function HeroSection() {
       aria-label="ALMA Y AROMA"
       className="relative flex flex-col overflow-hidden bg-wine-deep text-cream"
     >
-      {/* Fundo do hero: o emblema/nome da arte fica em ~75% da largura da
-          imagem. A camada é mais larga que a viewport (220%) e deslocada para
-          que esse ponto caia exatamente no centro horizontal da página. */}
+      {/* Fundo do hero: o emblema/nome da arte fica em ~60% da largura da
+          imagem (a estimativa anterior de 75% deixava a marca à esquerda).
+          A camada tem 125% da largura do hero e recua 25%: pela regra de
+          background-position percentual, o ponto a 60% da imagem alinha com
+          60% da camada, então o emblema cai em -25% + 0,6·125% = 50% — centro
+          exato em QUALQUER viewport (desktop e celular), sem media query.
+          Zoom de só 1,25x (a tentativa anterior usava 2,2x): difusor/Buda
+          permanecem visíveis à esquerda e a vela à direita.
+          Ajuste fino: mudar f aqui e recalcular left = 50% - f·width. */}
       <div
         aria-hidden
-        className="absolute top-0 bottom-0 bg-cover bg-no-repeat bg-center"
+        className="absolute top-0 bottom-0 bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url(${heroBanner})`,
-          left: '-115%',
-          width: '220%',
+          left: '-25%',
+          width: '125%',
+          backgroundPosition: '60% center',
         }}
       />
       {/* Escurecimento suave: base e laterais mais fortes para a leitura do

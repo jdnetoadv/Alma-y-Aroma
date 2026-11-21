@@ -1,15 +1,17 @@
 import { CatalogCategory, CatalogKit, CatalogProduct, PurposeTag } from './types'
-import { categories } from './categories'
-import { products } from './products'
-import { kits } from './kits'
+import { categories as fallbackCategories } from './categories'
+import { products as fallbackProducts } from './products'
+import { kits as fallbackKits } from './kits'
 import { sensations } from './sensations'
 import { Locale } from '@/i18n/types'
+import { loadCatalogFromBackend } from './backendCatalog'
+import { useEffect, useState } from 'react'
+import type { CatalogCategoryRecord, CatalogProductRecord } from './backendCatalog'
 
 /**
  * Repositório central do catálogo. Único ponto de acesso aos dados —
- * telas nunca importam os arrays crus. A interface está desenhada para
- * que, no futuro, uma implementação Shopify/Nuvemshop a satisfaça sem
- * alterar os componentes.
+ * telas nunca importam os arrays crus. Fonte primária: backend PocketBase
+ * (Etapa 3); fallback: conteúdo demonstrativo local (Etapa 2).
  */
 export interface CatalogRepository {
   listCategories(): CatalogCategory[]
@@ -26,43 +28,63 @@ export interface CatalogRepository {
   listBySensation(purpose: PurposeTag): CatalogProduct[]
   /** Produtos relacionados: mesma categoria + complementares (kits/sensação) */
   listRelated(product: CatalogProduct, limit?: number): CatalogProduct[]
+  /** true quando os dados vieram do backend (não do fallback demonstrativo) */
+  readonly source: 'backend' | 'local'
 }
 
 class StaticCatalogRepository implements CatalogRepository {
+  private cats: CatalogCategory[] = fallbackCategories
+  private prods: CatalogProduct[] = fallbackProducts
+  source: 'backend' | 'local' = 'local'
+
+  /** Troca a fonte de dados (backend → UI). Arrays congelados, imutáveis. */
+  hydrate(cats: CatalogCategoryRecord[], prods: CatalogProductRecord[]) {
+    this.cats = cats
+    this.prods = prods
+    this.source = 'backend'
+  }
+
+  /** Reverte para o fallback demonstrativo. */
+  reset() {
+    this.cats = fallbackCategories
+    this.prods = fallbackProducts
+    this.source = 'local'
+  }
+
   listCategories(): CatalogCategory[] {
-    return [...categories].sort((a, b) => a.order - b.order)
+    return [...this.cats].sort((a, b) => a.order - b.order)
   }
 
   getCategoryBySlug(slug: string): CatalogCategory | undefined {
-    return categories.find((c) => c.slug === slug)
+    return this.cats.find((c) => c.slug === slug)
   }
 
   getCategory(id: CatalogCategory['id']): CatalogCategory | undefined {
-    return categories.find((c) => c.id === id)
+    return this.cats.find((c) => c.id === id)
   }
 
   listProducts(): CatalogProduct[] {
-    return products
+    return this.prods
   }
 
   getProductBySlug(slug: string): CatalogProduct | undefined {
-    return products.find((p) => p.slug === slug)
+    return this.prods.find((p) => p.slug === slug)
   }
 
   getProduct(id: string): CatalogProduct | undefined {
-    return products.find((p) => p.id === id)
+    return this.prods.find((p) => p.id === id)
   }
 
   listProductsByCategory(categoryId: CatalogCategory['id']): CatalogProduct[] {
-    return products.filter((p) => p.category === categoryId)
+    return this.prods.filter((p) => p.category === categoryId)
   }
 
   listKits(): CatalogKit[] {
-    return kits
+    return fallbackKits
   }
 
   getKitBySlug(slug: string): CatalogKit | undefined {
-    return kits.find((k) => k.slug === slug)
+    return fallbackKits.find((k) => k.slug === slug)
   }
 
   getKitProducts(kit: CatalogKit): CatalogProduct[] {
@@ -76,7 +98,7 @@ class StaticCatalogRepository implements CatalogRepository {
     if (!normalizedQuery) return []
     const terms = normalizedQuery.split(/\s+/).filter(Boolean)
 
-    return products.filter((product) => {
+    return this.prods.filter((product) => {
       const haystack = this.normalize(
         [
           product.name[locale],
@@ -105,10 +127,10 @@ class StaticCatalogRepository implements CatalogRepository {
   }
 
   listRelated(product: CatalogProduct, limit = 4): CatalogProduct[] {
-    const sameCategory = products.filter(
+    const sameCategory = this.prods.filter(
       (p) => p.category === product.category && p.id !== product.id,
     )
-    const complementary = products.filter(
+    const complementary = this.prods.filter(
       (p) =>
         p.category !== product.category &&
         (p.purposes.some((purpose) => product.purposes.includes(purpose)) ||
@@ -140,4 +162,30 @@ export function formatPrice(value: number, locale: Locale): string {
     style: 'currency',
     currency: 'BRL',
   }).format(value)
+}
+
+/**
+ * Carrega o catálogo do backend uma única vez por sessão de página.
+ * Em caso de falha (backend fora, coleções ausentes), mantém o fallback.
+ */
+export function useCatalogReady(): boolean {
+  const [ready, setReady] = useState(catalogRepository.source === 'backend')
+
+  useEffect(() => {
+    let cancelled = false
+    loadCatalogFromBackend()
+      .then(({ categories, products }) => {
+        if (cancelled) return
+        catalogRepository.hydrate(categories, products)
+        setReady(true)
+      })
+      .catch(() => {
+        // Backend indisponível ou coleções ainda não criadas: fallback local.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return ready
 }

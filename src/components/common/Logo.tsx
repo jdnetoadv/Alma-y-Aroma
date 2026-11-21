@@ -69,8 +69,8 @@ export function Logo({ variant = 'dark', className = '', showTagline = false }: 
         <span
           className={`font-serif tracking-[0.28em] text-base md:text-lg uppercase font-medium leading-none transition-colors duration-300 ${
             isLight
-              ? 'text-ivory group-hover:text-gold-light'
-              : 'text-graphite group-hover:text-gold'
+              ? 'text-cream group-hover:text-gold-light'
+              : 'text-espresso group-hover:text-gold'
           }`}
         >
           ALMA Y AROMA
@@ -78,7 +78,7 @@ export function Logo({ variant = 'dark', className = '', showTagline = false }: 
         {showTagline && (
           <span
             className={`font-sans text-[10px] tracking-[0.2em] uppercase mt-1 transition-colors duration-300 ${
-              isLight ? 'text-ivory/60' : 'text-graphite/60'
+              isLight ? 'text-cream/60' : 'text-espresso/60'
             }`}
           >
             {t('footer.tagline')}

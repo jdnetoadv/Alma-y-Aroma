@@ -32,29 +32,35 @@ export default {
         serif: ['Cormorant Garamond', 'Georgia', 'serif'],
       },
       colors: {
-        ivory: {
-          DEFAULT: '#F5F0E6',
-          50: '#FDFAF4',
-          100: '#FAF6EE',
-          200: '#F5F0E6',
-          300: '#EBE3D3',
-          400: '#DDD0BA',
+        /* Tibetan temple palette: warm coffee-browns, terracotta, deep wine, saffron */
+        cream: {
+          DEFAULT: '#E8D9C3',
+          50: '#F7EFE1',
+          100: '#F3E9D7',
+          200: '#E8D9C3',
+          300: '#DFCBAE',
+          400: '#D9C3A9',
         },
-        sand: {
-          DEFAULT: '#DDD0BA',
-          light: '#EFE7DA',
-          dark: '#C8B89C',
+        clay: {
+          DEFAULT: '#D9C3A9',
+          light: '#E6D4BB',
+          dark: '#C0A683',
         },
-        sage: {
-          DEFAULT: '#A3AC98',
-          light: '#BDC4B5',
-          dark: '#858F7A',
+        terracotta: {
+          DEFAULT: '#B4674A',
+          light: '#C98A6B',
+          dark: '#8F4E37',
         },
-        olive: {
-          DEFAULT: '#495746',
-          light: '#5D6E5A',
-          dark: '#343E32',
-          deep: '#293227',
+        wine: {
+          DEFAULT: '#6B2A2A',
+          light: '#7E3936',
+          dark: '#551F1E',
+          deep: '#3B1715',
+        },
+        saffron: {
+          DEFAULT: '#D07832',
+          light: '#E08A3C',
+          dark: '#B8621F',
         },
         gold: {
           DEFAULT: '#B49A67',
@@ -62,10 +68,10 @@ export default {
           dark: '#967D4D',
           hover: '#C2A976',
         },
-        graphite: {
-          DEFAULT: '#33352F',
-          muted: '#5A5D55',
-          soft: '#74776E',
+        espresso: {
+          DEFAULT: '#2E1F1A',
+          muted: '#553F35',
+          soft: '#6E564A',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

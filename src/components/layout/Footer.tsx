@@ -71,17 +71,17 @@ export function Footer() {
   }
 
   return (
-    <footer className="bg-olive-deep text-ivory/90 relative overflow-hidden border-t border-sand/20">
+    <footer className="bg-wine-deep text-cream/90 relative overflow-hidden border-t border-wine/40">
       {/* Decorative ambient smoke curve at top */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-12">
         {/* Main 4-column grid on desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-ivory/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-cream/10">
           {/* Col 1: Brand & Manifesto (5 cols) */}
           <div className="lg:col-span-5 space-y-5">
             <Logo variant="light" showTagline />
-            <p className="font-sans text-xs text-ivory/70 leading-relaxed max-w-sm pt-2">
+            <p className="font-sans text-xs text-cream/70 leading-relaxed max-w-sm pt-2">
               {t('essence.p2')}
             </p>
 
@@ -93,7 +93,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram da Alma y Aroma"
-                  className="w-8 h-8 rounded-full border border-ivory/20 flex items-center justify-center text-ivory/80 hover:text-gold hover:border-gold transition-colors"
+                  className="w-8 h-8 rounded-full border border-cream/20 flex items-center justify-center text-cream/80 hover:text-saffron hover:border-saffron transition-colors"
                 >
                   <Instagram className="w-4 h-4" />
                 </a>
@@ -104,7 +104,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp da Alma y Aroma"
-                  className="w-8 h-8 rounded-full border border-ivory/20 flex items-center justify-center text-ivory/80 hover:text-gold hover:border-gold transition-colors"
+                  className="w-8 h-8 rounded-full border border-cream/20 flex items-center justify-center text-cream/80 hover:text-saffron hover:border-saffron transition-colors"
                 >
                   <MessageCircle className="w-4 h-4" />
                 </a>
@@ -113,7 +113,7 @@ export function Footer() {
                 <a
                   href={`mailto:${siteConfig.contactEmail}`}
                   aria-label="E-mail de contato"
-                  className="w-8 h-8 rounded-full border border-ivory/20 flex items-center justify-center text-ivory/80 hover:text-gold hover:border-gold transition-colors"
+                  className="w-8 h-8 rounded-full border border-cream/20 flex items-center justify-center text-cream/80 hover:text-saffron hover:border-saffron transition-colors"
                 >
                   <Mail className="w-4 h-4" />
                 </a>
@@ -123,7 +123,7 @@ export function Footer() {
 
           {/* Col 2: Institutional (2 cols) */}
           <div className="lg:col-span-2 space-y-4">
-            <h4 className="font-serif text-base tracking-wider uppercase text-ivory font-medium">
+            <h4 className="font-serif text-base tracking-wider uppercase text-cream font-medium">
               {t('footer.institutional')}
             </h4>
             <ul className="space-y-2.5 text-xs font-sans">
@@ -131,7 +131,7 @@ export function Footer() {
                 <button
                   type="button"
                   onClick={() => handleSectionScroll('hero')}
-                  className="text-ivory/70 hover:text-gold transition-colors"
+                  className="text-cream/70 hover:text-saffron transition-colors"
                 >
                   {t('menu.home')}
                 </button>
@@ -140,7 +140,7 @@ export function Footer() {
                 <button
                   type="button"
                   onClick={() => handleSectionScroll('colecoes')}
-                  className="text-ivory/70 hover:text-gold transition-colors"
+                  className="text-cream/70 hover:text-saffron transition-colors"
                 >
                   {t('collections.title')}
                 </button>
@@ -149,7 +149,7 @@ export function Footer() {
                 <button
                   type="button"
                   onClick={() => handleSectionScroll('essencia')}
-                  className="text-ivory/70 hover:text-gold transition-colors"
+                  className="text-cream/70 hover:text-saffron transition-colors"
                 >
                   {t('menu.essence')}
                 </button>
@@ -158,7 +158,7 @@ export function Footer() {
                 <button
                   type="button"
                   onClick={() => handleSectionScroll('rituais')}
-                  className="text-ivory/70 hover:text-gold transition-colors"
+                  className="text-cream/70 hover:text-saffron transition-colors"
                 >
                   {t('ritual.title')}
                 </button>
@@ -168,10 +168,10 @@ export function Footer() {
 
           {/* Col 3: Policies (2 cols) - honest placeholder with "Em breve" badge */}
           <div className="lg:col-span-2 space-y-4">
-            <h4 className="font-serif text-base tracking-wider uppercase text-ivory font-medium">
+            <h4 className="font-serif text-base tracking-wider uppercase text-cream font-medium">
               {t('footer.policies')}
             </h4>
-            <ul className="space-y-2.5 text-xs font-sans text-ivory/50">
+            <ul className="space-y-2.5 text-xs font-sans text-cream/50">
               <li className="flex items-center gap-1.5 cursor-not-allowed">
                 <span>{t('footer.privacy')}</span>
                 <span className="text-[10px] text-gold/80 italic">
@@ -201,10 +201,10 @@ export function Footer() {
 
           {/* Col 4: Newsletter capture (3 cols) - real capture into PocketBase */}
           <div className="lg:col-span-3 space-y-4">
-            <h4 className="font-serif text-base tracking-wider uppercase text-ivory font-medium">
+            <h4 className="font-serif text-base tracking-wider uppercase text-cream font-medium">
               {t('newsletter.title')}
             </h4>
-            <p className="font-sans text-xs text-ivory/70 leading-relaxed">
+            <p className="font-sans text-xs text-cream/70 leading-relaxed">
               {t('newsletter.subtitle')}
             </p>
 
@@ -217,12 +217,12 @@ export function Footer() {
                   placeholder={t('newsletter.placeholder')}
                   required
                   disabled={isSubmitting}
-                  className="flex-1 bg-ivory/10 border border-ivory/20 rounded-sm px-3.5 py-2 text-xs text-ivory placeholder:text-ivory/40 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold disabled:opacity-50"
+                  className="flex-1 bg-cream/10 border border-cream/20 rounded-sm px-3.5 py-2 text-xs text-cream placeholder:text-cream/40 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-gold hover:bg-gold-light text-graphite font-semibold px-4 py-2 text-xs uppercase tracking-wider rounded-sm transition-colors flex-shrink-0 disabled:opacity-60"
+                  className="bg-saffron hover:bg-saffron-light text-wine-deep font-semibold px-4 py-2 text-xs uppercase tracking-wider rounded-sm transition-colors flex-shrink-0 disabled:opacity-60"
                 >
                   {isSubmitting ? t('newsletter.subscribing') : t('newsletter.button')}
                 </button>
@@ -234,14 +234,14 @@ export function Footer() {
                   role="status"
                   className={`flex items-start gap-2 p-2.5 rounded text-xs leading-snug animate-fade-in ${
                     feedback.type === 'success'
-                      ? 'bg-olive/60 border border-sage/40 text-ivory'
+                      ? 'bg-wine/60 border border-saffron/40 text-cream'
                       : feedback.type === 'duplicate'
                         ? 'bg-gold/20 border border-gold/40 text-gold-light'
                         : 'bg-red-950/60 border border-red-500/40 text-red-200'
                   }`}
                 >
                   {feedback.type === 'success' ? (
-                    <CheckCircle2 className="w-4 h-4 text-sage flex-shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-saffron-light flex-shrink-0 mt-0.5" />
                   ) : (
                     <AlertCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
                   )}
@@ -253,7 +253,7 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans text-ivory/60">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans text-cream/60">
           <div className="flex flex-wrap items-center gap-4">
             <span>{t('footer.rights')}</span>
             <span className="hidden sm:inline">•</span>
@@ -263,7 +263,7 @@ export function Footer() {
           <div className="flex items-center gap-4">
             {/* Language selector repeated in footer */}
             <div className="flex items-center gap-2">
-              <span className="text-[11px] uppercase tracking-wider text-ivory/50">
+              <span className="text-[11px] uppercase tracking-wider text-cream/50">
                 {t('footer.selectLanguage')}:
               </span>
               <LanguageSelector variant="light" align="right" />
@@ -273,7 +273,7 @@ export function Footer() {
               type="button"
               onClick={scrollToTop}
               aria-label="Voltar ao topo"
-              className="p-2 rounded-full border border-ivory/20 text-ivory/70 hover:text-gold hover:border-gold transition-colors"
+              className="p-2 rounded-full border border-cream/20 text-cream/70 hover:text-saffron hover:border-saffron transition-colors"
             >
               <ArrowUp className="w-3.5 h-3.5" />
             </button>

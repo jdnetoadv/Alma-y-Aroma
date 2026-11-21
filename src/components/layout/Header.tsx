@@ -60,8 +60,8 @@ export function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-ivory/95 backdrop-blur-md shadow-subtle border-b border-sand/50 py-3.5'
-            : 'bg-gradient-to-b from-graphite/40 via-graphite/10 to-transparent py-5'
+            ? 'bg-cream/95 backdrop-blur-md shadow-subtle border-b border-clay/50 py-3.5'
+            : 'bg-gradient-to-b from-espresso/40 via-espresso/10 to-transparent py-5'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -73,8 +73,8 @@ export function Header() {
               aria-label="Abrir menu de navegação"
               className={`lg:hidden p-2 rounded-full transition-colors ${
                 isScrolled
-                  ? 'text-graphite hover:text-gold hover:bg-sand/30'
-                  : 'text-ivory hover:text-gold'
+                  ? 'text-espresso hover:text-saffron hover:bg-clay/30'
+                  : 'text-cream hover:text-saffron'
               }`}
             >
               <Menu className="w-5 h-5" />
@@ -91,11 +91,13 @@ export function Header() {
                 type="button"
                 onClick={() => handleNavClick(item.anchor)}
                 className={`relative font-sans text-xs uppercase tracking-[0.14em] font-medium transition-colors group py-1 ${
-                  isScrolled ? 'text-graphite/85 hover:text-gold' : 'text-ivory/90 hover:text-ivory'
+                  isScrolled
+                    ? 'text-espresso/85 hover:text-saffron'
+                    : 'text-cream/90 hover:text-cream'
                 }`}
               >
                 <span>{item.label}</span>
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 ease-out group-hover:w-full" />
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-saffron transition-all duration-300 ease-out group-hover:w-full" />
               </button>
             ))}
           </nav>
@@ -109,8 +111,8 @@ export function Header() {
               aria-label={t('search.placeholder')}
               className={`p-2 rounded-full transition-colors ${
                 isScrolled
-                  ? 'text-graphite/80 hover:text-gold hover:bg-sand/30'
-                  : 'text-ivory/90 hover:text-gold'
+                  ? 'text-espresso/80 hover:text-saffron hover:bg-clay/30'
+                  : 'text-cream/90 hover:text-saffron'
               }`}
             >
               <Search className="w-4 h-4" />
@@ -128,15 +130,15 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile Drawer (full-screen ivory background, staggered serif links) */}
+      {/* Mobile Drawer (full-screen cream background, staggered serif links) */}
       {isMobileMenuOpen && (
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 bg-ivory flex flex-col justify-between p-6 overflow-y-auto animate-fade-in"
+          className="fixed inset-0 z-50 bg-cream flex flex-col justify-between p-6 overflow-y-auto animate-fade-in"
         >
           {/* Drawer top bar */}
-          <div className="flex items-center justify-between pb-4 border-b border-sand/60">
+          <div className="flex items-center justify-between pb-4 border-b border-clay/60">
             <Logo variant="dark" />
             <div className="flex items-center gap-2">
               <LanguageSelector variant="dark" align="right" />
@@ -144,7 +146,7 @@ export function Header() {
                 type="button"
                 onClick={() => setIsMobileMenuOpen(false)}
                 aria-label="Fechar menu"
-                className="p-2 rounded-full text-graphite hover:text-gold transition-colors"
+                className="p-2 rounded-full text-espresso hover:text-saffron transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -159,7 +161,7 @@ export function Header() {
                 type="button"
                 onClick={() => handleNavClick(item.anchor)}
                 style={{ animationDelay: `${index * 50}ms` }}
-                className="text-left font-serif text-2xl sm:text-3xl text-graphite hover:text-gold transition-colors py-1 border-b border-sand/30 animate-fade-in-up"
+                className="text-left font-serif text-2xl sm:text-3xl text-espresso hover:text-saffron transition-colors py-1 border-b border-clay/30 animate-fade-in-up"
               >
                 {item.label}
               </button>
@@ -167,9 +169,9 @@ export function Header() {
           </nav>
 
           {/* Drawer bottom info */}
-          <div className="pt-6 border-t border-sand/60 space-y-3">
-            <p className="font-serif italic text-xs text-graphite/70">{t('footer.tagline')}</p>
-            <p className="font-sans text-[11px] text-graphite/50 tracking-wider uppercase">
+          <div className="pt-6 border-t border-clay/60 space-y-3">
+            <p className="font-serif italic text-xs text-espresso/70">{t('footer.tagline')}</p>
+            <p className="font-sans text-[11px] text-espresso/50 tracking-wider uppercase">
               {t('footer.rights')}
             </p>
           </div>

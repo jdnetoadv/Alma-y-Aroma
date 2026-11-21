@@ -8,37 +8,37 @@
 
 @layer base {
   :root {
-    /* Ivory #F5F0E6 background, Graphite #33352F foreground */
-    --background: 38 42% 93%;
-    --foreground: 80 6% 19%;
+    /* Cream #E8D9C3 background, Espresso #2E1F1A foreground */
+    --background: 36 40% 84%;
+    --foreground: 18 22% 14%;
 
-    --card: 38 42% 95%;
-    --card-foreground: 80 6% 19%;
+    --card: 38 48% 90%;
+    --card-foreground: 18 22% 14%;
 
-    --popover: 38 42% 96%;
-    --popover-foreground: 80 6% 19%;
+    --popover: 38 48% 90%;
+    --popover-foreground: 18 22% 14%;
 
-    /* Deep Olive #495746 primary */
-    --primary: 110 11% 31%;
-    --primary-foreground: 38 42% 93%;
+    /* Terracotta #B4674A primary */
+    --primary: 15 43% 50%;
+    --primary-foreground: 36 40% 84%;
 
-    /* Sand #DDD0BA secondary */
-    --secondary: 38 34% 80%;
-    --secondary-foreground: 80 6% 19%;
+    /* Clay #D9C3A9 secondary */
+    --secondary: 36 42% 76%;
+    --secondary-foreground: 18 22% 14%;
 
-    --muted: 38 25% 88%;
-    --muted-foreground: 80 4% 40%;
+    --muted: 36 32% 81%;
+    --muted-foreground: 18 25% 32%;
 
-    /* Aged Gold #B49A67 accent */
-    --accent: 40 35% 55%;
-    --accent-foreground: 38 42% 93%;
+    /* Saffron #D07832 accent */
+    --accent: 28 66% 51%;
+    --accent-foreground: 36 40% 84%;
 
     --destructive: 0 60% 45%;
-    --destructive-foreground: 38 42% 93%;
+    --destructive-foreground: 36 40% 84%;
 
-    --border: 38 28% 82%;
-    --input: 38 28% 82%;
-    --ring: 40 35% 55%;
+    --border: 35 34% 72%;
+    --input: 35 34% 72%;
+    --ring: 28 66% 51%;
 
     --radius: 0.375rem;
 
@@ -58,11 +58,11 @@
 
     --sidebar-ring: 222.2 84% 4.9%;
 
-    --chart-1: 34 100% 44%;
-    --chart-2: 189 100% 38%;
-    --chart-3: 209 100% 32%;
-    --chart-4: 42 100% 50%;
-    --chart-5: 33 100% 50%;
+    --chart-1: 15 43% 50%;
+    --chart-2: 28 66% 51%;
+    --chart-3: 355 45% 29%;
+    --chart-4: 40 35% 55%;
+    --chart-5: 25 38% 33%;
   }
 
   .dark {

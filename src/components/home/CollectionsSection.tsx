@@ -79,7 +79,7 @@ export function CollectionsSection() {
     <section
       id="colecoes"
       aria-label="Nossas Coleções"
-      className="py-24 sm:py-32 bg-ivory text-graphite relative"
+      className="py-24 sm:py-32 bg-cream text-espresso relative"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -87,11 +87,11 @@ export function CollectionsSection() {
           <span className="font-serif italic text-gold text-sm sm:text-base tracking-widest uppercase">
             Boutique & Rituais
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-graphite mt-2 mb-4">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-espresso mt-2 mb-4">
             {t('collections.title')}
           </h2>
           <div className="w-12 h-px bg-gold mx-auto mb-4" />
-          <p className="font-sans text-xs sm:text-sm text-graphite/70 leading-relaxed">
+          <p className="font-sans text-xs sm:text-sm text-espresso/70 leading-relaxed">
             {t('collections.subtitle')}
           </p>
         </div>
@@ -101,27 +101,27 @@ export function CollectionsSection() {
           {collections.map((item, index) => (
             <article
               key={item.id}
-              className="group cursor-pointer bg-ivory-100 rounded-sm overflow-hidden border border-sand/70 shadow-subtle hover:shadow-elevation transition-all duration-500 hover:-translate-y-1 flex flex-col"
+              className="group cursor-pointer bg-cream-100 rounded-sm overflow-hidden border border-clay/70 shadow-subtle hover:shadow-elevation transition-all duration-500 hover:-translate-y-1 flex flex-col"
               onClick={() => setActiveModalItem(item)}
             >
               {/* Image Container with hover zoom */}
-              <div className="relative overflow-hidden aspect-[4/5] bg-sand/30">
+              <div className="relative overflow-hidden aspect-[4/5] bg-clay/30">
                 <img
                   src={item.imageUrl}
                   alt={t(item.titleKey)}
                   loading="lazy"
                   className="w-full h-full object-cover transform duration-700 ease-out group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-graphite/70 via-graphite/20 to-transparent opacity-60 group-hover:opacity-75 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-wine-deep/70 via-wine-deep/20 to-transparent opacity-60 group-hover:opacity-75 transition-opacity" />
 
                 {/* Numbering badge */}
-                <div className="absolute top-4 left-4 w-7 h-7 rounded-full bg-ivory/80 backdrop-blur-sm border border-sand/60 flex items-center justify-center font-serif text-xs text-graphite font-medium">
+                <div className="absolute top-4 left-4 w-7 h-7 rounded-full bg-cream/80 backdrop-blur-sm border border-clay/60 flex items-center justify-center font-serif text-xs text-espresso font-medium">
                   0{index + 1}
                 </div>
 
                 {/* Overlaid Title on card bottom */}
-                <div className="absolute bottom-4 left-4 right-4 text-ivory">
-                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-ivory tracking-wide leading-tight">
+                <div className="absolute bottom-4 left-4 right-4 text-cream">
+                  <h3 className="font-serif text-xl sm:text-2xl font-normal text-cream tracking-wide leading-tight">
                     {t(item.titleKey)}
                   </h3>
                   <div className="w-0 h-0.5 bg-gold mt-2 transition-all duration-300 ease-out group-hover:w-12" />
@@ -129,12 +129,12 @@ export function CollectionsSection() {
               </div>
 
               {/* Text Body */}
-              <div className="p-5 flex-1 flex flex-col justify-between bg-ivory">
-                <p className="font-sans text-xs text-graphite/80 leading-relaxed mb-4">
+              <div className="p-5 flex-1 flex flex-col justify-between bg-cream">
+                <p className="font-sans text-xs text-espresso/80 leading-relaxed mb-4">
                   {t(item.descKey)}
                 </p>
 
-                <div className="flex items-center justify-between pt-2 border-t border-sand/40 text-xs font-sans font-medium text-gold group-hover:text-gold-dark transition-colors">
+                <div className="flex items-center justify-between pt-2 border-t border-clay/40 text-xs font-sans font-medium text-saffron group-hover:text-saffron-dark transition-colors">
                   <span>{t('collections.viewCollection')}</span>
                   <ArrowRight className="w-3.5 h-3.5 transform transition-transform group-hover:translate-x-1" />
                 </div>
@@ -149,19 +149,19 @@ export function CollectionsSection() {
         open={Boolean(activeModalItem)}
         onOpenChange={(open) => !open && setActiveModalItem(null)}
       >
-        <DialogContent className="max-w-lg bg-ivory border-sand text-graphite p-6 sm:p-8">
+        <DialogContent className="max-w-lg bg-cream border-clay text-espresso p-6 sm:p-8">
           {activeModalItem && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="font-serif text-xs uppercase tracking-[0.2em] text-gold">
                   Coleção Alma y Aroma
                 </span>
-                <Badge className="bg-sand/60 text-olive-deep hover:bg-sand/70 text-[11px] font-sans">
+                <Badge className="bg-clay/60 text-wine-deep hover:bg-clay/70 text-[11px] font-sans">
                   {t('cart.soon')}
                 </Badge>
               </div>
 
-              <div className="overflow-hidden rounded-sm aspect-[16/9] bg-sand/30 my-2">
+              <div className="overflow-hidden rounded-sm aspect-[16/9] bg-clay/30 my-2">
                 <img
                   src={activeModalItem.imageUrl}
                   alt={t(activeModalItem.titleKey)}
@@ -170,16 +170,16 @@ export function CollectionsSection() {
               </div>
 
               <DialogHeader className="text-left space-y-2">
-                <DialogTitle className="font-serif text-2xl sm:text-3xl font-normal text-graphite">
+                <DialogTitle className="font-serif text-2xl sm:text-3xl font-normal text-espresso">
                   {t(activeModalItem.titleKey)}
                 </DialogTitle>
-                <DialogDescription className="font-sans text-xs sm:text-sm text-graphite/80 leading-relaxed">
+                <DialogDescription className="font-sans text-xs sm:text-sm text-espresso/80 leading-relaxed">
                   {t(activeModalItem.descKey)}
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="p-3.5 rounded bg-sand/30 border border-sand/60">
-                <p className="font-serif italic text-xs text-graphite/90 leading-relaxed">
+              <div className="p-3.5 rounded bg-clay/30 border border-clay/60">
+                <p className="font-serif italic text-xs text-espresso/90 leading-relaxed">
                   {t('collections.modal.soon')}
                 </p>
               </div>
@@ -188,7 +188,7 @@ export function CollectionsSection() {
                 <Button
                   type="button"
                   onClick={() => setActiveModalItem(null)}
-                  className="bg-olive hover:bg-olive-light text-ivory text-xs uppercase tracking-wider rounded-sm"
+                  className="bg-wine hover:bg-wine-light text-cream text-xs uppercase tracking-wider rounded-sm"
                 >
                   {t('collections.modal.close')}
                 </Button>

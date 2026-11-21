@@ -42,8 +42,8 @@ export function LanguageSelector({
         aria-label={`Idioma atual: ${current.label}`}
         className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border text-xs font-sans font-medium transition-all focus:outline-none focus:ring-2 focus:ring-gold/60 ${
           isLight
-            ? 'border-ivory/30 bg-olive/40 text-ivory hover:border-gold hover:bg-olive/60'
-            : 'border-sand/70 bg-ivory/80 backdrop-blur-sm text-graphite hover:border-gold hover:text-gold'
+            ? 'border-cream/30 bg-wine/40 text-cream hover:border-saffron hover:bg-wine/60'
+            : 'border-clay/70 bg-cream/80 backdrop-blur-sm text-espresso hover:border-saffron hover:text-saffron'
         }`}
       >
         <span className="text-sm leading-none" aria-hidden="true">
@@ -54,7 +54,7 @@ export function LanguageSelector({
         </span>
         <ChevronDown
           className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
-            isLight ? 'text-ivory/70' : 'text-graphite/60'
+            isLight ? 'text-cream/70' : 'text-espresso/60'
           }`}
         />
       </button>
@@ -65,7 +65,7 @@ export function LanguageSelector({
           aria-label="Selecionar idioma"
           className={`absolute ${
             align === 'right' ? 'right-0' : 'left-0'
-          } mt-2 w-48 rounded-md bg-ivory shadow-elevation border border-sand py-1.5 z-50 animate-fade-in-down`}
+          } mt-2 w-48 rounded-md bg-cream shadow-elevation border border-clay py-1.5 z-50 animate-fade-in-down`}
         >
           {(Object.keys(LOCALES) as Locale[]).map((key) => {
             const item = LOCALES[key]
@@ -82,8 +82,8 @@ export function LanguageSelector({
                 }}
                 className={`w-full flex items-center justify-between px-3.5 py-2 text-left text-xs transition-colors ${
                   isSelected
-                    ? 'bg-sand/40 text-olive-deep font-semibold'
-                    : 'text-graphite hover:bg-sand/20 hover:text-gold'
+                    ? 'bg-clay/40 text-wine-deep font-semibold'
+                    : 'text-espresso hover:bg-clay/20 hover:text-saffron'
                 }`}
               >
                 <span className="flex items-center gap-2">

@@ -5,7 +5,7 @@ import { AudioInvitePill, AudioPendingModal } from './audio/AudioComponents'
 
 export default function Layout() {
   return (
-    <div className="flex flex-col min-h-screen bg-ivory text-graphite antialiased selection:bg-sand selection:text-olive-deep">
+    <div className="flex flex-col min-h-screen bg-cream text-espresso antialiased selection:bg-clay selection:text-wine-deep">
       {/* Fixed Header */}
       <Header />
 

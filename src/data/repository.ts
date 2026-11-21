@@ -28,6 +28,10 @@ export interface CatalogRepository {
   listBySensation(purpose: PurposeTag): CatalogProduct[]
   /** Produtos relacionados: mesma categoria + complementares (kits/sensação) */
   listRelated(product: CatalogProduct, limit?: number): CatalogProduct[]
+  /** Troca a fonte de dados (backend → UI). */
+  hydrate(cats: CatalogCategoryRecord[], prods: CatalogProductRecord[]): void
+  /** Reverte para o fallback demonstrativo local. */
+  reset(): void
   /** true quando os dados vieram do backend (não do fallback demonstrativo) */
   readonly source: 'backend' | 'local'
 }
@@ -39,8 +43,8 @@ class StaticCatalogRepository implements CatalogRepository {
 
   /** Troca a fonte de dados (backend → UI). Arrays congelados, imutáveis. */
   hydrate(cats: CatalogCategoryRecord[], prods: CatalogProductRecord[]) {
-    this.cats = cats
-    this.prods = prods
+    this.cats = cats as unknown as CatalogCategory[]
+    this.prods = prods as unknown as CatalogProduct[]
     this.source = 'backend'
   }
 
@@ -150,7 +154,12 @@ class StaticCatalogRepository implements CatalogRepository {
 
 export const catalogRepository: CatalogRepository = new StaticCatalogRepository()
 
-export { categories, products, kits, sensations }
+export {
+  fallbackCategories as categories,
+  fallbackProducts as products,
+  fallbackKits as kits,
+  sensations,
+}
 
 /** Busca textual do catálogo (nome, categoria, tipo, família, tags, palavras-chave). */
 export const searchCatalog = (query: string, locale: Locale): CatalogProduct[] =>
@@ -174,9 +183,12 @@ export function useCatalogReady(): boolean {
   useEffect(() => {
     let cancelled = false
     loadCatalogFromBackend()
-      .then(({ categories, products }) => {
+      .then((result) => {
         if (cancelled) return
-        catalogRepository.hydrate(categories, products)
+        catalogRepository.hydrate(
+          result.categories as unknown as CatalogCategoryRecord[],
+          result.products as unknown as CatalogProductRecord[],
+        )
         setReady(true)
       })
       .catch(() => {

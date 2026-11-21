@@ -9,7 +9,14 @@ import { Locale } from '@/i18n/types'
  * ser substituída por um adaptador Shopify/Nuvemshop sem tocar nas telas.
  */
 
-export type ProductCategory = 'incensos' | 'velas' | 'aromas' | 'rituais' | 'acessorios' | 'kits'
+export type ProductCategory =
+  | 'aromas-essencias'
+  | 'incensos-defumacao'
+  | 'velas-aromaticas'
+  | 'difusores-aromatizadores'
+  | 'meditacao-relaxamento'
+  | 'decoracao-zen'
+  | 'kits-presentes'
 
 export type ScentFamily = 'floral-herbal' | 'woody' | 'citrus-fresh' | 'amber-warm' | 'resinous'
 

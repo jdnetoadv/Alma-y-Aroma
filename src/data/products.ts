@@ -48,7 +48,7 @@ export const products: CatalogProduct[] = [
     id: 'p-inc-massala-sandel',
     sku: 'AYA-INC-001',
     slug: 'incenso-massala-sandalo',
-    category: 'incensos',
+    category: 'incensos-defumacao',
     name: {
       'pt-br': 'Incenso Massala Sândalo',
       es: 'Incienso Massala Sándalo',
@@ -87,7 +87,7 @@ export const products: CatalogProduct[] = [
     id: 'p-inc-massala-lavanda',
     sku: 'AYA-INC-002',
     slug: 'incenso-massala-lavanda',
-    category: 'incensos',
+    category: 'incensos-defumacao',
     name: {
       'pt-br': 'Incenso Massala Lavanda',
       es: 'Incienso Massala Lavanda',
@@ -126,7 +126,7 @@ export const products: CatalogProduct[] = [
     id: 'p-inc-massala-rosa',
     sku: 'AYA-INC-003',
     slug: 'incenso-massala-rosa',
-    category: 'incensos',
+    category: 'incensos-defumacao',
     name: {
       'pt-br': 'Incenso Massala Rosa',
       es: 'Incienso Massala Rosa',
@@ -163,7 +163,7 @@ export const products: CatalogProduct[] = [
     id: 'p-inc-massala-jasmim',
     sku: 'AYA-INC-004',
     slug: 'incenso-massala-jasmim',
-    category: 'incensos',
+    category: 'incensos-defumacao',
     name: {
       'pt-br': 'Incenso Massala Jasmim',
       es: 'Incienso Massala Jazmín',
@@ -200,7 +200,7 @@ export const products: CatalogProduct[] = [
     id: 'p-inc-massala-patchouli',
     sku: 'AYA-INC-005',
     slug: 'incenso-massala-patchouli',
-    category: 'incensos',
+    category: 'incensos-defumacao',
     name: {
       'pt-br': 'Incenso Massala Patchouli',
       es: 'Incienso Massala Patchouli',
@@ -237,7 +237,7 @@ export const products: CatalogProduct[] = [
     id: 'p-inc-massala-nagchampa',
     sku: 'AYA-INC-006',
     slug: 'incenso-massala-nag-champa',
-    category: 'incensos',
+    category: 'incensos-defumacao',
     name: {
       'pt-br': 'Incenso Massala Nag Champa',
       es: 'Incienso Massala Nag Champa',
@@ -277,7 +277,7 @@ export const products: CatalogProduct[] = [
     id: 'p-vela-serenidade',
     sku: 'AYA-VEL-001',
     slug: 'vela-aromatica-serenidade',
-    category: 'velas',
+    category: 'velas-aromaticas',
     name: {
       'pt-br': 'Vela Aromática Serenidade',
       es: 'Vela Aromática Serenidad',
@@ -315,7 +315,7 @@ export const products: CatalogProduct[] = [
     id: 'p-vela-sandalo',
     sku: 'AYA-VEL-002',
     slug: 'vela-aromatica-sandalo',
-    category: 'velas',
+    category: 'velas-aromaticas',
     name: {
       'pt-br': 'Vela Aromática Sândalo',
       es: 'Vela Aromática Sándalo',
@@ -353,7 +353,7 @@ export const products: CatalogProduct[] = [
     id: 'p-vela-lavanda',
     sku: 'AYA-VEL-003',
     slug: 'vela-aromatica-lavanda',
-    category: 'velas',
+    category: 'velas-aromaticas',
     name: {
       'pt-br': 'Vela Aromática Lavanda',
       es: 'Vela Aromática Lavanda',
@@ -390,7 +390,7 @@ export const products: CatalogProduct[] = [
     id: 'p-vela-baunilha',
     sku: 'AYA-VEL-004',
     slug: 'vela-aromatica-baunilha',
-    category: 'velas',
+    category: 'velas-aromaticas',
     name: {
       'pt-br': 'Vela Aromática Baunilha',
       es: 'Vela Aromática Vainilla',
@@ -429,7 +429,7 @@ export const products: CatalogProduct[] = [
     id: 'p-difusor-lavanda',
     sku: 'AYA-DIF-001',
     slug: 'difusor-ambiente-lavanda',
-    category: 'aromas',
+    category: 'difusores-aromatizadores',
     name: {
       'pt-br': 'Difusor de Ambiente Lavanda',
       es: 'Difusor de Ambiente Lavanda',
@@ -467,7 +467,7 @@ export const products: CatalogProduct[] = [
     id: 'p-difusor-bamboo',
     sku: 'AYA-DIF-002',
     slug: 'difusor-ambiente-bamboo',
-    category: 'aromas',
+    category: 'difusores-aromatizadores',
     name: {
       'pt-br': 'Difusor de Ambiente Bamboo',
       es: 'Difusor de Ambiente Bamboo',
@@ -504,7 +504,7 @@ export const products: CatalogProduct[] = [
     id: 'p-spray-sandalo',
     sku: 'AYA-SPR-001',
     slug: 'spray-aromatico-sandalo',
-    category: 'aromas',
+    category: 'aromas-essencias',
     name: {
       'pt-br': 'Spray Aromático Sândalo',
       es: 'Spray Aromático Sándalo',
@@ -541,7 +541,7 @@ export const products: CatalogProduct[] = [
     id: 'p-essencia-jasmim',
     sku: 'AYA-ESE-001',
     slug: 'essencia-aromatica-jasmim',
-    category: 'aromas',
+    category: 'aromas-essencias',
     name: {
       'pt-br': 'Essência Aromática Jasmim',
       es: 'Esencia Aromática Jazmín',
@@ -578,7 +578,7 @@ export const products: CatalogProduct[] = [
     id: 'p-kit-ritual-meditacao',
     sku: 'AYA-RIT-001',
     slug: 'kit-ritual-de-meditacao',
-    category: 'rituais',
+    category: 'meditacao-relaxamento',
     name: {
       'pt-br': 'Kit Ritual de Meditação',
       es: 'Kit Ritual de Meditación',
@@ -616,7 +616,7 @@ export const products: CatalogProduct[] = [
     id: 'p-kit-ritual-serenidade',
     sku: 'AYA-RIT-002',
     slug: 'kit-ritual-de-serenidade',
-    category: 'rituais',
+    category: 'meditacao-relaxamento',
     name: {
       'pt-br': 'Kit Ritual de Serenidade',
       es: 'Kit Ritual de Serenidad',
@@ -653,7 +653,7 @@ export const products: CatalogProduct[] = [
     id: 'p-incensario-meditacao',
     sku: 'AYA-RIT-003',
     slug: 'incensario-para-meditacao',
-    category: 'rituais',
+    category: 'meditacao-relaxamento',
     name: {
       'pt-br': 'Incensário para Meditação',
       es: 'Incensario para Meditación',
@@ -687,7 +687,7 @@ export const products: CatalogProduct[] = [
     id: 'p-conjunto-contemplacao',
     sku: 'AYA-RIT-004',
     slug: 'conjunto-ritual-de-contemplacao',
-    category: 'rituais',
+    category: 'meditacao-relaxamento',
     name: {
       'pt-br': 'Conjunto Ritual de Contemplação',
       es: 'Conjunto Ritual de Contemplación',
@@ -724,7 +724,7 @@ export const products: CatalogProduct[] = [
     id: 'p-porta-incenso-ceramico',
     sku: 'AYA-ACE-001',
     slug: 'porta-incenso-ceramico',
-    category: 'acessorios',
+    category: 'decoracao-zen',
     name: {
       'pt-br': 'Porta-Incenso Cerâmico',
       es: 'Porta-Incienso Cerámico',
@@ -758,7 +758,7 @@ export const products: CatalogProduct[] = [
     id: 'p-porta-incenso-madeira',
     sku: 'AYA-ACE-002',
     slug: 'porta-incenso-madeira',
-    category: 'acessorios',
+    category: 'decoracao-zen',
     name: {
       'pt-br': 'Porta-Incenso de Madeira',
       es: 'Porta-Incienso de Madera',
@@ -795,7 +795,7 @@ export const products: CatalogProduct[] = [
     id: 'p-bandeja-rituais',
     sku: 'AYA-ACE-003',
     slug: 'bandeja-decorativa-para-rituais',
-    category: 'acessorios',
+    category: 'decoracao-zen',
     name: {
       'pt-br': 'Bandeja Decorativa para Rituais',
       es: 'Bandeja Decorativa para Rituales',
@@ -831,7 +831,7 @@ export const products: CatalogProduct[] = [
     id: 'p-caixa-essencias-alma',
     sku: 'AYA-KIT-001',
     slug: 'caixa-essencias-da-alma',
-    category: 'kits',
+    category: 'kits-presentes',
     name: {
       'pt-br': 'Caixa Essências da Alma',
       es: 'Caja Esencias del Alma',
@@ -869,7 +869,7 @@ export const products: CatalogProduct[] = [
     id: 'p-kit-presente-aconchego',
     sku: 'AYA-KIT-002',
     slug: 'kit-presente-aconchego',
-    category: 'kits',
+    category: 'kits-presentes',
     name: {
       'pt-br': 'Kit Presente Aconchego',
       es: 'Kit Regalo Aconchego',
@@ -906,7 +906,7 @@ export const products: CatalogProduct[] = [
     id: 'p-kit-presente-momento-zen',
     sku: 'AYA-KIT-003',
     slug: 'kit-presente-momento-zen',
-    category: 'kits',
+    category: 'kits-presentes',
     name: {
       'pt-br': 'Kit Presente Momento Zen',
       es: 'Kit Regalo Momento Zen',

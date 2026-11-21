@@ -16,6 +16,7 @@ export interface ShippingQuote {
 }
 
 const ECONOMY: ShippingQuote = {
+  estimated: true,
   id: 'economy',
   label: {
     'pt-br': 'Econômico (estimativa demonstrativa)',
@@ -31,6 +32,7 @@ const ECONOMY: ShippingQuote = {
 }
 
 const STANDARD: ShippingQuote = {
+  estimated: true,
   id: 'standard',
   label: {
     'pt-br': 'Padrão (estimativa demonstrativa)',
@@ -42,6 +44,7 @@ const STANDARD: ShippingQuote = {
 }
 
 const EXPRESS: ShippingQuote = {
+  estimated: true,
   id: 'express',
   label: {
     'pt-br': 'Expresso (estimativa demonstrativa)',

@@ -26,42 +26,42 @@ export function CollectionsSection() {
   // Cada card direciona à página de categoria correspondente na loja (Etapa 2).
   const collections: CollectionItem[] = [
     {
-      id: 'incensos',
+      id: 'incensos-defumacao',
       titleKey: 'col.1.title',
       descKey: 'col.1.desc',
       imageUrl: 'https://img.usecurling.com/p/800/1000?q=incense%20smoke%20sticks&color=black',
       aspect: 'aspect-[4/5]',
     },
     {
-      id: 'velas',
+      id: 'velas-aromaticas',
       titleKey: 'col.2.title',
       descKey: 'col.2.desc',
       imageUrl: 'https://img.usecurling.com/p/800/1000?q=scented%20candle%20linen&color=white',
       aspect: 'aspect-[4/5]',
     },
     {
-      id: 'aromas',
+      id: 'aromas-essencias',
       titleKey: 'col.3.title',
       descKey: 'col.3.desc',
       imageUrl: 'https://img.usecurling.com/p/800/1000?q=essential%20oil%20diffuser&color=gray',
       aspect: 'aspect-[4/5]',
     },
     {
-      id: 'rituais',
+      id: 'meditacao-relaxamento',
       titleKey: 'col.4.title',
       descKey: 'col.4.desc',
       imageUrl: 'https://img.usecurling.com/p/800/1000?q=meditation%20brass%20bell&color=black',
       aspect: 'aspect-[4/5]',
     },
     {
-      id: 'acessorios',
+      id: 'decoracao-zen',
       titleKey: 'col.5.title',
       descKey: 'col.5.desc',
       imageUrl: 'https://img.usecurling.com/p/800/1000?q=ceramic%20incense%20holder&color=white',
       aspect: 'aspect-[4/5]',
     },
     {
-      id: 'kits',
+      id: 'kits-presentes',
       titleKey: 'col.6.title',
       descKey: 'col.6.desc',
       imageUrl: 'https://img.usecurling.com/p/800/1000?q=gift%20box%20linen&color=gray',

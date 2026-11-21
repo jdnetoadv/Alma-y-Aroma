@@ -111,7 +111,7 @@ export const cartStore = {
     const key = (i: CartItem) => i.productId + (i.variation ?? '')
     const incomingKey = product.id + (variation ?? '')
     const existing = s.items.find((i) => key(i) === incomingKey)
-    const maxStock = Math.max(1, product.stock ?? 99)
+    const maxStock = Math.max(1, (product as unknown as { stock?: number }).stock ?? 99)
     if (existing) {
       existing.quantity = Math.min(existing.quantity + quantity, maxStock)
     } else {
@@ -120,7 +120,7 @@ export const cartStore = {
         slug: product.slug,
         name: product.name['pt-br'],
         image: product.images[0],
-        unitPrice: product.price ?? product.illustrativePrice,
+        unitPrice: (product as unknown as { price?: number }).price ?? product.illustrativePrice,
         quantity: Math.min(quantity, maxStock),
         variation,
         maxStock,

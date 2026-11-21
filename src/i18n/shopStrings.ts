@@ -285,6 +285,8 @@ const ptbr: Record<string, string> = {
   'admin.statOrders': 'Pedidos',
   'admin.statRevenue': 'Faturamento (pedidos demo)',
   'admin.statAvgTicket': 'Ticket médio',
+  // produto (usado via shopT com interpolação)
+  'product.savePercent': 'Economize {percent}%',
 }
 
 const es: Record<string, string> = {
@@ -560,6 +562,8 @@ const es: Record<string, string> = {
   'admin.statOrders': 'Pedidos',
   'admin.statRevenue': 'Facturación (pedidos demo)',
   'admin.statAvgTicket': 'Ticket medio',
+  // producto (usado vía shopT con interpolación)
+  'product.savePercent': 'Ahorra {percent}%',
 }
 
 const engb: Record<string, string> = {
@@ -831,6 +835,8 @@ const engb: Record<string, string> = {
   'admin.statOrders': 'Orders',
   'admin.statRevenue': 'Revenue (demo orders)',
   'admin.statAvgTicket': 'Average ticket',
+  // product (used via shopT with interpolation)
+  'product.savePercent': 'Save {percent}%',
 }
 
 export const shopStrings: Record<Locale, Record<string, string>> = {

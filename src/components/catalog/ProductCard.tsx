@@ -113,7 +113,7 @@ export function ProductCard({ product, localePrefix, badge, className }: Product
               {formatPrice(product.compareAtPrice, locale)}
             </span>
             <span className="text-[11px] text-primary">
-              {t('product.savePercent', {
+              {shopT(locale, 'product.savePercent', {
                 percent: String(
                   Math.round(
                     ((product.compareAtPrice - product.price) / product.compareAtPrice) * 100,

@@ -188,7 +188,7 @@ export default function ProductPage() {
                   {formatPrice(product.compareAtPrice, locale)}
                 </span>
                 <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-                  {t('product.savePercent', {
+                  {shopT(locale, 'product.savePercent', {
                     percent: String(
                       Math.round(
                         ((product.compareAtPrice - product.price) / product.compareAtPrice) * 100,

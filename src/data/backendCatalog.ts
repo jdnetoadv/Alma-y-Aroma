@@ -74,7 +74,10 @@ function toUiProduct(r: CatalogProductRecord) {
     productType: r.productType,
     tags: r.tags,
     purposes: r.purposes,
+    // Preço vigente: o campo `price` da UI é o preço NOVO; `compareAtPrice`
+    // (quando maior) sai riscado ao lado com a % de economia.
     price: r.price,
+    illustrativePrice: r.price,
     compareAtPrice: r.compareAtPrice,
     currency: r.currency,
     stock: r.stock,

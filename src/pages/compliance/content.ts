@@ -43,6 +43,24 @@ export const COMPLIANCE_PAGES: CompliancePageKey[] = [
   'contato',
 ]
 
+/**
+ * Placeholder de moeda/preço exibido nas minutas até que os valores oficiais
+ * da loja sejam definidos (nada de valores inventados).
+ */
+export const SHOP_CURRENCY_PLACEHOLDER = '[a definir]' as const
+
+/** Rótulo de moeda das minutas, por idioma — a moeda oficial ainda será definida. */
+export function shopCurrencyLabel(locale: Locale): string {
+  switch (locale) {
+    case 'es':
+      return 'moneda: [a definir]'
+    case 'en-gb':
+      return 'currency: [to be defined]'
+    default:
+      return 'moeda: [a definir]'
+  }
+}
+
 export const complianceContent: Record<CompliancePageKey, ComplianceContent> = {
   privacidade: {
     title: L('Política de Privacidade', 'Política de Privacidad', 'Privacy Policy'),

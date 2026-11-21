@@ -2,12 +2,14 @@ import { Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useLocale } from '@/i18n/LocaleContext'
 import { BrandSeal } from '@/components/common/BrandSeal'
+import bannerArt from '@/assets/banner-spa-luxuoso-alma-y-aroma-f5890.png'
 
 /**
- * Hero 100% HTML/CSS da homepage — sem fotografia de banner.
- * Fundo vinho profundo com halo âmbar (mesma atmosfera das seções escuras)
- * e todo o conteúdo centralizado e traduzido via i18n, para que a troca de
- * idioma (pt-BR / es-ES / en-GB) reflita imediatamente no hero.
+ * Hero da homepage: a fotografia do banner (vinho profundo, difusor, vela,
+ * Buda e lavanda) como camada de fundo — mas com overlay vinho forte, leve
+ * desfoque e zoom para neutralizar o texto/emblema EMBUTIDO na arte, de modo
+ * que o visitante leia apenas o texto HTML traduzido (i18n: pt-BR / es-ES /
+ * en-GB) sobreposto à atmosfera fotográfica.
  */
 export function HeroSection() {
   const { t, locale } = useLocale()
@@ -18,12 +20,21 @@ export function HeroSection() {
       aria-label="ALMA Y AROMA"
       className="relative flex flex-col overflow-hidden bg-wine-deep text-cream"
     >
-      {/* Fundo do hero: halo âmbar radial + gradiente sutil vinho/âmbar.
-          A camada com animate-breath respira a 20s, respeitando
-          prefers-reduced-motion (regra já definida em main.css). */}
+      {/* Fundo do hero: a fotografia do banner, ampliada e deslocada para
+          enquadrar a área da foto (difusor/vela/Buda) e tirar a faixa central
+          de texto embutido do enquadramento; leve desfoque e overlay vinho
+          escuro completam a neutralização. Camadas de halo âmbar + gradiente
+          por cima mantêm o clima atual. A camada com animate-breath respira a
+          20s, respeitando prefers-reduced-motion (regra já em main.css). */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-[#3E1A1D] via-wine-deep to-[#2B1113]"
+        className="absolute inset-0 bg-cover scale-110 blur-[2px]"
+        style={{ backgroundImage: `url(${bannerArt})`, backgroundPosition: '52% 38%' }}
+      />
+      <div aria-hidden className="absolute inset-0 bg-wine-deep/85" />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-[#3E1A1D]/80 via-wine-deep/60 to-[#2B1113]/90"
       />
       <div
         aria-hidden

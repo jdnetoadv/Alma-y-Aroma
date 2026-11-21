@@ -9,6 +9,7 @@ import { Locale } from './types'
 const ptbr: Record<string, string> = {
   // ── carrinho ──
   'cart.title': 'Carrinho',
+  'cart.added': 'Adicionado ao carrinho.',
   'cart.empty': 'Seu carrinho está vazio.',
   'cart.emptyCta': 'Explorar a loja',
   'cart.product': 'Produto',
@@ -159,6 +160,7 @@ const ptbr: Record<string, string> = {
 
 const es: Record<string, string> = {
   'cart.title': 'Carrito',
+  'cart.added': 'Añadido al carrito.',
   'cart.empty': 'Tu carrito está vacío.',
   'cart.emptyCta': 'Explorar la tienda',
   'cart.product': 'Producto',
@@ -306,6 +308,7 @@ const es: Record<string, string> = {
 
 const engb: Record<string, string> = {
   'cart.title': 'Cart',
+  'cart.added': 'Added to your cart.',
   'cart.empty': 'Your cart is empty.',
   'cart.emptyCta': 'Explore the shop',
   'cart.product': 'Product',

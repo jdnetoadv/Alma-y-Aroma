@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Plus, Minus, Lock, Truck, ChevronRight, X } from 'lucide-react'
+import { ArrowLeft, Plus, Minus, ShoppingCart, Truck, ChevronRight, X } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { CatalogProduct } from '@/data/types'
 import { catalogRepository, formatPrice } from '@/data/repository'
 import { ProductCard } from '@/components/catalog/ProductCard'
 import { CatalogBreadcrumb } from '@/components/catalog/CatalogShared'
+import { cartStore } from '@/lib/cart/cartStore'
 import { Button } from '@/components/ui/button'
+import { toast } from '@/hooks/use-toast'
+import { shopT } from '@/i18n/shopStrings'
 import { cn } from '@/lib/utils'
 
 export default function ProductPage() {
@@ -219,18 +222,30 @@ export default function ProductPage() {
               </div>
             </div>
 
-            {/* Compra desabilitada + frete */}
+            {/* Adicionar ao carrinho + frete */}
             <div className="mt-8 space-y-3">
-              <button
+              <Button
                 type="button"
-                disabled
-                title={t('product.cartSoon')}
-                aria-disabled="true"
-                className="flex h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-md bg-muted/50 text-sm text-muted-foreground/70"
+                onClick={() => {
+                  const variationLabel = variationList
+                    .map(
+                      (v, idx) =>
+                        v.values[variationSelection[v.kind] ?? 0] ??
+                        v.values[variationSelection[v.kind] ?? 0],
+                    )
+                    .filter(Boolean)
+                    .join(' · ')
+                  cartStore.addItem(product, quantity, variationLabel || undefined)
+                  toast({
+                    title: shopT(locale, 'cart.added'),
+                    description: `${name} · ${quantity} × ${formatPrice(product.illustrativePrice, locale)}`,
+                  })
+                }}
+                className="h-12 w-full bg-primary text-base hover:bg-primary/90"
               >
-                <Lock className="h-4 w-4" aria-hidden />
-                {t('product.addToCart')} — {t('shop.heroBadge').toLowerCase()}
-              </button>
+                <ShoppingCart className="mr-2 h-4 w-4" aria-hidden />
+                {t('product.addToCart')}
+              </Button>
               <p className="flex items-center gap-2 text-xs text-muted-foreground/80">
                 <Truck className="h-3.5 w-3.5" aria-hidden />
                 {t('product.shippingInfo')}

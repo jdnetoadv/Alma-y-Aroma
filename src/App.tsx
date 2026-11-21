@@ -12,6 +12,8 @@ import ProductPage from './pages/ProductPage'
 import KitsPage from './pages/KitsPage'
 import KitDetailPage from './pages/KitDetailPage'
 import SensationPage from './pages/SensationPage'
+import CartPage from './pages/CartPage'
+import CheckoutPage from './pages/CheckoutPage'
 import NotFound from './pages/NotFound'
 import { RootRedirect } from './components/routing/RootRedirect'
 
@@ -50,6 +52,10 @@ const App = () => (
               <Route path={localePath('/sensacoes/:purpose')} element={<SensationPage />} />
               <Route path={localePath('/categoria/:slug')} element={<CategoryPage />} />
               <Route path={localePath('/produto/:slug')} element={<ProductPage />} />
+
+              {/* ─── Etapa 3: carrinho e checkout (sem pagamento real) ─── */}
+              <Route path={localePath('/carrinho')} element={<CartPage />} />
+              <Route path={localePath('/checkout')} element={<CheckoutPage />} />
             </Route>
 
             {/* Contemplative 404 Catch-All */}

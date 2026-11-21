@@ -1,7 +1,10 @@
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Check } from 'lucide-react'
+import { ArrowLeft, Check, ShoppingCart } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { catalogRepository, formatPrice } from '@/data/repository'
+import { cartStore } from '@/lib/cart/cartStore'
+import { toast } from '@/hooks/use-toast'
+import { shopT } from '@/i18n/shopStrings'
 import { CatalogBreadcrumb } from '@/components/catalog/CatalogShared'
 import { ProductCard } from '@/components/catalog/ProductCard'
 import { Button } from '@/components/ui/button'
@@ -82,12 +85,14 @@ export default function KitDetailPage() {
             <div className="mt-10">
               <button
                 type="button"
-                disabled
-                title={t('product.cartSoon')}
-                aria-disabled="true"
-                className="flex h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-md bg-muted/50 text-sm text-muted-foreground/70"
+                onClick={() => {
+                  cartStore.addItem(kitProducts[0], 1)
+                  toast({ title: shopT(locale, 'cart.added') })
+                }}
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary text-sm text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                {t('product.addToCart')} — {t('shop.heroBadge').toLowerCase()}
+                <ShoppingCart className="h-4 w-4" aria-hidden />
+                {t('product.addToCart')} — {t('kits.priceNote')}
               </button>
             </div>
           </div>

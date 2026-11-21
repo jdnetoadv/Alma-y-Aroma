@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom'
-import { Lock } from 'lucide-react'
+import { ShoppingCart } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { CatalogProduct } from '@/data/types'
 import { formatPrice } from '@/data/repository'
+import { cartStore } from '@/lib/cart/cartStore'
+import { toast } from '@/hooks/use-toast'
+import { shopT } from '@/i18n/shopStrings'
 import { cn } from '@/lib/utils'
 
 interface ProductCardProps {
@@ -83,12 +86,13 @@ export function ProductCard({ product, localePrefix, badge, className }: Product
           </Link>
           <button
             type="button"
-            disabled
-            title={t('product.cartSoon')}
-            aria-disabled="true"
-            className="inline-flex h-9 flex-1 cursor-not-allowed items-center justify-center gap-1.5 rounded-md border border-border/50 bg-muted/40 px-3 text-sm text-muted-foreground/70"
+            onClick={() => {
+              cartStore.addItem(product, 1)
+              toast({ title: shopT(locale, 'cart.added') })
+            }}
+            className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-md border border-primary/60 bg-transparent px-3 text-sm text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
-            <Lock className="h-3.5 w-3.5" aria-hidden />
+            <ShoppingCart className="h-3.5 w-3.5" aria-hidden />
             {t('product.addToCart')}
           </button>
         </div>

@@ -4,6 +4,8 @@ import { Search, ShoppingBag, X, ArrowUpRight, ArrowRight } from 'lucide-react'
 import { useLocale } from '@/i18n/LocaleContext'
 import { searchCatalog } from '@/data/repository'
 import { formatPrice } from '@/data/repository'
+import { useCartStore } from '@/lib/cart/useCartStore'
+import { shopT } from '@/i18n/shopStrings'
 import {
   Dialog,
   DialogContent,
@@ -11,7 +13,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Badge } from '@/components/ui/badge'
 
 export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -150,34 +151,30 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   )
 }
 
+/**
+ * Botão do carrinho — Etapa 3: link direto para /{locale}/carrinho com
+ * contador de itens (quantidade total) em destaque quando há produtos.
+ */
 export function CartButton() {
-  const { t } = useLocale()
-  const [isOpen, setIsOpen] = useState(false)
+  const { locale } = useLocale()
+  const { itemCount } = useCartStore()
+  const cartLabel = shopT(locale, 'cart.title')
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          aria-label={t('cart.soon')}
-          className="relative p-2 rounded-full text-espresso/80 hover:text-saffron hover:bg-clay/30 transition-colors focus:outline-none focus:ring-2 focus:ring-saffron/60"
+    <Link
+      to={`/${locale}/carrinho`}
+      aria-label={`${cartLabel}${itemCount ? ` (${itemCount})` : ''}`}
+      className="relative inline-flex items-center p-2 rounded-full text-espresso/80 hover:text-saffron hover:bg-clay/30 transition-colors focus:outline-none focus:ring-2 focus:ring-saffron/60"
+    >
+      <ShoppingBag className="w-4 h-4" aria-hidden />
+      {itemCount > 0 && (
+        <span
+          className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-saffron px-1 font-sans text-[10px] font-semibold leading-none text-wine-deep"
+          aria-hidden
         >
-          <ShoppingBag className="w-4 h-4" />
-          <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-gold/80" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="end"
-        className="w-64 bg-cream border-clay text-espresso p-4 shadow-elevation"
-      >
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-serif text-sm font-semibold tracking-wide">ALMA Y AROMA</span>
-          <Badge className="bg-clay/60 text-wine-deep hover:bg-clay/80 text-[10px] font-sans font-medium">
-            {t('cart.soon')}
-          </Badge>
-        </div>
-        <p className="font-sans text-xs text-espresso/80 leading-relaxed">{t('cart.message')}</p>
-      </PopoverContent>
-    </Popover>
+          {itemCount > 9 ? '9+' : itemCount}
+        </span>
+      )}
+    </Link>
   )
 }

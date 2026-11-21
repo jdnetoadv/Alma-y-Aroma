@@ -1,25 +1,51 @@
 import { CatalogCategory } from './types'
 
 /**
- * As seis categorias da boutique. Slugs curtos, reutilizados nas URLs
- * localizadas: /pt-br/categoria/incensos, /es/categoria/inciensos...
+ * As sete categorias da boutique. Slugs alinhados 1:1 com o backend
+ * (PocketBase, coleção `categories`, migration 0002) e reutilizados nas
+ * URLs localizadas: /pt-br/categoria/incensos-defumacao, etc.
  */
 export const categories: CatalogCategory[] = [
   {
-    id: 'incensos',
-    slug: 'incensos',
+    id: 'aromas-essencias',
+    slug: 'aromas-essencias',
     order: 1,
     title: {
-      'pt-br': 'Incensos & Massala',
-      es: 'Inciensos & Massala',
-      'en-gb': 'Incense & Massala',
+      'pt-br': 'Aromas & Essências',
+      es: 'Aromas & Esencias',
+      'en-gb': 'Aromas & Essences',
+    },
+    description: {
+      'pt-br': 'Essências concentradas e óleos para difusores, pedras e rituais de ambientação.',
+      es: 'Esencias concentradas y aceites para difusores, piedras y rituales de ambientación.',
+      'en-gb': 'Concentrated essences and oils for diffusers, stones and atmosphere rituals.',
+    },
+    longDescription: {
+      'pt-br':
+        'Essências concentradas, sprays e óleos para perfume constante sem chama. Ideais para entrada, escritório, quarto ou banheiro — bastam alguns toques ou gotas para que o ambiente respire calma durante horas.',
+      es: 'Esencias concentradas, sprays y aceites para un perfume constante sin llama. Ideales para entrada, escritorio, dormitorio o baño — bastan unos toques o gotas para que el ambiente respire calma durante horas.',
+      'en-gb':
+        'Concentrated essences, sprays and oils for constant scent without a flame. Ideal for entryways, desks, bedrooms or bathrooms — a few drops or sprays are enough to keep a room breathing calm for hours.',
+    },
+    heroImage:
+      'https://img.usecurling.com/p/1600/900?q=essential%20oil%20amber%20bottles&color=white',
+    cardImage:
+      'https://img.usecurling.com/p/800/1000?q=essential%20oil%20amber%20bottles&color=white',
+  },
+  {
+    id: 'incensos-defumacao',
+    slug: 'incensos-defumacao',
+    order: 2,
+    title: {
+      'pt-br': 'Incensos & Defumação',
+      es: 'Incienso & Defumación',
+      'en-gb': 'Incense & Smudging',
     },
     description: {
       'pt-br':
-        'Fórmulas tradicionais e madeiras nobres, prensadas à mão para elevar a frequência do ambiente.',
-      es: 'Fórmulas tradicionales y maderas nobles, prensadas a mano para elevar la vibración de cada espacio.',
-      'en-gb':
-        'Traditional artisan formulas and precious woods, hand-rolled to elevate your sanctuary.',
+        'Varas, cones e resinas para aromatizar e marcar o ritmo dos seus momentos de pausa.',
+      es: 'Varillas, conos y resinas para aromatizar y marcar el ritmo de tus pausas.',
+      'en-gb': 'Sticks, cones and resins to scent your pauses and mark their rhythm.',
     },
     longDescription: {
       'pt-br':
@@ -28,22 +54,23 @@ export const categories: CatalogCategory[] = [
       'en-gb':
         'Our massala incense sticks are prepared in the traditional way, with hand-pressed resins, herbs and precious woods. Each fragrance was chosen to accompany quiet pauses, reading, meditation or the end of a busy day — always with a slow burn and gentle smoke.',
     },
-    heroImage: 'https://img.usecurling.com/p/1600/900?q=incense%20smoke%20sticks&color=black',
-    cardImage: 'https://img.usecurling.com/p/800/1000?q=incense%20smoke%20sticks&color=black',
+    heroImage: 'https://img.usecurling.com/p/1600/900?q=incense%20sticks%20smoke%20zen&color=black',
+    cardImage: 'https://img.usecurling.com/p/800/1000?q=incense%20sticks%20smoke%20zen&color=black',
   },
   {
-    id: 'velas',
-    slug: 'velas',
-    order: 2,
+    id: 'velas-aromaticas',
+    slug: 'velas-aromaticas',
+    order: 3,
     title: {
       'pt-br': 'Velas Aromáticas',
       es: 'Velas Aromáticas',
       'en-gb': 'Scented Candles',
     },
     description: {
-      'pt-br': 'Cera vegetal, pavios de algodão e óleos finos para uma queima limpa e envolvente.',
-      es: 'Cera vegetal, mechas de algodón y finos aceites para una combustión limpia y envolvente.',
-      'en-gb': 'Plant-based botanical wax, cotton wicks and fine oils for a clean, lingering burn.',
+      'pt-br': 'Cera vegetal, pavio de algodão e luz baixa para as horas em que a casa se aquieta.',
+      es: 'Cera vegetal, mecha de algodón y luz baja para las horas en que la casa se aquieta.',
+      'en-gb':
+        'Plant-based wax, cotton wick and low light for the hours when the house goes quiet.',
     },
     longDescription: {
       'pt-br':
@@ -52,48 +79,49 @@ export const categories: CatalogCategory[] = [
       'en-gb':
         'Candles made with plant-based wax and cotton wicks, formulated for a clean, steady burn. They accompany long baths, calm dinners and reading nights — low light, discreet perfume and presence.',
     },
-    heroImage: 'https://img.usecurling.com/p/1600/900?q=scented%20candle%20linen&color=white',
-    cardImage: 'https://img.usecurling.com/p/800/1000?q=scented%20candle%20linen&color=white',
+    heroImage:
+      'https://img.usecurling.com/p/1600/900?q=scented%20candle%20warm%20light&color=white',
+    cardImage:
+      'https://img.usecurling.com/p/800/1000?q=scented%20candle%20warm%20light&color=white',
   },
   {
-    id: 'aromas',
-    slug: 'aromas',
-    order: 3,
+    id: 'difusores-aromatizadores',
+    slug: 'difusores-aromatizadores',
+    order: 4,
     title: {
-      'pt-br': 'Aromas & Essências',
-      es: 'Aromas & Esencias',
-      'en-gb': 'Aromas & Essences',
+      'pt-br': 'Difusores & Aromatizadores',
+      es: 'Difusores & Aromatizadores',
+      'en-gb': 'Diffusers & Scenting',
     },
     description: {
-      'pt-br':
-        'Gotas de presença, difusores e névoas aromáticas para perfumar com sutileza e constância.',
-      es: 'Gotas de presencia, difusores y brumas aromáticas para perfumar con sutileza y constancia.',
-      'en-gb': 'Subtle drops of presence, reed diffusers and room mists for serene constancy.',
+      'pt-br': 'Difusores elétricos, de varetas e pedras aromáticas para perfume contínuo.',
+      es: 'Difusores eléctricos, de varillas y piedras aromáticas para perfume continuo.',
+      'en-gb': 'Electric, reed and aroma stone diffusers for continuous scent.',
     },
     longDescription: {
       'pt-br':
-        'Difusores, sprays e essências para perfume constante sem chama. Ideais para entrada, escritório, quarto ou banheiro — bastam alguns toques ou varetas para que o ambiente respire calma durante horas.',
-      es: 'Difusores, sprays y esencias para un perfume constante sin llama. Ideales para entrada, escritorio, dormitorio o baño — bastan unas varillas o toques para que el ambiente respire calma durante horas.',
+        'Difusores de varetas, elétricos e pedras aromáticas para perfume contínuo sem chama. Basta girar as varetas ou ligar o aparelho para que o ambiente respire o mesmo aroma por horas.',
+      es: 'Difusores de varillas, eléctricos y piedras aromáticas para perfume continuo sin llama. Basta girar las varillas o encender el aparato para que el ambiente respire el mismo aroma por horas.',
       'en-gb':
-        'Diffusers, sprays and essences for constant scent without a flame. Ideal for entryways, desks, bedrooms or bathrooms — a few reeds or sprays are enough to keep a room breathing calm for hours.',
+        'Reed, electric and aroma-stone diffusers for continuous flame-free scent. Flip the reeds or switch it on and the room keeps breathing the same aroma for hours.',
     },
-    heroImage: 'https://img.usecurling.com/p/1600/900?q=essential%20oil%20diffuser&color=gray',
-    cardImage: 'https://img.usecurling.com/p/800/1000?q=essential%20oil%20diffuser&color=gray',
+    heroImage: 'https://img.usecurling.com/p/1600/900?q=reed%20diffuser%20home%20aroma&color=white',
+    cardImage: 'https://img.usecurling.com/p/800/1000?q=reed%20diffuser%20home%20aroma&color=white',
   },
   {
-    id: 'rituais',
-    slug: 'rituais',
-    order: 4,
+    id: 'meditacao-relaxamento',
+    slug: 'meditacao-relaxamento',
+    order: 5,
     title: {
-      'pt-br': 'Rituais & Espiritualidade',
-      es: 'Rituales & Espiritualidad',
-      'en-gb': 'Rituals & Spirituality',
+      'pt-br': 'Meditação & Relaxamento',
+      es: 'Meditación & Relaxamiento',
+      'en-gb': 'Meditation & Relaxation',
     },
     description: {
-      'pt-br':
-        'Elementos sagrados, sinos, resinas puras e incensários concebidos para a sua pausa interior.',
-      es: 'Elementos sagrados, campanas, resinas puras e incensarios diseñados para tu pausa interior.',
-      'en-gb': 'Sacred elements, bells, raw resins and holders crafted for quiet reflection.',
+      'pt-br': 'Objetos de apoio à pausa: sinos, almofadas, pedras e acessórios de contemplação.',
+      es: 'Objetos de apoyo a la pausa: campanas, cojines, piedras y accesorios de contemplación.',
+      'en-gb':
+        'Objects that support the pause: bells, cushions, stones and contemplation accessories.',
     },
     longDescription: {
       'pt-br':
@@ -102,48 +130,50 @@ export const categories: CatalogCategory[] = [
       'en-gb':
         'Kits, holders and sets designed for your inner pause: light, breathe, contemplate. Each piece supports simple rituals of presence — no promises, only beautiful and functional objects for your quiet moment.',
     },
-    heroImage: 'https://img.usecurling.com/p/1600/900?q=meditation%20brass%20bell&color=black',
-    cardImage: 'https://img.usecurling.com/p/800/1000?q=meditation%20brass%20bell&color=black',
+    heroImage:
+      'https://img.usecurling.com/p/1600/900?q=meditation%20cushion%20zen%20bell&color=black',
+    cardImage:
+      'https://img.usecurling.com/p/800/1000?q=meditation%20cushion%20zen%20bell&color=black',
   },
   {
-    id: 'acessorios',
-    slug: 'acessorios',
-    order: 5,
+    id: 'decoracao-zen',
+    slug: 'decoracao-zen',
+    order: 6,
     title: {
-      'pt-br': 'Acessórios & Decoração',
-      es: 'Accesorios & Decoración',
-      'en-gb': 'Accessories & Décor',
+      'pt-br': 'Decoração Zen',
+      es: 'Decoración Zen',
+      'en-gb': 'Zen Decoration',
     },
     description: {
-      'pt-br':
-        'Design minimalista em cerâmica, pedra e latão envelhecido que harmoniza com seu santuário.',
-      es: 'Diseño minimalista en cerámica, piedra y latón envejecido que armoniza con tu santuario.',
-      'en-gb':
-        'Minimalist ceramics, stone and aged brass designed to complement your calm interior.',
+      'pt-br': 'Peças de madeira, cerâmica e pedra que trazem calma à decoração.',
+      es: 'Piezas de madera, cerámica y piedra que traen calma a la decoración.',
+      'en-gb': 'Wood, ceramic and stone pieces that bring calm to your decor.',
     },
     longDescription: {
       'pt-br':
-        'Peças de cerâmica, madeira e latão que organizam e embelezam o seu canto de rituais. Porta-incensos, bandejas e detalhes desenhados para durar, combinando com a paleta quente da casa.',
-      es: 'Piezas de cerámica, madera y latón que organizan y embellecen tu rincón de rituales. Porta-inciensos, bandejas y detalles diseñados para durar, en sintonía con la paleta cálida de la casa.',
+        'Peças de cerâmica, madeira e pedra que organizam e embelezam o seu canto de rituais. Porta-incensos, bandejas e detalhes desenhados para durar, combinando com a paleta quente da casa.',
+      es: 'Piezas de cerámica, madera y piedra que organizan y embellecen tu rincón de rituales. Porta-inciensos, bandejas y detalles diseñados para durar, en sintonía con la paleta cálida de la casa.',
       'en-gb':
-        'Ceramic, wood and brass pieces that organise and beautify your ritual corner. Incense holders, trays and details designed to last, in tune with the warm palette of the house.',
+        'Ceramic, wood and stone pieces that organise and beautify your ritual corner. Incense holders, trays and details designed to last, in tune with the warm palette of the house.',
     },
-    heroImage: 'https://img.usecurling.com/p/1600/900?q=ceramic%20incense%20holder&color=white',
-    cardImage: 'https://img.usecurling.com/p/800/1000?q=ceramic%20incense%20holder&color=white',
+    heroImage:
+      'https://img.usecurling.com/p/1600/900?q=zen%20stone%20wood%20decoration&color=white',
+    cardImage:
+      'https://img.usecurling.com/p/800/1000?q=zen%20stone%20wood%20decoration&color=white',
   },
   {
-    id: 'kits',
-    slug: 'kits',
-    order: 6,
+    id: 'kits-presentes',
+    slug: 'kits-presentes',
+    order: 7,
     title: {
       'pt-br': 'Kits & Presentes',
       es: 'Kits & Regalos',
       'en-gb': 'Kits & Gifts',
     },
     description: {
-      'pt-br': 'Curadorias especiais embaladas com linho e carinho para presentear quem você ama.',
-      es: 'Curadurías especiales envueltas en lino y afecto para obsequiar a quienes más amas.',
-      'en-gb': 'Bespoke sets wrapped in natural linen and care, prepared for thoughtful gifting.',
+      'pt-br': 'Combinações pensadas para presentear — ou para presentear a si mesmo.',
+      es: 'Combinaciones pensadas para regalar — o para regalarte.',
+      'en-gb': 'Curated combinations to give as gifts — or to gift yourself.',
     },
     longDescription: {
       'pt-br':
@@ -152,7 +182,7 @@ export const categories: CatalogCategory[] = [
       'en-gb':
         'Curated sets ready to gift — or to treat yourself. Each kit brings together complementary scents and objects, wrapped in linen with a message card; the exact composition of each box appears on the kit page.',
     },
-    heroImage: 'https://img.usecurling.com/p/1600/900?q=gift%20box%20linen&color=gray',
-    cardImage: 'https://img.usecurling.com/p/800/1000?q=gift%20box%20linen&color=gray',
+    heroImage: 'https://img.usecurling.com/p/1600/900?q=gift%20box%20aromatherapy&color=white',
+    cardImage: 'https://img.usecurling.com/p/800/1000?q=gift%20box%20aromatherapy&color=white',
   },
 ]

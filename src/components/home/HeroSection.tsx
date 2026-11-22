@@ -1,7 +1,7 @@
 import { Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useLocale } from '@/i18n/LocaleContext'
-import heroBanner from '@/assets/difusor-alma-y-aroma-ao-entardecer-e7ed7.png'
+import heroBanner from '@/assets/luxo-e-aroma-no-spa-3896d.png'
 
 /**
  * Hero da homepage: o banner enviado pela usuária (difusor, vela, Buda,
@@ -20,31 +20,27 @@ export function HeroSection() {
       aria-label="ALMA Y AROMA"
       className="relative flex flex-col overflow-hidden bg-wine-deep text-cream"
     >
-      {/* Fundo do hero: MEASURED, não estimado. O script
-          scripts/measure-emblem.cjs (Node, sem dependências — decodifica o PNG
-          com zlib e faz análise de pixels) mediu a marca (emblema + wordmark
-          ALMA Y AROMA) gravada na arte em f = 0,6419 da largura da imagem
-          (região dourada densa x 940–1261 de 1736 px,
-          scripts/emblem-measurement.json).
+      {/* Fundo do hero: enquadramento natural, SEM desfoque e SEM zoom forte.
+          Arte nova "Difusor Alma y Aroma ao Entardecer": a marca (emblema +
+          wordmark ALMA Y AROMA) nasce quase centralizada, em f ≈ 0,52 da
+          largura do arquivo. Camada mínima de 108% (longe dos zooms 1,25–2,2
+          das versões 0.0.33–0.0.35) só para permitir a micro-correção de ~2%
+          sem expor bordas, preservando as laterais: Buda/difusor à esquerda
+          e vela/incensário/presente à direita.
           Regra invariante da camada: left + f·width = 50% da viewport ⇒
-          left = 50% − 0,6419·125% = −30,24%.
-          background-position horizontal = f = 64,19% (equivalente matemático:
-          posiciona a imagem de modo que o ponto f fique em f·(divW−imgW) do
-          overflow, caindo exatamente no centro — válido em desktop e celular,
-          com background-size cover por altura).
-          Zoom de 1,25x mantido (aprovado pela usuária): difusor/Buda à
-          esquerda e a vela à direita permanecem visíveis.
-          Recalibração futura: rode `node scripts/measure-emblem.cjs`, pegue o
-          f do bloco "emblem" em scripts/emblem-measurement.json e recalcule
+          left = 50% − 0,52·108% = −6,16%; background-position = f = 52%
+          (equivalente matemático — válido em desktop e celular, cover).
+          Recalibração: rode `node scripts/measure-emblem.cjs`, pegue o f do
+          bloco "emblem" em scripts/emblem-measurement.json e recalcule
           left = 50% − f·width e position = f. */}
       <div
         aria-hidden
         className="absolute top-0 bottom-0 bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url(${heroBanner})`,
-          left: '-30.24%',
-          width: '125%',
-          backgroundPosition: '64.19% center',
+          left: '-6.16%',
+          width: '108%',
+          backgroundPosition: '52% center',
         }}
       />
       {/* Escurecimento suave: base e laterais mais fortes para a leitura do

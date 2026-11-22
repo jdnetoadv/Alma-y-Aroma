@@ -13,11 +13,7 @@ const fs = require('fs')
 const path = require('path')
 const zlib = require('zlib')
 
-const BANNER_PATH = path.resolve(
-  __dirname,
-  '..',
-  'src/assets/difusor-alma-y-aroma-ao-entardecer-e7ed7.png',
-)
+const BANNER_PATH = path.resolve(__dirname, '..', 'src/assets/luxo-e-aroma-no-spa-3896d.png')
 
 // ---------- decodificador PNG mínimo ----------
 function decodePng(buf) {

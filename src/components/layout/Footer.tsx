@@ -202,6 +202,15 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+            {/* Acesso discreto ao painel administrativo — apenas em pt-BR */}
+            {locale === 'pt-br' && (
+              <Link
+                to="/pt-br/admin"
+                className="block text-[11px] text-cream/40 hover:text-cream/70 transition-colors"
+              >
+                Administração
+              </Link>
+            )}
           </div>
 
           {/* Col 4: Newsletter capture (3 cols) - real capture into PocketBase */}

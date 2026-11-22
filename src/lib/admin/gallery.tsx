@@ -34,10 +34,13 @@ export type GalleryState = {
   markers: string[]
 }
 
-/** URL de um arquivo já gravado em `galleryFiles` (coleção products). */
-export function galleryFileUrl(fileName: string): string {
+/**
+ * URL de um arquivo já gravado em `galleryFiles` (coleção products).
+ * Exige o id REAL do registro: `/api/files/<coleção>/<id-do-produto>/<arquivo>`.
+ */
+export function galleryFileUrl(recordId: string, fileName: string): string {
   return pb.files.getURL(
-    { id: 'x', collectionId: 'products' } as unknown as Parameters<typeof pb.files.getURL>[0],
+    { id: recordId, collectionId: 'products' } as unknown as Parameters<typeof pb.files.getURL>[0],
     fileName,
   )
 }
@@ -109,6 +112,8 @@ function savedGalleryFiles(product: { galleryFiles?: string | string[] }): strin
  */
 export function loadGalleryEntries(
   record: {
+    /** Id REAL do registro em edição — necessário para as URLs de arquivo. */
+    id?: string
     galleryFiles?: string | string[]
     imageFile?: string
   },
@@ -118,6 +123,9 @@ export function loadGalleryEntries(
   if (record.imageFile && !saved.includes(record.imageFile)) {
     saved.push(record.imageFile)
   }
+  // Sem id de registro não há como montar URL de arquivo do PocketBase
+  // (só acontece fora da edição, quando não há arquivos gravados).
+  const fileUrl = (name: string): string => (record.id ? galleryFileUrl(record.id, name) : '')
   const list = Array.isArray(images) ? (images as unknown[]) : []
   const entries: GalleryEntry[] = []
   const usedFiles = new Set<string>()
@@ -131,7 +139,7 @@ export function loadGalleryEntries(
         entries.push({
           kind: 'remote',
           id: `file:${name}`,
-          url: galleryFileUrl(name),
+          url: fileUrl(name),
           fileName: name,
         })
       }
@@ -145,7 +153,7 @@ export function loadGalleryEntries(
       entries.push({
         kind: 'remote',
         id: `file:${name}`,
-        url: galleryFileUrl(name),
+        url: fileUrl(name),
         fileName: name,
       })
     }
@@ -165,7 +173,12 @@ export function AdminProductGallery({
   onNotify,
 }: {
   /** Produto em edição (carrega as fotos já salvas) — ausente na criação. */
-  product?: { galleryFiles?: string | string[]; imageFile?: string; images?: unknown }
+  product?: {
+    id?: string
+    galleryFiles?: string | string[]
+    imageFile?: string
+    images?: unknown
+  }
   /** Chamado quando a galeria muda, para o pai montar o payload de salvamento. */
   onChange: (value: GalleryState) => void
   /** Notificação de erro/aviso (ex.: limite de 10 fotos). */
@@ -177,7 +190,11 @@ export function AdminProductGallery({
   const [entries, setEntries] = useState<GalleryEntry[]>(() =>
     product
       ? loadGalleryEntries(
-          { galleryFiles: product.galleryFiles, imageFile: product.imageFile },
+          {
+            id: product.id,
+            galleryFiles: product.galleryFiles,
+            imageFile: product.imageFile,
+          },
           product.images,
         )
       : [],

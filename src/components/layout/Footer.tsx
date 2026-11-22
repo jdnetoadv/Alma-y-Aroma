@@ -264,7 +264,7 @@ export function Footer() {
             <span>{t('footer.rights')}</span>
             <span className="hidden sm:inline">•</span>
             <span className="italic">{t('footer.crafted')}</span>
-            {/* Atribuição da faixa real — exibida somente quando o MP3 está tocando */}
+            {/* Atribuição da faixa real — exibida somente quando o MP3 instalado existe */}
             {hasLicensedFile && (
               <>
                 <span className="hidden sm:inline">•</span>

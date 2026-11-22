@@ -24,7 +24,7 @@ export function EssenceSection() {
 
               <div className="relative rounded-sm overflow-hidden aspect-[4/5] bg-clay shadow-elevation">
                 <img
-                  src="https://img.usecurling.com/p/800/1000?q=candle%20ceramic%20table%20tea&color=white"
+                  src="https://img.usecurling.com/p/800/1000?q=spa%20still%20life%20incense%20candle%20dried%20flowers%20warm%20golden%20light%20luxury&color=warm"
                   alt="Atmosfera de contemplação da Alma y Aroma"
                   loading="lazy"
                   className="w-full h-full object-cover transform duration-1000 hover:scale-105"

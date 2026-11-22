@@ -157,7 +157,8 @@ export default function CheckoutPage() {
           {/* Selo circular da marca (vinho/dourado) como marcação de sucesso */}
           <BrandSeal
             title="Alma y Aroma"
-            className="mx-auto h-24 w-24 drop-shadow-[0_2px_18px_rgba(180,154,103,0.45)]"
+            showLettering={false}
+            className="mx-auto w-24 drop-shadow-[0_2px_18px_rgba(180,154,103,0.45)]"
           />
           <h1 className="mt-6 font-serif text-4xl text-cream">{t('order.successTitle')}</h1>
           <p className="mt-3 text-cream/70">{t('order.successSubtitle')}</p>

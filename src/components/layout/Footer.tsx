@@ -88,9 +88,9 @@ export function Footer() {
           {/* Col 1: Brand & Manifesto (5 cols) — nova identidade enviada pela
               cliente: emblema + wordmark + slogan, um único selo coeso */}
           <div className="lg:col-span-5 space-y-5">
-            {/* Selo completo da nova identidade: emblema + wordmark marfim +
-                slogan dourado entre filetes (tudo no próprio SVG) */}
-            <BrandSeal title="Alma y Aroma" className="h-28 w-auto flex-shrink-0" />
+            {/* Selo completo da LOGO OFICIAL: emblema PNG processado (fundo
+                transparente) + wordmark marfim + slogan dourado */}
+            <BrandSeal title="Alma y Aroma" className="flex-shrink-0" />
             <p className="font-sans text-xs text-cream/70 leading-relaxed max-w-sm pt-2">
               {t('essence.p2')}
             </p>

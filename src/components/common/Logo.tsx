@@ -10,12 +10,11 @@ interface LogoProps {
 }
 
 /**
- * Logomarca ALMA Y AROMA — identidade NOVA enviada pela cliente (PNGs de
- * referência): emblema de chama/folha em gradiente dourado dentro de círculo
- * fino aberto no topo + wordmark "ALMA Y AROMA" em serifadas marfim/creme com
- * letter-spacing largo. Renderizada como SVG vetorial com fundo transparente
- * (a referência PNG tem fundo preto opaco, não aproveitável no topbar marfim).
- * O mesmo emblema canônico é usado no rodapé, favicon, conta e checkout.
+ * Logomarca ALMA Y AROMA — LOGO OFICIAL da cliente (PNG processado com fundo
+ * transparente). No topbar marfim aparece SEM retângulo preto: o fundo do
+ * PNG oficial foi removido por chave de luminância no pipeline de build, e o
+ * glow dourado ao redor do emblema virou transparência suave.
+ * O mesmo emblema oficial é usado no rodapé, favicon, conta e checkout.
  */
 export function Logo({ variant = 'dark', className = '', showTagline = false }: LogoProps) {
   const { locale, t } = useLocale()
@@ -34,8 +33,8 @@ export function Logo({ variant = 'dark', className = '', showTagline = false }: 
       className={`group flex items-center gap-3 select-none outline-none ${className}`}
       aria-label="Alma y Aroma"
     >
-      {/* Emblema da nova identidade (chama/folha + círculo dourado aberto) */}
-      <BrandEmblem className="w-8 h-9 flex-shrink-0" />
+      {/* Emblema oficial (chama atravessando o círculo aberto + folhas) */}
+      <BrandEmblem className="w-9 h-9 object-contain flex-shrink-0" />
 
       <div className="flex flex-col">
         <span

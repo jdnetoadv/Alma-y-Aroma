@@ -73,7 +73,7 @@ export default function AccountAuthForms() {
         />
         <div className="relative">
           {/* Selo circular da marca (vinho/dourado), discreto */}
-          <BrandSeal title="Alma y Aroma" className="mx-auto mb-5 h-16 w-16 opacity-90" />
+          <BrandSeal title="Alma y Aroma" showLettering={false} className="mx-auto mb-5 w-16" />
           <p className="font-serif text-2xl text-cream">
             {t('account.welcome', { name: user.name || user.email })}
           </p>
@@ -105,7 +105,7 @@ export default function AccountAuthForms() {
       />
       <div className="relative">
         {/* Selo circular da marca (vinho/dourado), discreto */}
-        <BrandSeal title="Alma y Aroma" className="mb-6 h-16 w-16 opacity-90" />
+        <BrandSeal title="Alma y Aroma" showLettering={false} className="mb-6 w-16" />
         <h2 className="font-serif text-2xl text-cream">
           {mode === 'signup'
             ? t('account.signup')

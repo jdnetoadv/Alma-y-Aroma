@@ -6,8 +6,8 @@ import heroBanner from '@/assets/luxo-e-aroma-no-spa-3896d.png'
 /**
  * Hero da homepage: o banner enviado pela usuária (difusor, vela, Buda,
  * lavanda e o emblema/wordmark ALMA Y AROMA já gravados na arte) é a camada
- * de fundo, sem desfoque. Os textos são HTML traduzidos (i18n pt-BR / es-ES /
- * en-GB) sobrepostos à imagem; só o texto muda ao trocar de idioma.
+ * de fundo, sem desfoque. Os textos são HTML traduzido (i18n pt-BR / es-ES /
+ * en-GB) sobreposto à imagem; só o texto muda ao trocar de idioma.
  * A marca (emblema + nome da arte) é centralizada horizontalmente; o conteúdo
  * é ancorado na base para não cobrir o emblema, que fica na parte superior.
  */
@@ -62,11 +62,14 @@ export function HeroSection() {
         className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent"
       />
 
-      {/* Conteúdo centralizado horizontalmente, ancorado à base da composição */}
-      <div className="relative z-10 flex-1 flex items-end justify-center min-h-[82vh] sm:min-h-[88vh] lg:min-h-screen px-6 pt-40 pb-16 sm:pb-20">
+      {/* Conteúdo centralizado horizontalmente, ancorado à base da composição.
+          Afastamento da base e gaps internos compactados (pedido da usuária:
+          "desce um pouco o slogan") para que o slogan fique claramente abaixo
+          do wordmark ALMA Y AROMA da arte, sem cortar o bloco na viewport. */}
+      <div className="relative z-10 flex-1 flex items-end justify-center min-h-[82vh] sm:min-h-[88vh] lg:min-h-screen px-6 pb-10 sm:pb-14">
         <div className="mx-auto max-w-4xl w-full text-center">
           {/* Badge da nova boutique */}
-          <div className="mb-5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/40 bg-wine-deep/55 backdrop-blur-sm text-gold-light animate-fade-in">
+          <div className="mb-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/40 bg-wine-deep/55 backdrop-blur-sm text-gold-light animate-fade-in">
             <Sparkles className="w-3.5 h-3.5" />
             <span className="font-sans text-[11px] uppercase tracking-[0.2em] font-medium">
               {t('hero.badge')}
@@ -79,12 +82,12 @@ export function HeroSection() {
           </h1>
 
           {/* Linha de apoio */}
-          <p className="mt-5 sm:mt-6 max-w-2xl mx-auto font-sans text-sm sm:text-base text-cream/85 leading-relaxed animate-fade-in-up">
+          <p className="mt-4 sm:mt-5 max-w-2xl mx-auto font-sans text-sm sm:text-base text-cream/85 leading-relaxed animate-fade-in-up">
             {t('hero.subtitle')}
           </p>
 
           {/* CTAs */}
-          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up">
             <Link
               to={`/${locale}/loja`}
               className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-sm bg-gold hover:bg-gold-hover text-wine-deep font-sans text-xs uppercase tracking-[0.16em] font-semibold transition-all duration-300 shadow-elevation hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-gold-light focus:ring-offset-2 focus:ring-offset-wine-deep"

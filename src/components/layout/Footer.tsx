@@ -5,11 +5,13 @@ import { Logo } from '@/components/common/Logo'
 import { BrandSeal } from '@/components/common/BrandSeal'
 import { LanguageSelector } from '@/components/common/LanguageSelector'
 import { useLocale } from '@/i18n/LocaleContext'
+import { useAmbientAudio } from '@/components/audio/AmbientAudioProvider'
 import { siteConfig } from '@/config/site'
 import { subscribeNewsletter } from '@/services/newsletter'
 
 export function Footer() {
   const { t, locale } = useLocale()
+  const { hasLicensedFile } = useAmbientAudio()
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [feedback, setFeedback] = useState<{
@@ -262,6 +264,15 @@ export function Footer() {
             <span>{t('footer.rights')}</span>
             <span className="hidden sm:inline">•</span>
             <span className="italic">{t('footer.crafted')}</span>
+            {/* Atribuição da faixa real — exibida somente quando o MP3 está tocando */}
+            {hasLicensedFile && (
+              <>
+                <span className="hidden sm:inline">•</span>
+                <span className="text-[11px] text-cream/50">
+                  Música: Flute of the Silent Valley — omar sahel (djovan), via Pixabay
+                </span>
+              </>
+            )}
           </div>
 
           <div className="flex items-center gap-4">

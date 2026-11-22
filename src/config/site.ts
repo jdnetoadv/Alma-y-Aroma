@@ -33,11 +33,11 @@ export const siteConfig: SiteConfig = {
   audio: {
     enabled: true,
     // A experiência sonora está ATIVA. O provider tenta primeiro o MP3 em
-    // public/audio/ambiente-loop.mp3 ("soothing tibetian flute music",
-    // PoorArtistt, Pixabay Content License — ver src/lib/audio/tibetanSynth.ts);
-    // se o arquivo não existir, usa o fallback sintetizado via WebAudio
-    // (flauta tibetana pentatônica sobre drone). Nenhum autoplay: só após
-    // clique no controle do cabeçalho ou no convite.
+    // public/audio/ambiente-loop.mp3 (faixa alvo: "Flute of the Silent Valley",
+    // omar sahel / djovan, Pixabay ID 497085, Pixabay Content License — crédito
+    // no rodapé enquanto o arquivo estiver tocando); se o arquivo não existir,
+    // usa o fallback sintetizado via WebAudio (src/lib/audio/tibetanSynth.ts).
+    // Nenhum autoplay: só após clique no controle do cabeçalho ou no convite.
     hasLicensedFile: false, // informativo — o provider detecta o arquivo em runtime via HEAD
     src: '/audio/ambiente-loop.mp3',
     defaultVolume: 0.3,

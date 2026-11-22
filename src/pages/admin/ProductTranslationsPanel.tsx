@@ -1,4 +1,6 @@
 import { Locale } from '@/i18n/types'
+import { useLocale } from '@/i18n/LocaleContext'
+import { shopT } from '@/i18n/shopStrings'
 import { AdminProduct } from '@/lib/admin/service'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -56,21 +58,29 @@ export function ProductTranslationsPanel({
   ptShortDescription: string
   ptLongDescription: string
 }) {
+  const { locale } = useLocale()
+  const t = (key: string) => shopT(locale, key)
+
   function setValue(field: TranslatedField, code: TranslatedLocale, text: string) {
     onChange({ ...value, [field]: { ...value[field], [code]: text } })
   }
 
-  const fields: { field: TranslatedField; label: string; pt: string; multiline: boolean }[] = [
-    { field: 'name', label: 'Nome', pt: ptName, multiline: false },
+  const fields: {
+    field: TranslatedField
+    label: string
+    pt: string
+    multiline: boolean
+  }[] = [
+    { field: 'name', label: t('admin.productName'), pt: ptName, multiline: false },
     {
       field: 'shortDescription',
-      label: 'Descrição curta',
+      label: t('admin.shortDescription'),
       pt: ptShortDescription,
       multiline: false,
     },
     {
       field: 'longDescription',
-      label: 'Descrição completa',
+      label: t('admin.longDescription'),
       pt: ptLongDescription,
       multiline: true,
     },
@@ -79,11 +89,9 @@ export function ProductTranslationsPanel({
   return (
     <fieldset className="space-y-3 rounded-md border border-border/60 p-4">
       <legend className="px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-        Traduções
+        {t('admin.translations.title')}
       </legend>
-      <p className="text-[11px] text-muted-foreground">
-        Deixe em branco para a loja mostrar o texto em português.
-      </p>
+      <p className="text-[11px] text-muted-foreground">{t('admin.translations.hint')}</p>
       {TRANSLATED_LOCALES.map(({ code, label: localeLabel }) => (
         <div key={code} className="space-y-2">
           <p className="text-xs font-medium text-foreground">{localeLabel}</p>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T15:33:00.842Z",
+  "generatedAt": "2026-11-22T16:06:17.654Z",
   "collections": [
     {
       "name": "users",
@@ -29,14 +29,19 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         }
       ],
       "indexes": [
@@ -66,21 +71,30 @@
           "type": "select",
           "required": true,
           "system": false,
-          "selectValues": ["pt-br", "es", "en-gb"]
+          "selectValues": [
+            "pt-br",
+            "es",
+            "en-gb"
+          ]
         },
         {
           "name": "created",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         }
       ],
       "indexes": [
@@ -237,7 +251,11 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["BRL", "EUR", "GBP"]
+          "selectValues": [
+            "BRL",
+            "EUR",
+            "GBP"
+          ]
         },
         {
           "name": "stock",
@@ -372,7 +390,12 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["available", "low_stock", "backorder", "unavailable"]
+          "selectValues": [
+            "available",
+            "low_stock",
+            "backorder",
+            "unavailable"
+          ]
         },
         {
           "name": "processingDays",
@@ -391,7 +414,12 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["BR", "ES", "EU", "GB"]
+          "selectValues": [
+            "BR",
+            "ES",
+            "EU",
+            "GB"
+          ]
         },
         {
           "name": "regulatoryNotes",
@@ -404,7 +432,11 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["draft", "published", "archived"]
+          "selectValues": [
+            "draft",
+            "published",
+            "archived"
+          ]
         },
         {
           "name": "imageFile",
@@ -413,7 +445,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_products_slug ON products (slug)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_products_slug ON products (slug)"
+      ]
     },
     {
       "name": "orders",
@@ -459,14 +493,23 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["pix", "credit_card", "debit_card", "international_card"]
+          "selectValues": [
+            "pix",
+            "credit_card",
+            "debit_card",
+            "international_card"
+          ]
         },
         {
           "name": "currency",
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["BRL", "EUR", "GBP"]
+          "selectValues": [
+            "BRL",
+            "EUR",
+            "GBP"
+          ]
         },
         {
           "name": "locale",
@@ -596,7 +639,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_orders_code ON orders (code)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_orders_code ON orders (code)"
+      ]
     },
     {
       "name": "coupons",
@@ -620,7 +665,10 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["percent", "fixed"]
+          "selectValues": [
+            "percent",
+            "fixed"
+          ]
         },
         {
           "name": "value",
@@ -641,7 +689,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_coupons_code ON coupons (code)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_coupons_code ON coupons (code)"
+      ]
     },
     {
       "name": "favorites",
@@ -668,7 +718,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_fav_user_product ON favorites (user, productSlug)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_fav_user_product ON favorites (user, productSlug)"
+      ]
     },
     {
       "name": "profiles",
@@ -713,7 +765,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_profiles_user ON profiles (user)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_profiles_user ON profiles (user)"
+      ]
     },
     {
       "name": "addresses",
@@ -821,7 +875,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_admins_user ON admins (user)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_admins_user ON admins (user)"
+      ]
     },
     {
       "name": "collections",
@@ -871,7 +927,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_collections_slug ON collections (slug)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_collections_slug ON collections (slug)"
+      ]
     },
     {
       "name": "suppliers",
@@ -992,7 +1050,11 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["pending", "approved", "blocked"]
+          "selectValues": [
+            "pending",
+            "approved",
+            "blocked"
+          ]
         },
         {
           "name": "notes",
@@ -1007,7 +1069,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_suppliers_slug ON suppliers (slug)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_suppliers_slug ON suppliers (slug)"
+      ]
     }
   ]
 }

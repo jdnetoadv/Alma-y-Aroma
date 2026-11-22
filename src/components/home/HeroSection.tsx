@@ -62,10 +62,12 @@ export function HeroSection() {
       />
 
       {/* Conteúdo centralizado horizontalmente, ancorado à base da composição.
-          Afastamento da base e gaps internos compactados (pedido da usuária:
-          "desce um pouco o slogan") para que o slogan fique claramente abaixo
-          do wordmark ALMA Y AROMA da arte, sem cortar o bloco na viewport. */}
-      <div className="relative z-10 flex-1 flex items-end justify-center min-h-[82vh] sm:min-h-[88vh] lg:min-h-screen px-6 pb-10 sm:pb-14">
+          Pedido da usuária ("desce um pouco mais todo o texto a partir do
+          slogan"): o padding inferior foi reduzido (pb-10/14 → pb-4/6), o que
+          desce o slogan e todo o bloco abaixo dele (subtítulo, CTAs e faixa de
+          categorias), afastando-o do wordmark ALMA Y AROMA da arte sem cortar
+          nada na base da viewport. */}
+      <div className="relative z-10 flex-1 flex items-end justify-center min-h-[82vh] sm:min-h-[88vh] lg:min-h-screen px-6 pb-4 sm:pb-6">
         <div className="mx-auto max-w-4xl w-full text-center">
           {/* Slogan principal (traduzido; não faz parte da arte) */}
           <h1 className="font-serif text-cream text-3xl sm:text-5xl lg:text-6xl leading-tight tracking-wide animate-fade-in-up drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">

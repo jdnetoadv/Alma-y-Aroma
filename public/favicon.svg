@@ -7,15 +7,12 @@
     </linearGradient>
   </defs>
   <rect width="64" height="64" rx="12" fill="#3B1715"/>
-  <!-- Círculo fino dourado aberto no topo (atravessado pela chama) -->
-  <circle cx="32" cy="34" r="21" fill="none" stroke="url(#fav-gold)" stroke-width="2.6"
-    stroke-dasharray="117 15" stroke-dashoffset="-9" transform="rotate(46 32 34)" stroke-linecap="round"/>
-  <!-- Chama: duas curvas finas em gradiente quente -->
-  <path d="M32 52 C26.5 38 24.8 25.5 27.4 14.5 C28.9 8.6 30.6 4.6 32 2 C33.4 4.6 35.1 8.6 36.6 14.5 C39.2 25.5 37.5 38 32 52 Z"
-    fill="url(#fav-gold)" opacity="0.28"/>
-  <path d="M32 52 C27.7 38 26 25.5 28.6 14.5 C29.9 9.3 31 5.2 32 2" fill="none" stroke="url(#fav-gold)" stroke-width="3.4" stroke-linecap="round"/>
-  <path d="M32 52 C36.6 38 38.3 25.5 35.7 14.5 C34.4 9.3 33 5.2 32 2" fill="none" stroke="url(#fav-gold)" stroke-width="2.6" stroke-linecap="round" opacity="0.85"/>
-  <!-- Folhas na base da chama -->
-  <path d="M32 52 C24 51.2 17 47.4 12.6 42 C18.6 43.4 25.4 46.8 32 52 Z" fill="url(#fav-gold)"/>
-  <path d="M32 52 C40 51.2 47 47.4 51.4 42 C45.4 43.4 38.6 46.8 32 52 Z" fill="url(#fav-gold)" opacity="0.85"/>
+  <!-- Círculo fino dourado ABERTO no topo (atravessado pela chama) -->
+  <path d="M32 9.7 A21 21 0 1 0 50.12 14.88" fill="none" stroke="url(#fav-gold)" stroke-width="2.6" stroke-linecap="round"/>
+  <!-- Chama/folha VAZADA: duas curvas finas que se cruzam e fecham na ponta ascendente -->
+  <path d="M35.5 47.3 C31.5 40 28.6 30.5 28.9 24.5 C29 20.8 29.9 15.8 32 11.3" fill="none" stroke="url(#fav-gold)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M28.5 47.3 C32.5 40 35.4 30.5 35.1 24.5 C35 20.8 34.1 15.8 32 11.3" fill="none" stroke="url(#fav-gold)" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+  <!-- Folhas na base, apontando para baixo -->
+  <path d="M32 49 C30.4 49 28.1 48.2 26.8 46.5 C28.8 46.2 30.7 46.9 32 49 Z" fill="url(#fav-gold)"/>
+  <path d="M32 49 C33.6 49 35.9 48.2 37.2 46.5 C35.2 46.2 33.3 46.9 32 49 Z" fill="url(#fav-gold)" opacity="0.85"/>
 </svg>

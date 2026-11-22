@@ -1,10 +1,10 @@
 /**
- * Emblema canônico da marca ALMA Y AROMA — identidade NOVA enviada pela
- * cliente (PNGs de referência anexados à tarefa). A referência tem fundo
- * preto opaco, então a arte foi recriada como SVG vetorial transparente:
- * chama estilizada de duas curvas finas em gradiente quente (#B49A67 →
- * claro), terminando em duas folhas na base, inscrita num círculo FINO
- * dourado aberto no topo (atravessado pela chama).
+ * Emblema canônico da marca ALMA Y AROMA — fidelidade às artes de referência
+ * da cliente. A chama/folha é VAZADA: duas curvas finas que nascem afastadas
+ * na base, se cruzam no meio e se unem numa ponta ascendente (nunca uma
+ * “lente”/amêndoa fechada preenchida, como na versão anterior). Na base, duas
+ * folhas finas apontando para BAIXO a partir da ponta. Tudo inscrito num
+ * círculo FINO dourado ABERTO no topo, por onde a chama atravessa.
  *
  * Este é o ponto único de verdade do emblema: header, drawer mobile,
  * favicon (public/favicon.svg espelha estas formas), selo do rodapé
@@ -45,49 +45,42 @@ export function BrandEmblem({ className = '', title, withHoverLift = true }: Bra
         </linearGradient>
       </defs>
 
-      {/* Círculo fino dourado, aberto no topo onde a chama o atravessa */}
-      <circle
-        cx="48"
-        cy="53"
-        r="45"
+      {/* Círculo fino dourado, ABERTO no topo onde a chama o atravessa
+          (arco explícito com furo de 40° a 140° — nunca um círculo fechado) */}
+      <path
+        d="M48 14.55 A40 40 0 1 0 82.14 24.55"
         fill="none"
         stroke="url(#aya-emblem-gold)"
         strokeWidth="3"
-        strokeDasharray="249 38"
-        strokeDashoffset="-19"
-        transform="rotate(46 48 53)"
         strokeLinecap="round"
       />
 
-      {/* Chama central: corpo em gradiente translúcido + duas curvas finas */}
+      {/* Chama central VAZADA — duas curvas finas, sem preenchimento.
+          Direita: base afastada, cruza à esquerda no meio, ponta no topo.
+          Esquerda: espelhada, cruzando de volta — silhueta de folha lanceta. */}
       <path
-        d="M48 88 C42 70 40 54 42.5 40 C45 26 46.8 18 48 10 C49.2 18 51 26 53.5 40 C56 54 54 70 48 88 Z"
-        fill="url(#aya-emblem-gold)"
-        opacity="0.28"
-      />
-      <path
-        d="M48 88 C43 70 41 54 43.5 40 C45.8 26.5 46.9 18.5 48 10"
+        d="M54.5 80 C47 66 42 48 42.5 36 C42.8 29 44.5 19.5 48 12"
         fill="none"
         stroke="url(#aya-emblem-gold)"
-        strokeWidth="3.2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
       <path
-        d="M48 88 C53.5 70 55.5 54 53 40 C50.8 26.5 49.1 18.5 48 10"
+        d="M41.5 80 C49 66 54 48 53.5 36 C53.2 29 51.5 19.5 48 12"
         fill="none"
         stroke="url(#aya-emblem-gold)"
-        strokeWidth="2.4"
+        strokeWidth="3"
         strokeLinecap="round"
         opacity="0.85"
       />
 
-      {/* Duas folhas na base da chama */}
+      {/* Duas folhas finas na base, APONTANDO PARA BAIXO a partir da ponta */}
       <path
-        d="M48 88 C39 87 31 82.5 26.5 76.5 C34 78 41.5 82 48 88 Z"
+        d="M48 84 C45 84 41.5 82.5 39.5 80 C42.5 79.5 45.5 80.5 48 84 Z"
         fill="url(#aya-emblem-gold)"
       />
       <path
-        d="M48 88 C57 87 65 82.5 69.5 76.5 C62 78 54.5 82 48 88 Z"
+        d="M48 84 C51 84 54.5 82.5 56.5 80 C53.5 79.5 50.5 80.5 48 84 Z"
         fill="url(#aya-emblem-gold)"
         opacity="0.85"
       />

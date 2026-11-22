@@ -1,14 +1,16 @@
 /**
- * Selo circular da marca — NOVA identidade enviada pela cliente (PNGs de
- * referência anexados à tarefa). A referência tem fundo preto opaco, então a
- * arte foi recriada como SVG vetorial fiel e transparente:
+ * Selo circular da marca — fidelidade às artes de referência da cliente
+ * (fundo transparente, sem o quadro preto das referências):
  *   • Círculo FINO dourado ABERTO no topo (atravessado pela chama);
- *   • Chama estilizada com duas curvas finas em gradiente quente
- *     (#B49A67 → claro) terminando em duas folhas na base;
+ *   • Chama/folha VAZADA de duas curvas finas em gradiente de ouro
+ *     envelhecido (#B49A67 → claro), com ponta ascendente e duas folhas
+ *     na base apontando para baixo;
  *   • Tipografia "ALMA Y AROMA" em serifadas com leve gradiente marfim
  *     e letter-spacing largo;
  *   • Slogan "ESSÊNCIAS QUE DESPERTAM SENTIDOS." em dourado, caixa alta,
  *     entre dois traços horizontais curtos de cada lado.
+ * O slogan usa textLength fixo, então nunca mais transborda nem fica
+ * sobreposto/riscado por outra linha, em nenhuma largura de renderização.
  * Usado no rodapé, conta/checkout e qualquer ponto que precise do selo
  * circular completo; o emblema sozinho vive em BrandEmblem.tsx.
  */
@@ -62,48 +64,38 @@ export function BrandSeal({
         </linearGradient>
       </defs>
 
-      {/* Emblema canônico da marca (compartilhado com header/favicon).
-          Centro em 60,64 · raio do círculo fino 40 · chama até y=16. */}
-      <g transform="translate(0 -2)">
-        <g transform="translate(8.5714 0) scale(0.57143)">
-          <circle
-            cx="48"
-            cy="53"
-            r="45"
+      {/* Emblema canônico da marca (formas idênticas a BrandEmblem.tsx):
+          círculo fino aberto no topo + chama vazada + folhas na base. */}
+      <g transform="translate(9.6 10)">
+        <g transform="scale(0.848)">
+          <path
+            d="M48 14.55 A40 40 0 1 0 82.14 24.55"
             fill="none"
             stroke="url(#aya-seal-gold)"
-            strokeWidth="3"
-            strokeDasharray="249 38"
-            strokeDashoffset="-19"
-            transform="rotate(46 48 53)"
+            strokeWidth="3.54"
             strokeLinecap="round"
           />
           <path
-            d="M48 88 C42 70 40 54 42.5 40 C45 26 46.8 18 48 10 C49.2 18 51 26 53.5 40 C56 54 54 70 48 88 Z"
-            fill="url(#aya-seal-gold)"
-            opacity="0.28"
-          />
-          <path
-            d="M48 88 C43 70 41 54 43.5 40 C45.8 26.5 46.9 18.5 48 10"
+            d="M54.5 80 C47 66 42 48 42.5 36 C42.8 29 44.5 19.5 48 12"
             fill="none"
             stroke="url(#aya-seal-gold)"
-            strokeWidth="3.2"
+            strokeWidth="3.54"
             strokeLinecap="round"
           />
           <path
-            d="M48 88 C53.5 70 55.5 54 53 40 C50.8 26.5 49.1 18.5 48 10"
+            d="M41.5 80 C49 66 54 48 53.5 36 C53.2 29 51.5 19.5 48 12"
             fill="none"
             stroke="url(#aya-seal-gold)"
-            strokeWidth="2.4"
+            strokeWidth="3.54"
             strokeLinecap="round"
             opacity="0.85"
           />
           <path
-            d="M48 88 C39 87 31 82.5 26.5 76.5 C34 78 41.5 82 48 88 Z"
+            d="M48 84 C45 84 41.5 82.5 39.5 80 C42.5 79.5 45.5 80.5 48 84 Z"
             fill="url(#aya-seal-gold)"
           />
           <path
-            d="M48 88 C57 87 65 82.5 69.5 76.5 C62 78 54.5 82 48 88 Z"
+            d="M48 84 C51 84 54.5 82.5 56.5 80 C53.5 79.5 50.5 80.5 48 84 Z"
             fill="url(#aya-seal-gold)"
             opacity="0.85"
           />
@@ -112,7 +104,8 @@ export function BrandSeal({
 
       {showLettering && (
         <>
-          {/* Wordmark marfim com leve gradiente, serifado e espaçado */}
+          {/* Wordmark marfim com leve gradiente, serifado e espaçado.
+              textLength fixo: nunca transborda, nunca se sobrepõe. */}
           <text
             x="60"
             y="110"
@@ -122,22 +115,34 @@ export function BrandSeal({
             fontSize="12"
             fontWeight="500"
             letterSpacing="2.2"
+            textLength="100"
+            lengthAdjust="spacing"
           >
             ALMA Y AROMA
           </text>
 
-          {/* Slogan dourado entre dois filetes horizontais curtos */}
-          <line x1="10" y1="121" x2="26" y2="121" stroke="url(#aya-seal-gold)" strokeWidth="1.6" />
-          <line x1="94" y1="121" x2="110" y2="121" stroke="url(#aya-seal-gold)" strokeWidth="1.6" />
+          {/* Slogan dourado entre dois filetes horizontais curtos, encaixado
+              EXATAMENTE entre eles (textLength fixo, sem sobreposição). */}
+          <line x1="4" y1="121" x2="19" y2="121" stroke="url(#aya-seal-gold)" strokeWidth="1.6" />
+          <line
+            x1="101"
+            y1="121"
+            x2="116"
+            y2="121"
+            stroke="url(#aya-seal-gold)"
+            strokeWidth="1.6"
+          />
           <text
             x="60"
-            y="124.5"
+            y="123.8"
             textAnchor="middle"
             fill="url(#aya-seal-gold)"
             fontFamily="Jost, system-ui, sans-serif"
             fontSize="6"
             fontWeight="600"
-            letterSpacing="1.1"
+            letterSpacing="0.4"
+            textLength="76"
+            lengthAdjust="spacing"
           >
             ESSÊNCIAS QUE DESPERTAM SENTIDOS.
           </text>

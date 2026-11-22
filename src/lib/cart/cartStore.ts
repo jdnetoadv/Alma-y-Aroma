@@ -1,5 +1,6 @@
 import pb from '@/lib/pocketbase/client'
 import { CatalogProduct } from '@/data/types'
+import { thumbUrlOr } from '@/lib/shop/thumbnails'
 
 /**
  * Carrinho de compras — Etapa 3.
@@ -119,7 +120,7 @@ export const cartStore = {
         productId: product.id,
         slug: product.slug,
         name: product.name['pt-br'],
-        image: product.images[0],
+        image: thumbUrlOr(product.images[0]),
         unitPrice: (product as unknown as { price?: number }).price ?? product.illustrativePrice,
         quantity: Math.min(quantity, maxStock),
         variation,

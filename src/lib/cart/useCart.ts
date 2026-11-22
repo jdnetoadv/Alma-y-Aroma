@@ -77,7 +77,7 @@ export const useCart = create<CartState>()(
                 productId: product.id,
                 slug: product.slug,
                 name: product.name['pt-br'],
-                image: product.images[0] ?? '',
+                image: thumbUrlOr(product.images[0] ?? undefined) ?? '',
                 unitPrice: product.illustrativePrice,
                 quantity: Math.max(1, quantity),
                 variation: label,
@@ -116,6 +116,7 @@ export const useCart = create<CartState>()(
 )
 
 import pb from '@/lib/pocketbase/client'
+import { thumbUrlOr } from '@/lib/shop/thumbnails'
 
 /** Valida o cupom contra o banco (coleção `coupons`). */
 export async function validateCoupon(

@@ -29,6 +29,7 @@ import {
 } from '@/lib/account/profile'
 import { catalogRepository, formatPrice } from '@/data/repository'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { thumbUrlOr } from '@/lib/shop/thumbnails'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -325,7 +326,7 @@ function FavoritesTab() {
           className="flex items-center gap-4 rounded-lg border border-border/60 bg-card p-4"
         >
           <img
-            src={p.images[0]}
+            src={thumbUrlOr(p.images[0])}
             alt=""
             className="h-16 w-16 shrink-0 rounded-md object-cover"
             loading="lazy"

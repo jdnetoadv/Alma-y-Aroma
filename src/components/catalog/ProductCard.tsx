@@ -8,6 +8,7 @@ import { toast } from '@/hooks/use-toast'
 import { shopT } from '@/i18n/shopStrings'
 import { useFavorites } from '@/lib/favorites/useFavorites'
 import pb from '@/lib/pocketbase/client'
+import { thumbUrlOr } from '@/lib/shop/thumbnails'
 import { cn } from '@/lib/utils'
 
 interface ProductCardProps {
@@ -50,7 +51,7 @@ export function ProductCard({ product, localePrefix, badge, className }: Product
         aria-label={product.name[locale]}
       >
         <img
-          src={product.images[0]}
+          src={thumbUrlOr(product.images[0])}
           alt={product.name[locale]}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"

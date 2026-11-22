@@ -7,6 +7,7 @@ import { formatPrice } from '@/data/repository'
 import { useCartStore } from '@/lib/cart/useCartStore'
 import { useAuth } from '@/lib/auth/AuthContext'
 import { shopT } from '@/i18n/shopStrings'
+import { thumbUrlOr } from '@/lib/shop/thumbnails'
 import {
   Dialog,
   DialogContent,
@@ -92,7 +93,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                         className="group flex items-center gap-3 rounded-sm border border-clay/50 bg-cream p-2.5 hover:border-saffron transition-colors"
                       >
                         <img
-                          src={product.images[0]}
+                          src={thumbUrlOr(product.images[0])}
                           alt=""
                           className="h-12 w-12 shrink-0 rounded-sm object-cover"
                           loading="lazy"

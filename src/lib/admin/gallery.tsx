@@ -1,5 +1,6 @@
 import pb from '@/lib/pocketbase/client'
 import { refreshCatalog } from '@/lib/admin/service'
+import { THUMB_SIZE } from '@/lib/shop/thumbnails'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,6 +11,14 @@ import { shopT } from '@/i18n/shopStrings'
 import { GripVertical, Plus, Star, Trash2 } from 'lucide-react'
 
 export const MAX_GALLERY_FILES = 10
+
+/**
+ * Tamanho de miniatura usado nas URIs de arquivo gravadas (galeria do admin
+ * e cards da loja). O valor tem de existir na lista `thumbs` do campo de
+ * arquivo `galleryFiles`/`imageFile` da coleção `products` (migração 0009) —
+ * sem isso o PocketBase ignora o parâmetro.
+ */
+export const GALLERY_THUMB_SIZE = THUMB_SIZE
 
 /** Uma entrada da galeria do formulário: foto nova (upload) ou já gravada. */
 export type GalleryEntry =
@@ -37,11 +46,15 @@ export type GalleryState = {
 /**
  * URL de um arquivo já gravado em `galleryFiles` (coleção products).
  * Exige o id REAL do registro: `/api/files/<coleção>/<id-do-produto>/<arquivo>`.
+ * Com `thumb`, pede a miniatura do PocketBase (ex.: `300x300`) — o campo de
+ * arquivo precisa ter o tamanho em Thumbs (migração 0009); para formatos sem
+ * suporte o PocketBase cai no original automaticamente.
  */
-export function galleryFileUrl(recordId: string, fileName: string): string {
+export function galleryFileUrl(recordId: string, fileName: string, thumb?: string): string {
   return pb.files.getURL(
     { id: recordId, collectionId: 'products' } as unknown as Parameters<typeof pb.files.getURL>[0],
     fileName,
+    thumb ? { thumb } : undefined,
   )
 }
 
@@ -109,6 +122,10 @@ function savedGalleryFiles(product: { galleryFiles?: string | string[] }): strin
  * arquivos gravados, itens restantes viram URLs externas. Arquivos salvos
  * que não estão (ainda) referenciados em `images` vão ao fim (produtos
  * legados que só tinham `galleryFiles`/`imageFile`).
+ *
+ * `thumb`: quando informado (ex.: `300x300`), as URLs de arquivos gravados
+ * apontam para a miniatura do PocketBase (a UI só exibe as entradas — o
+ * marcador gravado continua usando o NOME do arquivo, não a URL).
  */
 export function loadGalleryEntries(
   record: {
@@ -118,6 +135,7 @@ export function loadGalleryEntries(
     imageFile?: string
   },
   images: unknown,
+  thumb?: string,
 ): GalleryEntry[] {
   const saved = savedGalleryFiles(record)
   if (record.imageFile && !saved.includes(record.imageFile)) {
@@ -125,7 +143,8 @@ export function loadGalleryEntries(
   }
   // Sem id de registro não há como montar URL de arquivo do PocketBase
   // (só acontece fora da edição, quando não há arquivos gravados).
-  const fileUrl = (name: string): string => (record.id ? galleryFileUrl(record.id, name) : '')
+  const fileUrl = (name: string): string =>
+    record.id ? galleryFileUrl(record.id, name, thumb) : ''
   const list = Array.isArray(images) ? (images as unknown[]) : []
   const entries: GalleryEntry[] = []
   const usedFiles = new Set<string>()
@@ -166,6 +185,9 @@ export function loadGalleryEntries(
  * URL, com miniaturas, REORDENAÇÃO por arrastar (drag-and-drop HTML5) e
  * remoção individual. A PRIMEIRA foto da sequência é a foto principal
  * (capa do card na vitrine) — marcada com estrela.
+ *
+ * As miniaturas de arquivos gravados usam a versão 300x300 do PocketBase
+ * (não o original, que pode ter vários MB); uploads novos usam blob local.
  */
 export function AdminProductGallery({
   product,
@@ -196,6 +218,7 @@ export function AdminProductGallery({
             imageFile: product.imageFile,
           },
           product.images,
+          GALLERY_THUMB_SIZE,
         )
       : [],
   )
@@ -349,6 +372,7 @@ export function AdminProductGallery({
               <img
                 src={entry.kind === 'file' ? entry.previewUrl : entry.url}
                 alt={`${t('admin.productGallery')} ${i + 1}`}
+                loading="lazy"
                 className="aspect-square w-full object-cover"
               />
               {i === 0 && (

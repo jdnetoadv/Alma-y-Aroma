@@ -26,6 +26,8 @@ export interface CatalogProductRecord {
   images: string[]
   /** Arquivo de imagem enviado pelo admin (campo file da migração 0007). */
   imageFile?: string
+  /** Fotos da galeria (migração 0008 — file multi, até 10 arquivos). */
+  galleryFiles?: string[]
   variations: { kind: string; label: string; values: string[] }[]
   productType: Record<Locale, string>
   scentFamily: string
@@ -63,8 +65,44 @@ function toUiCategory(r: CatalogCategoryRecord) {
 }
 
 function toUiProduct(r: CatalogProductRecord) {
-  // Arquivo enviado tem prioridade: vira a primeira imagem da galeria.
-  const uploaded = r.imageFile ? pb.files.getURL(r, r.imageFile) : ''
+  // Sequência definida no painel (migração 0008): o campo `images` grava a
+  // ordem exata escolhida pelo admin — marcadores `file:<nome>` ancoram cada
+  // arquivo da galeria (galleryFiles/imageFile) em uma posição; demais itens
+  // são URLs externas. Sem sequência gravada, cai no modelo legado
+  // (arquivo enviado primeiro, depois as URLs).
+  const savedFiles = (r.galleryFiles ?? []).filter(Boolean)
+  const legacyImage = r.imageFile && !savedFiles.includes(r.imageFile) ? r.imageFile : ''
+  const fileUrls = new Map<string, string>()
+  if (r.imageFile) fileUrls.set(r.imageFile, pb.files.getURL(r, r.imageFile))
+  for (const name of savedFiles) {
+    if (!fileUrls.has(name)) fileUrls.set(name, pb.files.getURL(r, name))
+  }
+
+  const sequence = (r.images ?? []).filter(
+    (item): item is string => typeof item === 'string' && item !== '',
+  )
+  const hasGallerySequence =
+    sequence.some((item) => item.startsWith('file:')) || savedFiles.length > 1
+
+  let images: string[]
+  if (hasGallerySequence) {
+    images = sequence
+      .map((item) =>
+        item.startsWith('file:') ? (fileUrls.get(item.slice(5)) ?? '') : resolveImage(item),
+      )
+      .filter(Boolean)
+    // Arquivos gravados não referenciados na sequência vão ao fim (legado).
+    const referenced = new Set(sequence.map((s) => s.slice(5)))
+    for (const name of savedFiles) {
+      if (!referenced.has(name) && fileUrls.has(name)) images.push(fileUrls.get(name) as string)
+    }
+  } else {
+    images = []
+  }
+  if (images.length === 0) {
+    const uploaded = legacyImage ? pb.files.getURL(r, legacyImage) : ''
+    images = [uploaded, ...(r.images ?? []).map(resolveImage)].filter(Boolean)
+  }
   return {
     id: r.slug,
     slug: r.slug,
@@ -73,7 +111,7 @@ function toUiProduct(r: CatalogProductRecord) {
     name: r.name,
     shortDescription: r.shortDescription,
     longDescription: r.longDescription,
-    images: [uploaded, ...(r.images ?? []).map(resolveImage)].filter(Boolean),
+    images,
     variations: r.variations,
     scentFamily: r.scentFamily,
     productType: r.productType,

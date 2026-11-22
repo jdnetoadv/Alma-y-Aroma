@@ -39,6 +39,8 @@ export interface AdminProduct {
   longDescription: Record<Locale, string>
   images: string[]
   imageFile?: string
+  /** Fotos da galeria (migração 0008, file multi — até 10, ordem gravada). */
+  galleryFiles?: string[]
   variations: { kind: string; label: string; values: string[] }[]
   productType: Record<Locale, string>
   scentFamily: string
@@ -127,7 +129,7 @@ function productFormData(payload: Record<string, unknown>, imageFile: File): For
   return form
 }
 
-export async function createProduct(data: ProductWriteData): Promise<void> {
+export async function createProduct(data: ProductWriteData): Promise<string> {
   const payload = {
     ...productPayload(data),
     sku: data.slug.toUpperCase().replaceAll('-', '').slice(0, 12),
@@ -139,11 +141,10 @@ export async function createProduct(data: ProductWriteData): Promise<void> {
     isNew: false,
     demonstrative: false,
   }
-  if (!data.imageFile) {
-    await pb.collection('products').create(payload)
-    return
-  }
-  await pb.collection('products').create(productFormData(payload, data.imageFile))
+  const rec = data.imageFile
+    ? await pb.collection('products').create(productFormData(payload, data.imageFile))
+    : await pb.collection('products').create(payload)
+  return rec.id
 }
 
 /**
@@ -158,6 +159,17 @@ export async function updateProductFull(id: string, data: ProductWriteData): Pro
     return
   }
   await pb.collection('products').update(id, productFormData(payload, data.imageFile))
+}
+
+/**
+ * Atualiza apenas a galeria de fotos (arquivos + sequência), sem tocar nos
+ * demais campos do produto.
+ */
+export async function updateProductGallery(
+  id: string,
+  payload: { galleryFiles?: FormData; images?: string[] },
+): Promise<void> {
+  await pb.collection('products').update(id, payload)
 }
 
 export interface AdminCategory {

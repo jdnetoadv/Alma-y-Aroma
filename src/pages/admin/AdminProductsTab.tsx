@@ -14,7 +14,7 @@ import {
 import { listAdminCategories, AdminCategory } from '@/lib/admin/service'
 import { catalogRepository, formatPrice } from '@/data/repository'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
-import pb from '@/lib/pocketbase/client'
+import { AdminProductGallery, GalleryState, saveGalleryState } from '@/lib/admin/gallery'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -317,10 +317,15 @@ function AdminProductForm({
   const [active, setActive] = useState(product?.active ?? true)
   const [shortDesc, setShortDesc] = useState(product?.shortDescription['pt-br'] ?? '')
   const [longDesc, setLongDesc] = useState(product?.longDescription['pt-br'] ?? '')
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imageUrl, setImageUrl] = useState(product?.images?.[0] ?? '')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  // Galeria de fotos (migração 0008): sequência definida no painel.
+  const [gallery, setGallery] = useState<GalleryState>({
+    files: [],
+    keptNames: [],
+    markers: [],
+  })
+  const [galleryNotice, setGalleryNotice] = useState<string | null>(null)
 
   // slug automático a partir do nome quando o admin não digitar um
   function autoSlug(value: string) {
@@ -337,12 +342,17 @@ function AdminProductForm({
     setBusy(true)
     setError(null)
     try {
-      const url = imageUrl.trim()
-      await createProduct({
+      // Criação: primeiro o produto, depois a galeria — a sequência
+      // (marcadores file:/URLs no campo images) precisa do id do registro.
+      const id = await createProduct({
         slug: (slug || autoSlug(name)).slice(0, 60),
         ...commonWrite(),
       })
-      await refreshCatalog()
+      if (gallery.markers.length > 0) {
+        await saveGalleryState(id, gallery)
+      } else {
+        await refreshCatalog()
+      }
       onDone()
     } catch (err) {
       setError(getErrorMessage(err))
@@ -362,8 +372,6 @@ function AdminProductForm({
       stock: Number(stock) || 0,
       active,
       featured,
-      imageFile,
-      images: imageUrl.trim() ? [imageUrl.trim()] : [],
     }
   }
 
@@ -373,9 +381,11 @@ function AdminProductForm({
     setBusy(true)
     setError(null)
     try {
-      // Update no registro existente — nunca cria produto novo.
+      // Update no registro existente — nunca cria produto novo. A galeria
+      // (arquivos + sequência no campo images) é gravada em seguida, com o
+      // refresh do catálogo já embutido em saveGalleryState.
       await updateProductFull(product.id, { ...commonWrite(), slug: product.slug })
-      await refreshCatalog()
+      await saveGalleryState(product.id, gallery)
       onDone()
     } catch (err) {
       setError(getErrorMessage(err))
@@ -383,16 +393,6 @@ function AdminProductForm({
       setBusy(false)
     }
   }
-
-  // Imagem atual: arquivo enviado (prioridade) ou a URL cadastrada.
-  const currentImage = product
-    ? product.imageFile
-      ? pb.files.getURL(
-          product as unknown as { id: string; collectionId: string },
-          product.imageFile,
-        )
-      : (product.images?.[0] ?? '')
-    : ''
 
   return (
     <form
@@ -496,44 +496,12 @@ function AdminProductForm({
           className="bg-background"
         />
       </div>
-      {currentImage && (
-        <div className="flex items-center gap-3">
-          <img
-            src={currentImage}
-            alt={t('admin.productImage')}
-            className="h-16 w-16 rounded-md border border-border/60 object-cover"
-          />
-          <p className="text-[11px] text-muted-foreground">{t('admin.productImageCurrent')}</p>
-        </div>
+      <AdminProductGallery product={product} onChange={setGallery} onNotify={setGalleryNotice} />
+      {galleryNotice && (
+        <p className="text-xs text-amber-600" role="status">
+          {galleryNotice}
+        </p>
       )}
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1">
-          <Label htmlFor="prod-image-file" className="text-xs text-muted-foreground">
-            {t('admin.productImage')} — {t('admin.productImageFile')}
-          </Label>
-          <input
-            id="prod-image-file"
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
-            className="block w-full text-xs text-muted-foreground file:mr-3 file:rounded-md file:border-0 file:bg-secondary file:px-3 file:py-1.5 file:text-xs file:text-foreground"
-          />
-        </div>
-        <div className="space-y-1">
-          <Label htmlFor="prod-image-url" className="text-xs text-muted-foreground">
-            {t('admin.productImage')} — {t('admin.productImageUrl')}
-          </Label>
-          <Input
-            id="prod-image-url"
-            type="url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            disabled={!!imageFile}
-            className="bg-background"
-          />
-        </div>
-      </div>
-      <p className="text-[11px] italic text-muted-foreground/70">{t('admin.productImageHint')}</p>
       <label className="flex items-center gap-2 text-xs text-muted-foreground">
         <input
           type="checkbox"

@@ -291,6 +291,14 @@ const ptbr: Record<string, string> = {
   'admin.productImageUrl': 'ou URL da imagem',
   'admin.productImageHint':
     'JPG, PNG ou WebP até 5 MB. O arquivo enviado tem prioridade sobre a URL.',
+  'admin.productGallery': 'Fotos do produto (até 10)',
+  'admin.galleryAddUrl': 'Adicionar foto por URL',
+  'admin.galleryLimitReached': 'Limite de 10 fotos por produto atingido.',
+  'admin.galleryMain': 'Capa',
+  'admin.galleryRemove': 'Remover foto',
+  'admin.galleryHint':
+    'Arraste as miniaturas para escolher a sequência — a primeira é a capa na loja.',
+  'admin.galleryDragHint': 'Arraste para reordenar',
   'admin.priceHint': 'Preço na moeda do produto (use ponto decimal). Sem conversão automática.',
   'admin.statProducts': 'Produtos ativos',
   'admin.statOrders': 'Pedidos',
@@ -685,6 +693,14 @@ const es: Record<string, string> = {
   'admin.productImageUrl': 'o URL de la imagen',
   'admin.productImageHint':
     'JPG, PNG o WebP de hasta 5 MB. El archivo subido tiene prioridad sobre la URL.',
+  'admin.productGallery': 'Fotos del producto (hasta 10)',
+  'admin.galleryAddUrl': 'Añadir foto por URL',
+  'admin.galleryLimitReached': 'Límite de 10 fotos por producto alcanzado.',
+  'admin.galleryMain': 'Portada',
+  'admin.galleryRemove': 'Quitar foto',
+  'admin.galleryHint':
+    'Arrastra las miniaturas para elegir la secuencia — la primera es la portada en la tienda.',
+  'admin.galleryDragHint': 'Arrastra para reordenar',
   'admin.priceHint':
     'Precio en la moneda del producto (usa punto decimal). Sin conversión automática.',
   'admin.statProducts': 'Productos activos',
@@ -1077,6 +1093,13 @@ const engb: Record<string, string> = {
   'admin.productImageUrl': 'or image URL',
   'admin.productImageHint':
     'JPG, PNG or WebP up to 5 MB. An uploaded file takes priority over the URL.',
+  'admin.productGallery': 'Product photos (up to 10)',
+  'admin.galleryAddUrl': 'Add photo by URL',
+  'admin.galleryLimitReached': 'Limit of 10 photos per product reached.',
+  'admin.galleryMain': 'Cover',
+  'admin.galleryRemove': 'Remove photo',
+  'admin.galleryHint': 'Drag the thumbnails to choose the order — the first one is the shop cover.',
+  'admin.galleryDragHint': 'Drag to reorder',
   'admin.priceHint':
     'Price in the product currency (use a decimal point). No automatic conversion.',
   'admin.statProducts': 'Active products',

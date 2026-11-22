@@ -81,6 +81,7 @@ export default function ProductPage() {
 
   const category = catalogRepository.getCategory(product.category)
   const name = product.name[locale]
+  // Galeria na ordem exata escolhida no painel (capa = primeira foto).
   const gallery = product.images
   const variationList = product.variations ?? []
   const techRows: { label: string; value?: string }[] = [

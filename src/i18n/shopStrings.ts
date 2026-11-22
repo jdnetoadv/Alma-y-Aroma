@@ -280,6 +280,13 @@ const ptbr: Record<string, string> = {
   'admin.productStock': 'Estoque',
   'admin.productFeatured': 'Destaque',
   'admin.productNew': 'Novo produto',
+  'admin.shortDescription': 'Descrição curta',
+  'admin.longDescription': 'Descrição completa',
+  'admin.productImage': 'Imagem do produto',
+  'admin.productImageFile': 'Enviar arquivo',
+  'admin.productImageUrl': 'ou URL da imagem',
+  'admin.productImageHint':
+    'JPG, PNG ou WebP até 5 MB. O arquivo enviado tem prioridade sobre a URL.',
   'admin.priceHint': 'Preço na moeda do produto (use ponto decimal). Sem conversão automática.',
   'admin.statProducts': 'Produtos ativos',
   'admin.statOrders': 'Pedidos',
@@ -663,6 +670,13 @@ const es: Record<string, string> = {
   'admin.productStock': 'Stock',
   'admin.productFeatured': 'Destacado',
   'admin.productNew': 'Nuevo producto',
+  'admin.shortDescription': 'Descripción corta',
+  'admin.longDescription': 'Descripción completa',
+  'admin.productImage': 'Imagen del producto',
+  'admin.productImageFile': 'Subir archivo',
+  'admin.productImageUrl': 'o URL de la imagen',
+  'admin.productImageHint':
+    'JPG, PNG o WebP de hasta 5 MB. El archivo subido tiene prioridad sobre la URL.',
   'admin.priceHint':
     'Precio en la moneda del producto (usa punto decimal). Sin conversión automática.',
   'admin.statProducts': 'Productos activos',
@@ -1044,6 +1058,13 @@ const engb: Record<string, string> = {
   'admin.productStock': 'Stock',
   'admin.productFeatured': 'Featured',
   'admin.productNew': 'New product',
+  'admin.shortDescription': 'Short description',
+  'admin.longDescription': 'Full description',
+  'admin.productImage': 'Product image',
+  'admin.productImageFile': 'Upload file',
+  'admin.productImageUrl': 'or image URL',
+  'admin.productImageHint':
+    'JPG, PNG or WebP up to 5 MB. An uploaded file takes priority over the URL.',
   'admin.priceHint':
     'Price in the product currency (use a decimal point). No automatic conversion.',
   'admin.statProducts': 'Active products',

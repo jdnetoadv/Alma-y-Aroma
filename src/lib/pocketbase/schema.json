@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T14:58:58.415Z",
+  "generatedAt": "2026-11-22T15:15:31.766Z",
   "collections": [
     {
       "name": "users",
@@ -405,6 +405,12 @@
           "required": false,
           "system": false,
           "selectValues": ["draft", "published", "archived"]
+        },
+        {
+          "name": "imageFile",
+          "type": "file",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": ["CREATE UNIQUE INDEX idx_products_slug ON products (slug)"]

@@ -50,7 +50,7 @@ export function RitualsSection() {
       descKey: 'ritual.meditate.desc',
       notesKey: 'ritual.meditate.notes',
       imageUrl:
-        'https://img.usecurling.com/p/600/600?q=meditation%20cushion%20candle%20wood&color=orange',
+        'https://img.usecurling.com/p/600/600?q=meditation%20sunrise%20mountain&color=orange',
       relatedCollection: 'col.1.title', // Incensos
     },
     {

@@ -40,7 +40,8 @@ export function RitualsSection() {
       labelKey: 'ritual.relax',
       descKey: 'ritual.relax.desc',
       notesKey: 'ritual.relax.notes',
-      imageUrl: 'https://img.usecurling.com/p/600/600?q=lavender%20tea%20bath&color=purple',
+      imageUrl:
+        'https://img.usecurling.com/p/600/600?q=candle%20bath%20stones%20warm%20light&color=orange',
       relatedCollection: 'col.2.title', // Velas
     },
     {
@@ -48,7 +49,8 @@ export function RitualsSection() {
       labelKey: 'ritual.meditate',
       descKey: 'ritual.meditate.desc',
       notesKey: 'ritual.meditate.notes',
-      imageUrl: 'https://img.usecurling.com/p/600/600?q=meditation%20stone%20incense&color=black',
+      imageUrl:
+        'https://img.usecurling.com/p/600/600?q=meditation%20cushion%20candle%20wood&color=orange',
       relatedCollection: 'col.1.title', // Incensos
     },
     {
@@ -56,7 +58,8 @@ export function RitualsSection() {
       labelKey: 'ritual.renew',
       descKey: 'ritual.renew.desc',
       notesKey: 'ritual.renew.notes',
-      imageUrl: 'https://img.usecurling.com/p/600/600?q=sage%20herbs%20cleanse&color=green',
+      imageUrl:
+        'https://img.usecurling.com/p/600/600?q=dried%20roses%20wooden%20table%20warm&color=red',
       relatedCollection: 'col.3.title', // Aromas
     },
     {
@@ -73,8 +76,7 @@ export function RitualsSection() {
       labelKey: 'ritual.gift',
       descKey: 'ritual.gift.desc',
       notesKey: 'ritual.gift.notes',
-      imageUrl:
-        'https://img.usecurling.com/p/600/600?q=gift%20ribbon%20linen%20botanical&color=white',
+      imageUrl: 'https://img.usecurling.com/p/600/600?q=gift%20box%20candlelight%20wood&color=red',
       relatedCollection: 'col.6.title', // Kits & Presentes
     },
   ]

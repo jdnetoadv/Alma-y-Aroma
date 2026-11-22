@@ -50,7 +50,7 @@ export function RitualsSection() {
       descKey: 'ritual.meditate.desc',
       notesKey: 'ritual.meditate.notes',
       imageUrl:
-        'https://img.usecurling.com/p/600/600?q=meditation%20sunrise%20mountain&color=orange',
+        'https://img.usecurling.com/p/600/600?q=woman%20meditating%20lotus%20pose%20golden%20light%20photo&color=warm',
       relatedCollection: 'col.1.title', // Incensos
     },
     {

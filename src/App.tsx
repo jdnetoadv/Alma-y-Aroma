@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
@@ -27,7 +28,15 @@ import { RootRedirect } from './components/routing/RootRedirect'
  * idioma mantém a mesma página de produto/categoria.
  */
 const LOCALE_PREFIX = ['pt-br', 'es', 'en-gb']
-const localePath = (suffix: string) => LOCALE_PREFIX.map((l) => `/${l}${suffix}`).join(' ')
+
+/**
+ * React Router 7 não aceita vários caminhos numa única string: cada idioma
+ * vira um <Route> próprio, todos com o mesmo elemento.
+ */
+const localizedRoutes = (suffix: string, element: ReactElement) =>
+  LOCALE_PREFIX.map((l) => (
+    <Route key={`${l}${suffix}`} path={`/${l}${suffix}`} element={element} />
+  ))
 
 const App = () => (
   <BrowserRouter>
@@ -50,40 +59,28 @@ const App = () => (
               <Route path="/en-gb/" element={<Index />} />
 
               {/* ─── Etapa 2: catálogo ─── */}
-              <Route path={localePath('/loja')} element={<ShopPage />} />
-              <Route path={localePath('/kits')} element={<KitsPage />} />
-              <Route path={localePath('/kits/:slug')} element={<KitDetailPage />} />
-              <Route path={localePath('/sensacoes/:purpose')} element={<SensationPage />} />
-              <Route path={localePath('/categoria/:slug')} element={<CategoryPage />} />
-              <Route path={localePath('/produto/:slug')} element={<ProductPage />} />
+              {localizedRoutes('/loja', <ShopPage />)}
+              {localizedRoutes('/kits', <KitsPage />)}
+              {localizedRoutes('/kits/:slug', <KitDetailPage />)}
+              {localizedRoutes('/sensacoes/:purpose', <SensationPage />)}
+              {localizedRoutes('/categoria/:slug', <CategoryPage />)}
+              {localizedRoutes('/produto/:slug', <ProductPage />)}
 
               {/* ─── Etapa 3: carrinho e checkout (sem pagamento real) ─── */}
-              <Route path={localePath('/carrinho')} element={<CartPage />} />
-              <Route path={localePath('/checkout')} element={<CheckoutPage />} />
+              {localizedRoutes('/carrinho', <CartPage />)}
+              {localizedRoutes('/checkout', <CheckoutPage />)}
 
               {/* ─── Etapa 4: conta do cliente e painel admin ─── */}
-              <Route path={localePath('/conta')} element={<AccountPage />} />
-              <Route path={localePath('/admin')} element={<AdminDashboard />} />
+              {localizedRoutes('/conta', <AccountPage />)}
+              {localizedRoutes('/admin', <AdminDashboard />)}
 
               {/* ─── Etapa 4: conformidade (minutas, 3 idiomas) ─── */}
-              <Route
-                path={localePath('/privacidade')}
-                element={<ComplianceRoute pageKey="privacidade" />}
-              />
-              <Route
-                path={localePath('/cookies')}
-                element={<ComplianceRoute pageKey="cookies" />}
-              />
-              <Route path={localePath('/termos')} element={<ComplianceRoute pageKey="termos" />} />
-              <Route path={localePath('/trocas')} element={<ComplianceRoute pageKey="trocas" />} />
-              <Route
-                path={localePath('/entrega')}
-                element={<ComplianceRoute pageKey="entrega" />}
-              />
-              <Route
-                path={localePath('/contato')}
-                element={<ComplianceRoute pageKey="contato" />}
-              />
+              {localizedRoutes('/privacidade', <ComplianceRoute pageKey="privacidade" />)}
+              {localizedRoutes('/cookies', <ComplianceRoute pageKey="cookies" />)}
+              {localizedRoutes('/termos', <ComplianceRoute pageKey="termos" />)}
+              {localizedRoutes('/trocas', <ComplianceRoute pageKey="trocas" />)}
+              {localizedRoutes('/entrega', <ComplianceRoute pageKey="entrega" />)}
+              {localizedRoutes('/contato', <ComplianceRoute pageKey="contato" />)}
             </Route>
 
             {/* Contemplative 404 Catch-All */}

@@ -38,8 +38,8 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
 
   // Source resolution: prefer the licensed MP3 when it exists at
   // public/audio/ambiente-loop.mp3; otherwise fall back to the WebAudio
-  // tibetan-flute synth (see src/lib/audio/tibetanSynth.ts for the track
-  // this fallback stands in for and how to swap it).
+  // zen-meditation soundscape (drone + tibetan bowls, see
+  // src/lib/audio/tibetanSynth.ts).
   const probeFile = async (): Promise<boolean> => {
     try {
       const res = await fetch(siteConfig.audio.src, { method: 'HEAD' })

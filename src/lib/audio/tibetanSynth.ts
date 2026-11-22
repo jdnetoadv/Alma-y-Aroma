@@ -1,33 +1,64 @@
 /**
- * Tibetan-style flute ambient loop, generated in the browser via Web Audio API.
+ * Paisagem sonora zen de meditação, gerada no navegador via Web Audio API.
  *
- * Fallback active because the licensed MP3 could not be programmatically
- * downloaded from Pixabay (the direct CDN file is a binary the agent tooling
- * cannot save; the page is Cloudflare-protected against scripted access):
+ * Não há arquivo de áudio licenciado em public/audio/ambiente-loop.mp3: o
+ * download de faixas de domínio público/royalty-free não foi possível no
+ * ambiente de build, então esta é a versão sintetizada. O provider prefere o
+ * arquivo sempre que ele existir e nunca instancia este synth nesse caso.
  *
- *   "soothing tibetian flute music" — PoorArtistt, Pixabay (Pixabay Content
- *   License, free for use), track id 575523 (pixabay.com/music, busca
- *   "tibetian flute", autor PoorArtistt).
- *
- * To switch to the licensed track, drop it at public/audio/ambiente-loop.mp3
- * (download from the URL above) — the provider prefers the file whenever it
- * exists and never instantiates this synth in that case.
- *
- * The synth plays a slow minor-pentatonic phrase over a warm drone bed with
- * long silences between notes, like a bamboo/himalayan flute breathing.
+ * Composição (lenta e grave, volume baixo):
+ *   - drone contínuo em lá grave (A1 + quinta), com respiração muito lenta;
+ *   - tigelas tibetanas: fundamental + parciais inarmônicos com decay longo
+ *     (12–20 s), batidas esparsas a cada 15–30 s;
+ *   - gongo suave ocasional (a cada 75–150 s), com entrada lenta;
+ *   - reverb longo e escuro (delay com filtro passa-baixa no feedback) e
+ *     filtro passa-baixa geral: nada agudo nem percussivo.
  */
 
 interface SynthHandle {
   stop: () => void
 }
 
-const PENTATONIC_BASE_HZ = 220 // A3 — low, warm register
-const SCALE_RATIO = [1, 9 / 8, 6 / 5, 3 / 2, 8 / 5] // minor pentatonic ratios
-const NOTE_MIN_GAP_S = 3.5
-const NOTE_MAX_GAP_S = 9
-const DRONE_LEVEL = 0.045
-const NOTE_LEVEL = 0.16
-const FADE_IN_S = 2.5
+interface Partial {
+  ratio: number
+  gain: number
+  decayScale: number
+}
+
+const DRONE_ROOT_HZ = 55 // A1 — grave e estável
+const DRONE_FIFTH_HZ = 82.41 // E2 — quinta justa acima
+const DRONE_LEVEL = 0.1
+const DRONE_BREATH_HZ = 0.03
+
+const BOWL_ROOTS_HZ = [146.83, 164.81, 220, 246.94] // D3, E3, A3, B3
+const BOWL_PARTIALS: Partial[] = [
+  { ratio: 1, gain: 1, decayScale: 1 },
+  { ratio: 2.71, gain: 0.35, decayScale: 0.6 },
+  { ratio: 5.13, gain: 0.14, decayScale: 0.35 },
+  { ratio: 8.4, gain: 0.05, decayScale: 0.2 },
+]
+const BOWL_LEVEL = 0.2
+const BOWL_MIN_GAP_S = 15
+const BOWL_MAX_GAP_S = 30
+const BOWL_FIRST_DELAY_S = 4
+
+const GONG_ROOT_HZ = 73.42 // D2
+const GONG_PARTIALS: Partial[] = [
+  { ratio: 1, gain: 1, decayScale: 1 },
+  { ratio: 1.52, gain: 0.5, decayScale: 0.7 },
+  { ratio: 2.14, gain: 0.3, decayScale: 0.5 },
+  { ratio: 2.73, gain: 0.15, decayScale: 0.3 },
+]
+const GONG_LEVEL = 0.16
+const GONG_ATTACK_S = 1.8
+const GONG_MIN_GAP_S = 75
+const GONG_MAX_GAP_S = 150
+
+const FADE_IN_S = 4
+const FADE_OUT_S = 0.5
+
+const pick = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)]
+const between = (min: number, max: number) => min + Math.random() * (max - min)
 
 export async function startTibetanFluteSynth(volume: number): Promise<SynthHandle> {
   const AudioCtx: typeof AudioContext =
@@ -49,7 +80,7 @@ export async function startTibetanFluteSynth(volume: number): Promise<SynthHandl
     try {
       await ctx.resume()
     } catch (err) {
-      console.error('[tibetanSynth] ctx.resume() falhou:', err)
+      console.error('[zenSynth] ctx.resume() falhou:', err)
       void ctx.close().catch(() => {})
       throw new Error('AudioContext não pôde ser retomado (política de autoplay do navegador)')
     }
@@ -59,41 +90,51 @@ export async function startTibetanFluteSynth(volume: number): Promise<SynthHandl
     }
   }
 
+  // ── Cadeia de saída: master (fade) → tom escuro → destino ──
   const master = ctx.createGain()
   master.gain.setValueAtTime(0.0001, ctx.currentTime)
-  master.connect(ctx.destination)
   master.gain.linearRampToValueAtTime(volume, ctx.currentTime + FADE_IN_S)
+  master.connect(ctx.destination)
 
-  // Warm tube-like saturation
-  const shaper = ctx.createWaveShaper()
-  const curve = new Float32Array(256)
-  for (let i = 0; i < 256; i++) {
-    const x = (i / 255) * 2 - 1
-    curve[i] = Math.tanh(x * 2.2) / Math.tanh(2.2)
-  }
-  shaper.curve = curve
-  shaper.connect(master)
+  const tone = ctx.createBiquadFilter()
+  tone.type = 'lowpass'
+  tone.frequency.value = 1000
+  tone.Q.value = 0.5
+  tone.connect(master)
 
-  // Simple stereo-width feedback delay: adds the airy tail of a big hall
-  const delay = ctx.createDelay(1.5)
-  delay.delayTime.value = 0.42
+  // Barramento seco: todas as fontes somam aqui
+  const mix = ctx.createGain()
+  mix.gain.value = 1
+  mix.connect(tone)
+
+  // Reverb longo e escuro: delay com filtro no feedback (cada repetição fica mais grave)
+  const delay = ctx.createDelay(2)
+  delay.delayTime.value = 0.9
+  const damp = ctx.createBiquadFilter()
+  damp.type = 'lowpass'
+  damp.frequency.value = 1400
   const feedback = ctx.createGain()
-  feedback.gain.value = 0.32
+  feedback.gain.value = 0.45
   const wet = ctx.createGain()
   wet.gain.value = 0.35
-  delay.connect(feedback)
+  mix.connect(delay)
+  delay.connect(damp)
+  damp.connect(feedback)
   feedback.connect(delay)
-  delay.connect(wet)
-  wet.connect(shaper)
+  damp.connect(wet)
+  wet.connect(tone)
 
   const droneOut = ctx.createGain()
-  droneOut.gain.value = DRONE_LEVEL
-  droneOut.connect(shaper)
+  droneOut.gain.value = 1
+  droneOut.connect(mix)
 
-  const noteOut = ctx.createGain()
-  noteOut.gain.value = NOTE_LEVEL
-  noteOut.connect(delay)
-  noteOut.connect(shaper)
+  const bowlOut = ctx.createGain()
+  bowlOut.gain.value = 1
+  bowlOut.connect(mix)
+
+  const gongOut = ctx.createGain()
+  gongOut.gain.value = 1
+  gongOut.connect(mix)
 
   const timers: number[] = []
   let stopped = false
@@ -105,78 +146,83 @@ export async function startTibetanFluteSynth(volume: number): Promise<SynthHandl
     timers.push(id)
   }
 
-  // ── Drone bed: root + fifth, slightly detuned, slow breathing LFO ──
-  const lfo = ctx.createOscillator()
-  const lfoGain = ctx.createGain()
-  lfo.frequency.value = 0.07
-  lfoGain.gain.value = 0.018
-  lfo.connect(lfoGain)
+  // ── Drone: fundamental + quinta, com respiração lentíssima no volume ──
+  const breath = ctx.createOscillator()
+  breath.frequency.value = DRONE_BREATH_HZ
+  const breathDepth = ctx.createGain()
+  breathDepth.gain.value = DRONE_LEVEL * 0.3
+  breath.connect(breathDepth)
 
-  const droneVoices: Array<{ mult: number; detune: number }> = [
-    { mult: 1, detune: -4 },
-    { mult: 1, detune: 5 },
-    { mult: 3 / 2, detune: 3 },
-    { mult: 2, detune: -6 },
-  ]
-  for (const voice of droneVoices) {
+  const droneGain = ctx.createGain()
+  droneGain.gain.value = DRONE_LEVEL
+  breathDepth.connect(droneGain.gain)
+  droneGain.connect(droneOut)
+
+  for (const freq of [DRONE_ROOT_HZ, DRONE_FIFTH_HZ]) {
     const osc = ctx.createOscillator()
     osc.type = 'sine'
-    osc.frequency.value = PENTATONIC_BASE_HZ * voice.mult
-    osc.detune.value = voice.detune
-    const gain = ctx.createGain()
-    gain.gain.value = voice.mult === 1 ? 1 : 0.4
-    lfoGain.connect(gain.gain)
-    osc.connect(gain)
-    gain.connect(droneOut)
+    osc.frequency.value = freq
+    osc.detune.value = (Math.random() - 0.5) * 4
+    osc.connect(droneGain)
     osc.start()
   }
-  lfo.start()
+  breath.start()
 
-  // ── Flute notes: pentatonic phrase, one note at a time, long silences ──
-  const playNote = () => {
-    const degree = Math.floor(Math.random() * SCALE_RATIO.length)
-    const octave = Math.random() < 0.3 ? 2 : 1
-    const freq = PENTATONIC_BASE_HZ * SCALE_RATIO[degree] * octave
-
+  // ── Golpe de tigela / gongo: parciais inarmônicos com decay longo ──
+  const strike = (
+    root: number,
+    partials: Partial[],
+    level: number,
+    decayS: number,
+    attackS: number,
+    dest: AudioNode,
+  ) => {
     const now = ctx.currentTime
-    const attack = 0.6 + Math.random() * 0.5
-    const hold = 1.4 + Math.random() * 1.4
-    const release = 1.6 + Math.random() * 1.2
-    const breath = ctx.createOscillator()
-    breath.frequency.value = 5 + Math.random() * 3 // soft vibrato
-
-    const osc = ctx.createOscillator()
-    osc.type = 'triangle'
-    osc.frequency.value = freq
-
-    const vibrato = ctx.createGain()
-    vibrato.gain.value = freq * 0.006
-    breath.connect(vibrato)
-    vibrato.connect(osc.frequency)
-
-    const gain = ctx.createGain()
-    gain.gain.setValueAtTime(0.0001, now)
-    gain.gain.linearRampToValueAtTime(1, now + attack)
-    gain.gain.setValueAtTime(1, now + attack + hold)
-    gain.gain.linearRampToValueAtTime(0.0001, now + attack + hold + release)
-
-    osc.connect(gain)
-    gain.connect(noteOut)
-    osc.start(now)
-    breath.start(now)
-    const total = attack + hold + release
-    osc.stop(now + total)
-    breath.stop(now + total)
+    for (const p of partials) {
+      const osc = ctx.createOscillator()
+      osc.type = 'sine'
+      osc.frequency.value = root * p.ratio
+      osc.detune.value = (Math.random() - 0.5) * 6
+      const env = ctx.createGain()
+      const peak = Math.max(0.0002, p.gain * level)
+      const length = decayS * p.decayScale
+      env.gain.setValueAtTime(0.0001, now)
+      env.gain.exponentialRampToValueAtTime(peak, now + attackS)
+      env.gain.exponentialRampToValueAtTime(0.0001, now + attackS + length)
+      osc.connect(env)
+      env.connect(dest)
+      osc.start(now)
+      osc.stop(now + attackS + length + 0.2)
+    }
   }
 
-  const scheduleNextNote = () => {
-    const gap = NOTE_MIN_GAP_S + Math.random() * (NOTE_MAX_GAP_S - NOTE_MIN_GAP_S)
+  const playBowl = () => {
+    strike(pick(BOWL_ROOTS_HZ), BOWL_PARTIALS, BOWL_LEVEL, between(12, 20), 0.03, bowlOut)
+  }
+
+  const scheduleNextBowl = (firstDelayS?: number) => {
+    const gap = firstDelayS ?? between(BOWL_MIN_GAP_S, BOWL_MAX_GAP_S)
     schedule(() => {
-      playNote()
-      scheduleNextNote()
+      playBowl()
+      scheduleNextBowl()
     }, gap)
   }
-  scheduleNextNote()
+  scheduleNextBowl(BOWL_FIRST_DELAY_S)
+
+  const playGong = () => {
+    strike(GONG_ROOT_HZ, GONG_PARTIALS, GONG_LEVEL, between(18, 24), GONG_ATTACK_S, gongOut)
+  }
+
+  const scheduleNextGong = () => {
+    schedule(
+      () => {
+        playGong()
+        scheduleNextGong()
+      },
+      between(GONG_MIN_GAP_S, GONG_MAX_GAP_S),
+    )
+  }
+  scheduleNextGong()
 
   return {
     stop: () => {
@@ -186,7 +232,7 @@ export async function startTibetanFluteSynth(volume: number): Promise<SynthHandl
       try {
         master.gain.cancelScheduledValues(ctx.currentTime)
         master.gain.setValueAtTime(master.gain.value, ctx.currentTime)
-        master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5)
+        master.gain.linearRampToValueAtTime(0, ctx.currentTime + FADE_OUT_S)
       } catch {
         // already closed
       }

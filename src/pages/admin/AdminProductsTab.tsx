@@ -15,6 +15,12 @@ import { listAdminCategories, AdminCategory } from '@/lib/admin/service'
 import { catalogRepository, formatPrice } from '@/data/repository'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 import { AdminProductGallery, GalleryState, saveGalleryState } from '@/lib/admin/gallery'
+import {
+  ProductTranslationDraft,
+  ProductTranslationsPanel,
+  translationDraftFrom,
+  withPortuguese,
+} from './ProductTranslationsPanel'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -172,7 +178,7 @@ function ProductRow({
           title={t('admin.productEdit')}
           className="font-serif text-foreground underline-offset-2 hover:text-primary hover:underline"
         >
-          {product.name[locale] ?? product.slug}
+          {product.name[locale] || product.name['pt-br'] || product.slug}
         </button>
         <p className="text-[11px] text-muted-foreground">{product.slug}</p>
       </td>
@@ -317,6 +323,9 @@ function AdminProductForm({
   const [active, setActive] = useState(product?.active ?? true)
   const [shortDesc, setShortDesc] = useState(product?.shortDescription['pt-br'] ?? '')
   const [longDesc, setLongDesc] = useState(product?.longDescription['pt-br'] ?? '')
+  const [translations, setTranslations] = useState<ProductTranslationDraft>(() =>
+    translationDraftFrom(product),
+  )
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   // Galeria de fotos (migração 0008): sequência definida no painel.
@@ -365,9 +374,9 @@ function AdminProductForm({
   function commonWrite() {
     return {
       categoryId,
-      name: { 'pt-br': name, es: name, 'en-gb': name },
-      shortDescription: { 'pt-br': shortDesc, es: shortDesc, 'en-gb': shortDesc },
-      longDescription: { 'pt-br': longDesc, es: longDesc, 'en-gb': longDesc },
+      name: withPortuguese(name, translations.name),
+      shortDescription: withPortuguese(shortDesc, translations.shortDescription),
+      longDescription: withPortuguese(longDesc, translations.longDescription),
       price: Number(price) || 0,
       stock: Number(stock) || 0,
       active,
@@ -496,6 +505,13 @@ function AdminProductForm({
           className="bg-background"
         />
       </div>
+      <ProductTranslationsPanel
+        value={translations}
+        onChange={setTranslations}
+        ptName={name}
+        ptShortDescription={shortDesc}
+        ptLongDescription={longDesc}
+      />
       <AdminProductGallery product={product} onChange={setGallery} onNotify={setGalleryNotice} />
       {galleryNotice && (
         <p className="text-xs text-amber-600" role="status">

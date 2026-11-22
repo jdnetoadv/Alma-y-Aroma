@@ -64,6 +64,21 @@ function toUiCategory(r: CatalogCategoryRecord) {
   }
 }
 
+/**
+ * Texto por idioma com fallback para o português: um idioma vazio (ou ausente)
+ * mostra o pt-br. O pt-br é a base e nunca é substituído.
+ */
+function withPortugueseFallback(value: Record<Locale, string> | undefined | null) {
+  const source = value ?? ({} as Record<Locale, string>)
+  const pt = source['pt-br'] ?? ''
+  const filled = (text: string | undefined) => (text && text.trim() ? text : pt)
+  return {
+    'pt-br': pt,
+    es: filled(source.es),
+    'en-gb': filled(source['en-gb']),
+  } as Record<Locale, string>
+}
+
 function toUiProduct(r: CatalogProductRecord) {
   // Sequência definida no painel (migração 0008): o campo `images` grava a
   // ordem exata escolhida pelo admin — marcadores `file:<nome>` ancoram cada
@@ -108,9 +123,9 @@ function toUiProduct(r: CatalogProductRecord) {
     slug: r.slug,
     sku: r.sku,
     category: r.categoryId,
-    name: r.name,
-    shortDescription: r.shortDescription,
-    longDescription: r.longDescription,
+    name: withPortugueseFallback(r.name),
+    shortDescription: withPortugueseFallback(r.shortDescription),
+    longDescription: withPortugueseFallback(r.longDescription),
     images,
     variations: r.variations,
     scentFamily: r.scentFamily,

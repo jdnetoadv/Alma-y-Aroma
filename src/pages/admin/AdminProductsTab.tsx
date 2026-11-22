@@ -10,6 +10,7 @@ import { getErrorMessage } from '@/lib/pocketbase/errors'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { Loader2 } from 'lucide-react'
 
 const CURRENCIES: CurrencyCode[] = ['BRL', 'EUR', 'GBP']
@@ -261,6 +262,10 @@ function AdminProductForm({
   const [price, setPrice] = useState('')
   const [stock, setStock] = useState('0')
   const [featured, setFeatured] = useState(false)
+  const [shortDesc, setShortDesc] = useState('')
+  const [longDesc, setLongDesc] = useState('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imageUrl, setImageUrl] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -279,15 +284,19 @@ function AdminProductForm({
     setBusy(true)
     setError(null)
     try {
+      const url = imageUrl.trim()
       await createProduct({
         slug: (slug || autoSlug(name)).slice(0, 60),
         categoryId,
         name: { 'pt-br': name, es: name, 'en-gb': name },
-        shortDescription: { 'pt-br': '', es: '', 'en-gb': '' },
+        shortDescription: { 'pt-br': shortDesc, es: shortDesc, 'en-gb': shortDesc },
+        longDescription: { 'pt-br': longDesc, es: longDesc, 'en-gb': longDesc },
         price: Number(price) || 0,
         stock: Number(stock) || 0,
         active: true,
         featured,
+        imageFile,
+        images: url ? [url] : [],
       })
       onDone()
     } catch (err) {
@@ -375,6 +384,57 @@ function AdminProductForm({
           </div>
         </div>
       </div>
+      <div className="space-y-1">
+        <Label htmlFor="prod-short" className="text-xs text-muted-foreground">
+          {t('admin.shortDescription')}
+        </Label>
+        <Input
+          id="prod-short"
+          value={shortDesc}
+          onChange={(e) => setShortDesc(e.target.value)}
+          className="bg-background"
+        />
+      </div>
+      <div className="space-y-1">
+        <Label htmlFor="prod-long" className="text-xs text-muted-foreground">
+          {t('admin.longDescription')}
+        </Label>
+        <Textarea
+          id="prod-long"
+          value={longDesc}
+          onChange={(e) => setLongDesc(e.target.value)}
+          rows={5}
+          className="bg-background"
+        />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="space-y-1">
+          <Label htmlFor="prod-image-file" className="text-xs text-muted-foreground">
+            {t('admin.productImage')} — {t('admin.productImageFile')}
+          </Label>
+          <input
+            id="prod-image-file"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+            className="block w-full text-xs text-muted-foreground file:mr-3 file:rounded-md file:border-0 file:bg-secondary file:px-3 file:py-1.5 file:text-xs file:text-foreground"
+          />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor="prod-image-url" className="text-xs text-muted-foreground">
+            {t('admin.productImage')} — {t('admin.productImageUrl')}
+          </Label>
+          <Input
+            id="prod-image-url"
+            type="url"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            disabled={!!imageFile}
+            className="bg-background"
+          />
+        </div>
+      </div>
+      <p className="text-[11px] italic text-muted-foreground/70">{t('admin.productImageHint')}</p>
       <label className="flex items-center gap-2 text-xs text-muted-foreground">
         <input
           type="checkbox"

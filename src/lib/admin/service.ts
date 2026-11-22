@@ -38,6 +38,7 @@ export interface AdminProduct {
   shortDescription: Record<Locale, string>
   longDescription: Record<Locale, string>
   images: string[]
+  imageFile?: string
   variations: { kind: string; label: string; values: string[] }[]
   productType: Record<Locale, string>
   scentFamily: string
@@ -86,16 +87,23 @@ export async function updateProduct(
 export async function createProduct(
   data: Pick<
     AdminProduct,
-    'slug' | 'categoryId' | 'name' | 'shortDescription' | 'price' | 'stock' | 'active'
-  > & { images?: string[]; featured?: boolean },
+    | 'slug'
+    | 'categoryId'
+    | 'name'
+    | 'shortDescription'
+    | 'longDescription'
+    | 'price'
+    | 'stock'
+    | 'active'
+  > & { images?: string[]; featured?: boolean; imageFile?: File | null },
 ): Promise<void> {
-  await pb.collection('products').create({
+  const payload: Record<string, unknown> = {
     slug: data.slug,
     sku: data.slug.toUpperCase().replaceAll('-', '').slice(0, 12),
     categoryId: data.categoryId,
     name: data.name,
     shortDescription: data.shortDescription,
-    longDescription: data.shortDescription,
+    longDescription: data.longDescription,
     images: data.images ?? [],
     variations: [],
     productType: data.name,
@@ -109,7 +117,21 @@ export async function createProduct(
     isNew: false,
     demonstrative: false,
     currency: 'BRL',
-  })
+  }
+  if (!data.imageFile) {
+    await pb.collection('products').create(payload)
+    return
+  }
+  // Upload de arquivo: multipart, com os campos JSON serializados.
+  const form = new FormData()
+  for (const [key, value] of Object.entries(payload)) {
+    form.append(
+      key,
+      typeof value === 'object' && value !== null ? JSON.stringify(value) : String(value),
+    )
+  }
+  form.append('imageFile', data.imageFile)
+  await pb.collection('products').create(form)
 }
 
 export interface AdminCategory {

@@ -16,6 +16,7 @@ export interface CatalogCategoryRecord {
 
 export interface CatalogProductRecord {
   id: string
+  collectionId: string
   slug: string
   sku: string
   categoryId: string
@@ -23,6 +24,8 @@ export interface CatalogProductRecord {
   shortDescription: Record<Locale, string>
   longDescription: Record<Locale, string>
   images: string[]
+  /** Arquivo de imagem enviado pelo admin (campo file da migração 0007). */
+  imageFile?: string
   variations: { kind: string; label: string; values: string[] }[]
   productType: Record<Locale, string>
   scentFamily: string
@@ -60,6 +63,8 @@ function toUiCategory(r: CatalogCategoryRecord) {
 }
 
 function toUiProduct(r: CatalogProductRecord) {
+  // Arquivo enviado tem prioridade: vira a primeira imagem da galeria.
+  const uploaded = r.imageFile ? pb.files.getURL(r, r.imageFile) : ''
   return {
     id: r.slug,
     slug: r.slug,
@@ -68,7 +73,7 @@ function toUiProduct(r: CatalogProductRecord) {
     name: r.name,
     shortDescription: r.shortDescription,
     longDescription: r.longDescription,
-    images: r.images.map(resolveImage),
+    images: [uploaded, ...(r.images ?? []).map(resolveImage)].filter(Boolean),
     variations: r.variations,
     scentFamily: r.scentFamily,
     productType: r.productType,

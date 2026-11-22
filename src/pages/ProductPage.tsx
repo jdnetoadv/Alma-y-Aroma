@@ -117,16 +117,18 @@ export default function ProductPage() {
           {/* Galeria */}
           <div>
             <div className="relative aspect-square overflow-hidden rounded-lg border border-border/60 bg-secondary/40">
-              <img
-                src={gallery[activeImage]}
-                alt={`${name} — imagem ${activeImage + 1}`}
-                className="h-full w-full object-cover transition-transform duration-500"
-                onClick={() => setZoomed(true)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && setZoomed(true)}
-                aria-label={`${name} — ampliar imagem`}
-              />
+              {gallery[activeImage] && (
+                <img
+                  src={gallery[activeImage]}
+                  alt={`${name} — imagem ${activeImage + 1}`}
+                  className="h-full w-full object-cover transition-transform duration-500"
+                  onClick={() => setZoomed(true)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && setZoomed(true)}
+                  aria-label={`${name} — ampliar imagem`}
+                />
+              )}
               <span className="absolute left-4 top-4 rounded-full bg-background/85 px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground backdrop-blur">
                 {t('product.demoBadge')}
               </span>
@@ -176,9 +178,11 @@ export default function ProductPage() {
                 />
               </button>
             </h1>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              {product.shortDescription[locale]}
-            </p>
+            {product.shortDescription[locale] && (
+              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+                {product.shortDescription[locale]}
+              </p>
+            )}
             {product.price != null &&
             product.compareAtPrice != null &&
             product.compareAtPrice > product.price ? (
@@ -334,9 +338,11 @@ export default function ProductPage() {
             {/* Descrição sensorial */}
             <div className="mt-10 border-t border-border/40 pt-8">
               <h2 className="font-serif text-2xl text-foreground">{t('product.detailTitle')}</h2>
-              <p className="mt-4 leading-relaxed text-muted-foreground">
-                {product.longDescription[locale]}
-              </p>
+              {product.longDescription[locale] && (
+                <p className="mt-4 whitespace-pre-line leading-relaxed text-muted-foreground">
+                  {product.longDescription[locale]}
+                </p>
+              )}
             </div>
 
             {/* Informações técnicas */}

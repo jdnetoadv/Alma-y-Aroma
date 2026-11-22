@@ -1,0 +1,107 @@
+{
+  "image": "difusor-alma-y-aroma-ao-entardecer-e7ed7.png",
+  "width": 1736,
+  "height": 906,
+  "goldPixelsTopHalf": 5049,
+  "regions": [
+    {
+      "minX": 940,
+      "maxX": 1261,
+      "widthPct": 18.5,
+      "pixels": 1654,
+      "density": 5.14,
+      "centroidX": 1114,
+      "centroidYPct": 33,
+      "f": 0.6419
+    },
+    {
+      "minX": 0,
+      "maxX": 116,
+      "widthPct": 6.7,
+      "pixels": 951,
+      "density": 8.13,
+      "centroidX": 64,
+      "centroidYPct": 49.4,
+      "f": 0.0367
+    },
+    {
+      "minX": 293,
+      "maxX": 436,
+      "widthPct": 8.3,
+      "pixels": 408,
+      "density": 2.83,
+      "centroidX": 346,
+      "centroidYPct": 28,
+      "f": 0.1996
+    },
+    {
+      "minX": 551,
+      "maxX": 603,
+      "widthPct": 3.1,
+      "pixels": 386,
+      "density": 7.28,
+      "centroidX": 574,
+      "centroidYPct": 9.6,
+      "f": 0.3308
+    },
+    {
+      "minX": 1347,
+      "maxX": 1427,
+      "widthPct": 4.7,
+      "pixels": 315,
+      "density": 3.89,
+      "centroidX": 1387,
+      "centroidYPct": 44,
+      "f": 0.7991
+    },
+    {
+      "minX": 847,
+      "maxX": 925,
+      "widthPct": 4.6,
+      "pixels": 273,
+      "density": 3.46,
+      "centroidX": 886,
+      "centroidYPct": 44.1,
+      "f": 0.5105
+    },
+    {
+      "minX": 715,
+      "maxX": 772,
+      "widthPct": 3.3,
+      "pixels": 224,
+      "density": 3.86,
+      "centroidX": 742,
+      "centroidYPct": 41.1,
+      "f": 0.4272
+    },
+    {
+      "minX": 196,
+      "maxX": 287,
+      "widthPct": 5.3,
+      "pixels": 202,
+      "density": 2.2,
+      "centroidX": 250,
+      "centroidYPct": 25.9,
+      "f": 0.1439
+    }
+  ],
+  "emblem": {
+    "minX": 0,
+    "maxX": 116,
+    "widthPct": 6.7,
+    "pixels": 951,
+    "density": 8.13,
+    "centroidX": 64,
+    "centroidYPct": 49.4,
+    "f": 0.0367
+  },
+  "histogram": [
+    8.3, 5.1, 0.6, 2.5, 3.7, 1.8, 0.6, 4.2, 1.9, 0.2, 3.1, 3.2, 2.4, 4.2, 4.5, 5.5, 7, 2.7, 3, 2.8,
+    2.5, 0, 0, 0
+  ],
+  "f": 0.0367,
+  "positions": {
+    "leftPct": 45.41,
+    "positionPct": 3.67
+  }
+}

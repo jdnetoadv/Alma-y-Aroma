@@ -20,23 +20,31 @@ export function HeroSection() {
       aria-label="ALMA Y AROMA"
       className="relative flex flex-col overflow-hidden bg-wine-deep text-cream"
     >
-      {/* Fundo do hero: o emblema/nome da arte fica em ~60% da largura da
-          imagem (a estimativa anterior de 75% deixava a marca à esquerda).
-          A camada tem 125% da largura do hero e recua 25%: pela regra de
-          background-position percentual, o ponto a 60% da imagem alinha com
-          60% da camada, então o emblema cai em -25% + 0,6·125% = 50% — centro
-          exato em QUALQUER viewport (desktop e celular), sem media query.
-          Zoom de só 1,25x (a tentativa anterior usava 2,2x): difusor/Buda
-          permanecem visíveis à esquerda e a vela à direita.
-          Ajuste fino: mudar f aqui e recalcular left = 50% - f·width. */}
+      {/* Fundo do hero: MEASURED, não estimado. O script
+          scripts/measure-emblem.cjs (Node, sem dependências — decodifica o PNG
+          com zlib e faz análise de pixels) mediu a marca (emblema + wordmark
+          ALMA Y AROMA) gravada na arte em f = 0,6419 da largura da imagem
+          (região dourada densa x 940–1261 de 1736 px,
+          scripts/emblem-measurement.json).
+          Regra invariante da camada: left + f·width = 50% da viewport ⇒
+          left = 50% − 0,6419·125% = −30,24%.
+          background-position horizontal = f = 64,19% (equivalente matemático:
+          posiciona a imagem de modo que o ponto f fique em f·(divW−imgW) do
+          overflow, caindo exatamente no centro — válido em desktop e celular,
+          com background-size cover por altura).
+          Zoom de 1,25x mantido (aprovado pela usuária): difusor/Buda à
+          esquerda e a vela à direita permanecem visíveis.
+          Recalibração futura: rode `node scripts/measure-emblem.cjs`, pegue o
+          f do bloco "emblem" em scripts/emblem-measurement.json e recalcule
+          left = 50% − f·width e position = f. */}
       <div
         aria-hidden
         className="absolute top-0 bottom-0 bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url(${heroBanner})`,
-          left: '-25%',
+          left: '-30.24%',
           width: '125%',
-          backgroundPosition: '60% center',
+          backgroundPosition: '64.19% center',
         }}
       />
       {/* Escurecimento suave: base e laterais mais fortes para a leitura do

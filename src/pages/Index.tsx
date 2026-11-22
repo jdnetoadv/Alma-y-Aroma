@@ -5,6 +5,7 @@ import { EssenceSection } from '@/components/home/EssenceSection'
 import { RitualsSection } from '@/components/home/RitualsSection'
 import { MomentSection } from '@/components/home/MomentSection'
 import { useHomeShelves, HomeShelfSection } from '@/components/home/HomeShelves'
+import { DiscoverRibbon } from '@/components/home/DiscoverRibbon'
 import { useCatalogReady } from '@/data/repository'
 
 export default function Index() {
@@ -40,6 +41,9 @@ export default function Index() {
       {shelves.map((shelf) => (
         <HomeShelfSection key={shelf.id} shelf={shelf} />
       ))}
+
+      {/* Vitrine contínua: fita infinita com o catálogo passando sozinho. */}
+      {ready && <DiscoverRibbon />}
 
       {/* 4. Nossa Essência (Verbatim Manifesto) */}
       <EssenceSection />

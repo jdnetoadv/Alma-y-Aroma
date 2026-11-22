@@ -281,6 +281,33 @@
     animation: breath 20s ease-in-out infinite;
   }
 
+  /* Motion: Fita contínua da vitrine da homepage — desliza exatamente 50%
+     da largura (uma cópia da lista) e reinicia sem emenda. A pausa acontece
+     ao passar o mouse sobre a seção (.group/ribbon:hover). */
+  @keyframes ribbon-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .ribbon-track {
+    animation: ribbon-scroll 60s linear infinite;
+  }
+
+  .group\/ribbon:hover .ribbon-track {
+    animation-play-state: paused;
+  }
+
+  /* Respeita prefers-reduced-motion: fita parada, sem deslize contínuo. */
+  @media (prefers-reduced-motion: reduce) {
+    .ribbon-track {
+      animation: none;
+    }
+  }
+
   /* Respeita prefers-reduced-motion: sem animação contínua de fundo */
   @media (prefers-reduced-motion: reduce) {
     .animate-breath,

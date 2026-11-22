@@ -317,6 +317,10 @@ const ptbr: Record<string, string> = {
   'shop.shelf.ritual.subtitle': 'Produtos organizados por momento e ambiente.',
   'shop.shelf.seeAll': 'Ver tudo',
   'shop.shelf.empty': 'Nenhuma peça nesta vitrine por enquanto.',
+  // ── Fita contínua da homepage ──
+  'shop.ribbon.eyebrow': 'Navegue sem pressa',
+  'shop.ribbon.discover.title': 'Descubra',
+  'shop.ribbon.subtitle': 'Peças do nosso catálogo passando para você conhecer.',
   // ── Etapa 5: abas do admin ──
   'admin.tabPricing': 'Precificação',
   'admin.tabSuppliers': 'Fornecedores',
@@ -721,6 +725,10 @@ const es: Record<string, string> = {
   'shop.shelf.ritual.subtitle': 'Productos organizados por momento y ambiente.',
   'shop.shelf.seeAll': 'Ver todo',
   'shop.shelf.empty': 'Ninguna pieza en esta vitrina por ahora.',
+  // ── Fita contínua de la portada ──
+  'shop.ribbon.eyebrow': 'Recorre sin prisa',
+  'shop.ribbon.discover.title': 'Descubre',
+  'shop.ribbon.subtitle': 'Piezas de nuestro catálogo pasando para que las conozcas.',
   // ── Etapa 5: pestañas del admin ──
   'admin.tabPricing': 'Fijación de precios',
   'admin.tabSuppliers': 'Proveedores',
@@ -1119,6 +1127,10 @@ const engb: Record<string, string> = {
   'shop.shelf.ritual.subtitle': 'Products organised by moment and atmosphere.',
   'shop.shelf.seeAll': 'View all',
   'shop.shelf.empty': 'No pieces in this shelf for now.',
+  // ── Homepage continuous ribbon ──
+  'shop.ribbon.eyebrow': 'Wander at leisure',
+  'shop.ribbon.discover.title': 'Discover',
+  'shop.ribbon.subtitle': 'Pieces from our catalogue drifting by for you to meet.',
   // ── Stage 5: admin tabs ──
   'admin.tabPricing': 'Pricing',
   'admin.tabSuppliers': 'Suppliers',

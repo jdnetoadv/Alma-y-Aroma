@@ -1,4 +1,3 @@
-import { Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useLocale } from '@/i18n/LocaleContext'
 import heroBanner from '@/assets/luxo-e-aroma-no-spa-3896d.png'
@@ -68,14 +67,6 @@ export function HeroSection() {
           do wordmark ALMA Y AROMA da arte, sem cortar o bloco na viewport. */}
       <div className="relative z-10 flex-1 flex items-end justify-center min-h-[82vh] sm:min-h-[88vh] lg:min-h-screen px-6 pb-10 sm:pb-14">
         <div className="mx-auto max-w-4xl w-full text-center">
-          {/* Badge da nova boutique */}
-          <div className="mb-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold/40 bg-wine-deep/55 backdrop-blur-sm text-gold-light animate-fade-in">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span className="font-sans text-[11px] uppercase tracking-[0.2em] font-medium">
-              {t('hero.badge')}
-            </span>
-          </div>
-
           {/* Slogan principal (traduzido; não faz parte da arte) */}
           <h1 className="font-serif text-cream text-3xl sm:text-5xl lg:text-6xl leading-tight tracking-wide animate-fade-in-up drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
             {t('hero.slogan')}

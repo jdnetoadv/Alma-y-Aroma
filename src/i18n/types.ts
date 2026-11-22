@@ -46,7 +46,6 @@ export interface TranslationDictionary {
   'hero.subtitle': string
   'hero.cta': string
   'hero.scroll': string
-  'hero.badge': string
   'hero.ctaSecondary': string
   'hero.categories': string
 

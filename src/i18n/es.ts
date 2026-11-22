@@ -17,7 +17,6 @@ export const es: TranslationDictionary = {
     'Aromas, esencias y pequeños rituales para reconectarte con lo que realmente importa.',
   'hero.cta': 'Explorar la colección',
   'hero.scroll': 'Desliza para contemplar',
-  'hero.badge': 'Nueva boutique',
   'hero.ctaSecondary': 'Descubrir sensaciones',
   'hero.categories': 'Aromaterapia | Bienestar | Hogar | Regalos',
 

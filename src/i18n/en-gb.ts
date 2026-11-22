@@ -16,7 +16,6 @@ export const enGB: TranslationDictionary = {
   'hero.subtitle': 'Aromas, essences and small rituals to reconnect you with what truly matters.',
   'hero.cta': 'Explore the collection',
   'hero.scroll': 'Scroll to contemplate',
-  'hero.badge': 'New boutique',
   'hero.ctaSecondary': 'Discover sensations',
   'hero.categories': 'Aromatherapy | Wellbeing | Home | Gifts',
 

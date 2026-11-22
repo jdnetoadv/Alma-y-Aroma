@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { HeroSection } from '@/components/home/HeroSection'
 import { CollectionsSection } from '@/components/home/CollectionsSection'
 import { EssenceSection } from '@/components/home/EssenceSection'
@@ -9,6 +10,15 @@ import { DiscoverRibbon } from '@/components/home/DiscoverRibbon'
 import { useCatalogReady } from '@/data/repository'
 
 export default function Index() {
+  const location = useLocation()
+
+  // Chegada pela logomarca (de produto, loja, admin, etc.): garante o topo.
+  useEffect(() => {
+    if ((location.state as { scrollToTop?: boolean } | null)?.scrollToTop) {
+      window.scrollTo({ top: 0 })
+    }
+  }, [location.state])
+
   // Handle hash navigation if present when page mounts or hash changes
   useEffect(() => {
     if (window.location.hash) {

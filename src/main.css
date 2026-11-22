@@ -301,6 +301,18 @@
     animation-play-state: paused;
   }
 
+  /* Cards da fita: largura definida por variáveis CSS alimentadas por
+     DiscoverRibbon.tsx (constantes RIBBON_CARD_WIDTH), mobile e ≥640px. */
+  .ribbon-card {
+    width: var(--ribbon-card-w, 16rem);
+  }
+
+  @media (min-width: 640px) {
+    .ribbon-card {
+      width: var(--ribbon-card-w-sm, 19rem);
+    }
+  }
+
   /* Respeita prefers-reduced-motion: fita parada, sem deslize contínuo. */
   @media (prefers-reduced-motion: reduce) {
     .ribbon-track {

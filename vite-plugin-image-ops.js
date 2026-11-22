@@ -1,19 +1,107 @@
 /**
- * Vite plugin — gera as artes da marca ALMA Y AROMA (public/brand/) a partir
- * do PNG oficial da cliente, com remoção de fundo por chave de luminância.
- * Roda uma vez por processo (build ou dev), somente quando a arte muda.
+ * Plugin do Vite — gera as artes da marca ALMA Y AROMA (public/brand/) a
+ * partir do PNG oficial da cliente, com remoção de fundo por chave de
+ * luminância. Roda uma vez por processo (build ou dev), somente quando a
+ * arte muda. Sem dependências externas: decodifica e codifica PNG
+ * (RGBA 8-bit) manualmente, com o inflate/deflate do node:zlib.
  */
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { inflateSync, deflateSync } from 'node:zlib'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { deflateSync } from 'node:zlib'
-import { PNG } from 'pngjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(here, '..')
 const SRC = resolve(ROOT, 'src/assets/logotipo-dourado-alma-y-aroma-3d704.png')
 const OUT_DIR = resolve(ROOT, 'public/brand')
 const STAMP = resolve(OUT_DIR, '.generated-stamp')
+
+// ── PNG decode (RGBA 8-bit, sem entrelace; paleta e 16-bit não suportados) ──
+function decodePNG(buf) {
+  if (buf.readUInt32BE(0) !== 0x89504e47) throw new Error('PNG invalido')
+  let pos = 8
+  let width = 0
+  let height = 0
+  let bitDepth = 0
+  let colorType = 0
+  const idat = []
+  while (pos < buf.length) {
+    const len = buf.readUInt32BE(pos)
+    const type = buf.toString('ascii', pos + 4, pos + 8)
+    const data = buf.subarray(pos + 8, pos + 8 + len)
+    if (type === 'IHDR') {
+      width = data.readUInt32BE(0)
+      height = data.readUInt32BE(4)
+      bitDepth = data[8]
+      colorType = data[9]
+      if (data[12] !== 0) throw new Error('PNG entrelacado nao suportado')
+    } else if (type === 'IDAT') {
+      idat.push(data)
+    } else if (type === 'IEND') {
+      break
+    }
+    pos += 12 + len
+  }
+  if (bitDepth !== 8) throw new Error('PNG com bitDepth ' + bitDepth + ' nao suportado (use 8)')
+  if (colorType !== 0 && colorType !== 2 && colorType !== 4 && colorType !== 6) {
+    throw new Error('PNG colorType ' + colorType + ' nao suportado')
+  }
+
+  const bpp = colorType === 2 ? 3 : colorType === 4 ? 2 : colorType === 6 ? 4 : 1
+  const raw = inflateSync(Buffer.concat(idat))
+  const stride = width * bpp
+  const out = new Uint8ClampedArray(width * height * 4)
+
+  // desfiltros por linha (None/Sub/Up/Average/Paeth)
+  for (let y = 0; y < height; y++) {
+    const filter = raw[y * (stride + 1)]
+    const line = raw.subarray(y * (stride + 1) + 1, (y + 1) * (stride + 1))
+    const prev = y > 0 ? raw.subarray((y - 1) * (stride + 1) + 1, y * (stride + 1)) : null
+    for (let x = 0; x < stride; x++) {
+      const a = x >= bpp ? line[x - bpp] : 0
+      const b = prev ? prev[x] : 0
+      const c = x >= bpp && prev ? prev[x - bpp] : 0
+      let v = line[x]
+      if (filter === 1) v = (v + a) & 0xff
+      else if (filter === 2) v = (v + b) & 0xff
+      else if (filter === 3) v = (v + ((a + b) >> 1)) & 0xff
+      else if (filter === 4) {
+        const p = a + b - c
+        const pa = Math.abs(p - a)
+        const pb = Math.abs(p - b)
+        const pc = Math.abs(p - c)
+        v = (v + (pa <= pb && pa <= pc ? a : pb <= pc ? b : c)) & 0xff
+      }
+      line[x] = v
+    }
+    for (let x = 0; x < width; x++) {
+      const si = x * bpp
+      const di = (y * width + x) * 4
+      if (colorType === 6) {
+        out[di] = line[si]
+        out[di + 1] = line[si + 1]
+        out[di + 2] = line[si + 2]
+        out[di + 3] = line[si + 3]
+      } else if (colorType === 2) {
+        out[di] = line[si]
+        out[di + 1] = line[si + 1]
+        out[di + 2] = line[si + 2]
+        out[di + 3] = 255
+      } else if (colorType === 4) {
+        out[di] = line[si]
+        out[di + 1] = line[si]
+        out[di + 2] = line[si]
+        out[di + 3] = line[si + 1]
+      } else {
+        out[di] = line[si]
+        out[di + 1] = line[si]
+        out[di + 2] = line[si]
+        out[di + 3] = 255
+      }
+    }
+  }
+  return { width, height, data: out }
+}
 
 // ── PNG encode (RGBA 8-bit) ───────────────────────────────────────────────
 function crc32(buf) {
@@ -41,8 +129,8 @@ function encodePNG(w, h, rgba) {
   const ihdr = Buffer.alloc(13)
   ihdr.writeUInt32BE(w, 0)
   ihdr.writeUInt32BE(h, 4)
-  ihdr[8] = 8
-  ihdr[9] = 6
+  ihdr[8] = 8 // bit depth
+  ihdr[9] = 6 // color type RGBA
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
     chunk('IHDR', ihdr),
@@ -54,7 +142,7 @@ function encodePNG(w, h, rgba) {
 // ── Processamento ─────────────────────────────────────────────────────────
 function generate() {
   mkdirSync(OUT_DIR, { recursive: true })
-  const png = PNG.sync.read(readFileSync(SRC))
+  const png = decodePNG(readFileSync(SRC))
   const W = png.width
   const H = png.height
   const data = png.data

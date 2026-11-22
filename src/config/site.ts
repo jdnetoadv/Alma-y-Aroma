@@ -15,8 +15,8 @@ export interface SiteConfig {
   cnpj?: string
   audio: {
     enabled: boolean
-    hasLicensedFile: boolean
-    src: string
+    localSrc: string
+    externalSrc: string
     defaultVolume: number
   }
 }
@@ -32,14 +32,15 @@ export const siteConfig: SiteConfig = {
   cnpj: undefined,
   audio: {
     enabled: true,
-    // A experiência sonora está ATIVA. O provider tenta primeiro o MP3 em
-    // public/audio/ambiente-loop.mp3 (faixa alvo: "Flute of the Silent Valley",
-    // omar sahel / djovan, Pixabay ID 497085, Pixabay Content License — crédito
-    // no rodapé enquanto o arquivo estiver tocando); se o arquivo não existir,
-    // usa o fallback sintetizado via WebAudio (src/lib/audio/tibetanSynth.ts).
+    // A experiência sonora está ATIVA. Cadeia de prioridade do provider:
+    // 1) MP3 local em public/audio/ambiente-loop.mp3 (se existir);
+    // 2) faixa externa por URL, em streaming: "That Zen Moment" — Kevin MacLeod
+    //    (incompetech.com), CC-BY 4.0 (crédito obrigatório no rodapé);
+    // 3) sintetizador WebAudio (src/lib/audio/tibetanSynth.ts) se a faixa falhar.
     // Nenhum autoplay: só após clique no controle do cabeçalho ou no convite.
-    hasLicensedFile: false, // informativo — o provider detecta o arquivo em runtime via HEAD
-    src: '/audio/ambiente-loop.mp3',
+    localSrc: '/audio/ambiente-loop.mp3',
+    externalSrc:
+      'https://incompetech.com/music/royalty-free/mp3-royaltyfree/That%20Zen%20Moment.mp3',
     defaultVolume: 0.3,
   },
 }

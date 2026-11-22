@@ -4,7 +4,6 @@ import { startTibetanFluteSynth } from '@/lib/audio/tibetanSynth'
 
 interface AmbientAudioContextValue {
   isPlaying: boolean
-  hasLicensedFile: boolean
   hasInteracted: boolean
   isPendingNoticeOpen: boolean
   toggleAudio: () => void
@@ -18,6 +17,11 @@ const AmbientAudioContext = createContext<AmbientAudioContextValue | null>(null)
 
 const AUDIO_OPT_IN_KEY = 'alma_y_aroma_audio_opt_in'
 const AUDIO_INVITE_DISMISSED_KEY = 'alma_y_aroma_audio_dismissed'
+const FADE_IN_MS = 2500
+
+// Fonte em uso: 'file' = MP3 local, 'external' = faixa por URL (streaming),
+// 'synth' = fallback sintetizado, null = ainda sondando.
+type AudioSource = 'file' | 'external' | 'synth' | null
 
 export function AmbientAudioProvider({ children }: { children: React.ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -26,39 +30,43 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
   const [isInviteVisible, setIsInviteVisible] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const synthRef = useRef<{ stop: () => void } | null>(null)
-  // Which source is in use: null = still probing, true = MP3, false = synth fallback
-  const [hasLicensedFile, setHasLicensedFile] = useState<boolean | null>(null)
+  const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   // Refs espelhando o estado para uso dentro de callbacks assíncronos sem
   // depender de closures obsoletas (stale state após await).
-  const hasLicensedFileRef = useRef<boolean | null>(null)
+  const sourceRef = useRef<AudioSource>(null)
   const isPlayingRef = useRef(false)
-  const probeDoneRef = useRef<Promise<boolean> | null>(null)
+  const probeDoneRef = useRef<Promise<void> | null>(null)
   const pendingToggleRef = useRef(false)
   const toggleAudioRef = useRef<() => void>(() => {})
 
-  // Source resolution: prefer the licensed MP3 when it exists at
-  // public/audio/ambiente-loop.mp3; otherwise fall back to the WebAudio
-  // zen-meditation soundscape (drone + tibetan bowls, see
-  // src/lib/audio/tibetanSynth.ts).
-  const probeFile = async (): Promise<boolean> => {
+  // Cadeia de prioridade: MP3 local (public/audio/ambiente-loop.mp3, se existir)
+  // → faixa externa por URL (siteConfig.audio.externalSrc, streaming) →
+  // sintetizador WebAudio (src/lib/audio/tibetanSynth.ts).
+  const probeLocalFile = async (): Promise<boolean> => {
     try {
-      const res = await fetch(siteConfig.audio.src, { method: 'HEAD' })
+      const res = await fetch(siteConfig.audio.localSrc, { method: 'HEAD' })
       // Um host SPA com fallback responde 200 com index.html (text/html) para
-      // QUALQUER caminho inexistente — res.ok sozinho dá falso-positivo e o
-      // <audio> apontando para HTML falha em silêncio. Só aceitamos audio/*.
+      // QUALQUER caminho inexistente — só aceitamos audio/*.
       if (!res.ok) return false
       const type = res.headers.get('content-type') ?? ''
-      if (!type.startsWith('audio/')) {
-        console.warn(
-          `[audio] ${siteConfig.audio.src} respondeu "${type}" (não é audio/*) — usando o synth WebAudio`,
-        )
-        return false
-      }
-      return true
-    } catch (err) {
-      console.warn('[audio] probe do MP3 falhou — usando o synth WebAudio:', err)
+      return type.startsWith('audio/')
+    } catch {
       return false
     }
+  }
+
+  const createAudio = (src: string) => {
+    const audio = new Audio(src)
+    audio.loop = true
+    audio.volume = siteConfig.audio.defaultVolume
+    audio.onerror = () => {
+      // Falha tardia (404, rede caiu no meio, codec): se estava tocando, cai no synth.
+      if (isPlayingRef.current && audioRef.current === audio) {
+        console.warn('[audio] erro ao tocar a faixa — usando o synth WebAudio')
+        void fallbackToSynth()
+      }
+    }
+    return audio
   }
 
   useEffect(() => {
@@ -66,22 +74,22 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
 
     let cancelled = false
 
-    probeDoneRef.current = probeFile()
-
-    void probeDoneRef.current.then((found) => {
+    probeDoneRef.current = probeLocalFile().then((hasLocal) => {
       if (cancelled) return
-      setHasLicensedFile(found)
-      hasLicensedFileRef.current = found
-      if (!found) return
-
-      const audio = new Audio(siteConfig.audio.src)
-      audio.loop = true
-      audio.volume = siteConfig.audio.defaultVolume
-      audioRef.current = audio
+      if (hasLocal) {
+        sourceRef.current = 'file'
+        audioRef.current = createAudio(siteConfig.audio.localSrc)
+      } else if (siteConfig.audio.externalSrc) {
+        sourceRef.current = 'external'
+        audioRef.current = createAudio(siteConfig.audio.externalSrc)
+      } else {
+        sourceRef.current = 'synth'
+      }
     })
 
     return () => {
       cancelled = true
+      stopFade()
       audioRef.current?.pause()
       audioRef.current = null
       synthRef.current?.stop()
@@ -125,6 +133,26 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
     }
   }
 
+  const stopFade = () => {
+    if (fadeTimerRef.current) {
+      clearInterval(fadeTimerRef.current)
+      fadeTimerRef.current = null
+    }
+  }
+
+  // Volume gradual de 0 até o padrão em FADE_IN_MS.
+  const fadeIn = (audio: HTMLAudioElement) => {
+    stopFade()
+    const target = siteConfig.audio.defaultVolume
+    const start = Date.now()
+    audio.volume = 0
+    fadeTimerRef.current = setInterval(() => {
+      const p = Math.min(1, (Date.now() - start) / FADE_IN_MS)
+      audio.volume = target * p
+      if (p >= 1) stopFade()
+    }, 100)
+  }
+
   const startSynthFallback = async () => {
     synthRef.current?.stop()
     synthRef.current = null
@@ -135,13 +163,30 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
     synthRef.current = handle
   }
 
+  // Troca a fonte por ordem: arquivo/URL falhou → synth, sem quebrar a UI.
+  const fallbackToSynth = async () => {
+    stopFade()
+    audioRef.current?.pause()
+    audioRef.current = null
+    sourceRef.current = 'synth'
+    try {
+      await startSynthFallback()
+      isPlayingRef.current = true
+      setIsPlaying(true)
+    } catch (synthErr) {
+      console.error('[audio] synth WebAudio também falhou:', synthErr)
+      isPlayingRef.current = false
+      setIsPlaying(false)
+    }
+  }
+
   const toggleAudio = () => {
     setHasInteracted(true)
     setIsInviteVisible(false)
 
     // Clique durante o probe (rede lenta): enfileira e executa quando a fonte
     // resolver, em vez de descartar o clique silenciosamente.
-    if (hasLicensedFileRef.current === null) {
+    if (sourceRef.current === null) {
       if (!pendingToggleRef.current) {
         pendingToggleRef.current = true
         void probeDoneRef.current?.then(() => {
@@ -154,7 +199,8 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
     }
 
     const stopPlayback = () => {
-      if (hasLicensedFileRef.current) {
+      if (sourceRef.current !== 'synth') {
+        stopFade()
         audioRef.current?.pause()
       } else {
         synthRef.current?.stop()
@@ -175,9 +221,11 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
     }
 
     const startPlayback = async () => {
-      if (hasLicensedFileRef.current) {
+      if (sourceRef.current !== 'synth') {
         const audio = audioRef.current
-        if (!audio) throw new Error('Elemento de áudio MP3 não disponível')
+        if (!audio) throw new Error('Elemento de áudio não disponível')
+        // play() é chamado síncronamente dentro do gesto do clique.
+        fadeIn(audio)
         await audio.play()
       } else {
         await startSynthFallback()
@@ -194,23 +242,10 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
     void startPlayback().catch((err) => {
       // NUNCA engolir o erro: ícone "tocando" sem som é o pior cenário.
       console.error('[audio] playback falhou:', err)
-      // Se o MP3 falhou no play (corrompido, 404 tardio, codec), cai para o
-      // synth imediatamente — o usuário clicou e quer ouvir algo.
-      if (hasLicensedFileRef.current) {
-        hasLicensedFileRef.current = false
-        setHasLicensedFile(false)
-        audioRef.current?.pause()
-        audioRef.current = null
-        startSynthFallback()
-          .then(() => {
-            isPlayingRef.current = true
-            setIsPlaying(true)
-          })
-          .catch((synthErr) => {
-            console.error('[audio] synth WebAudio também falhou:', synthErr)
-            isPlayingRef.current = false
-            setIsPlaying(false)
-          })
+      if (sourceRef.current !== 'synth') {
+        // O arquivo/URL não tocou (404, rede, codec): cai para o synth na hora —
+        // o usuário clicou e quer ouvir algo.
+        void fallbackToSynth()
       } else {
         synthRef.current?.stop()
         synthRef.current = null
@@ -231,7 +266,6 @@ export function AmbientAudioProvider({ children }: { children: React.ReactNode }
     <AmbientAudioContext.Provider
       value={{
         isPlaying,
-        hasLicensedFile: hasLicensedFile === true,
         hasInteracted,
         isPendingNoticeOpen,
         toggleAudio,

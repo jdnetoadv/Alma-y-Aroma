@@ -1,18 +1,16 @@
 /**
- * Emblema oficial da marca ALMA Y AROMA — LOGO OFICIAL da cliente
- * (PNG "Logotipo Dourado Alma y Aroma", fundo preto removido por chave de
- * luminância no pipeline de build, glow dourado preservado como
- * transparência suave). NÃO é um desenho vetorial: é a arte oficial
- * recortada (chama + círculo aberto + folhas), sem o wordmark.
+ * Logomarca oficial da marca ALMA Y AROMA — PNG OFICIAL da cliente
+ * ("Logotipo Dourado Alma y Aroma": chama atravessando o círculo aberto,
+ * folhas na base e wordmark serifado, FUNDO TRANSPARENTE), importado como
+ * ativo estático pelo Vite, sem nenhum pipeline de processamento em build.
  *
- * Ponto único de verdade do emblema: topbar (desktop e drawer mobile),
- * favicon e selo do rodapé/conta/checkout compartilham esta arte.
+ * Ponto único de verdade da marca: topbar (desktop e drawer mobile),
+ * favicon (index.html) e selo do rodapé/conta/checkout compartilham esta arte.
  */
+import officialLogo from '@/assets/almayaromaoriginalchampanhetransparente-ffaab.png'
 
-/** Arte oficial processada em public/brand/ (gerada no build a partir do PNG oficial). */
-export const BRAND_EMBLEM_SRC = '/brand/emblem.png'
-/** Lockup oficial completa (emblema + wordmark), fundo transparente. */
-export const BRAND_LOCKUP_SRC = '/brand/lockup.png'
+/** PNG oficial completo (emblema + wordmark), fundo transparente. */
+export const BRAND_LOGO_SRC = officialLogo
 
 interface BrandEmblemProps {
   className?: string
@@ -25,7 +23,7 @@ interface BrandEmblemProps {
 export function BrandEmblem({ className = '', title }: BrandEmblemProps) {
   return (
     <img
-      src={BRAND_EMBLEM_SRC}
+      src={BRAND_LOGO_SRC}
       alt={title ?? ''}
       aria-hidden={title ? undefined : true}
       role={title ? 'img' : undefined}

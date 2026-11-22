@@ -3,10 +3,18 @@ import { useLocale } from '@/i18n/LocaleContext'
 import { Locale } from '@/i18n/types'
 import { CurrencyCode, ProductCategory } from '@/data/types'
 import { shopT } from '@/i18n/shopStrings'
-import { listAdminProducts, updateProduct, createProduct, AdminProduct } from '@/lib/admin/service'
+import {
+  listAdminProducts,
+  updateProduct,
+  createProduct,
+  updateProductFull,
+  refreshCatalog,
+  AdminProduct,
+} from '@/lib/admin/service'
 import { listAdminCategories, AdminCategory } from '@/lib/admin/service'
 import { catalogRepository, formatPrice } from '@/data/repository'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
+import pb from '@/lib/pocketbase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -15,7 +23,8 @@ import { Loader2 } from 'lucide-react'
 
 const CURRENCIES: CurrencyCode[] = ['BRL', 'EUR', 'GBP']
 
-/** Aba Produtos do painel: listar, editar (preço/estoque/destaque) e criar. */
+/** Aba Produtos do painel: listar, edição rápida (preço/estoque/destaque),
+ * edição completa (mesmo formulário da criação) e criar. */
 export default function AdminProductsTab() {
   const { locale } = useLocale()
   const t = (key: string, vars?: Record<string, string>) => shopT(locale, key, vars)
@@ -25,6 +34,8 @@ export default function AdminProductsTab() {
   const [error, setError] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
+  /** Produto em edição completa (mesmo formulário da criação). */
+  const [editing, setEditing] = useState<AdminProduct | null>(null)
 
   const reload = useCallback(async () => {
     try {
@@ -62,16 +73,36 @@ export default function AdminProductsTab() {
         <p className="text-sm text-muted-foreground">
           {t('admin.productsCount', { count: String(products.length) })}
         </p>
-        <Button type="button" variant="outline" onClick={() => setShowForm((v) => !v)}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            setEditing(null)
+            setShowForm((v) => !v)
+          }}
+        >
           {showForm ? t('account.cancel') : t('admin.productNew')}
         </Button>
+        {editing && (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setEditing(null)}
+            className="text-muted-foreground"
+          >
+            {t('admin.cancelEdit')}
+          </Button>
+        )}
       </div>
 
-      {showForm && (
+      {(showForm || editing) && (
         <AdminProductForm
+          key={editing?.id ?? 'new'}
           categories={categories}
+          product={editing ?? undefined}
           onDone={() => {
             setShowForm(false)
+            setEditing(null)
             reload()
           }}
         />
@@ -100,6 +131,10 @@ export default function AdminProductsTab() {
                 busy={busyId === p.id}
                 onPatch={(v) => patch(p.id, v)}
                 locale={locale}
+                onEdit={() => {
+                  setShowForm(false)
+                  setEditing(p)
+                }}
               />
             ))}
           </tbody>
@@ -114,11 +149,13 @@ function ProductRow({
   categories,
   busy,
   onPatch,
+  onEdit,
   locale,
 }: {
   product: AdminProduct
   categories: AdminCategory[]
   busy: boolean
+  onEdit: () => void
   onPatch: (v: Partial<AdminProduct>) => void
   locale: Locale
 }) {
@@ -129,7 +166,14 @@ function ProductRow({
   return (
     <tr className={busy ? 'opacity-50' : undefined}>
       <td className="px-4 py-3">
-        <p className="font-serif text-foreground">{product.name[locale] ?? product.slug}</p>
+        <button
+          type="button"
+          onClick={onEdit}
+          title={t('admin.productEdit')}
+          className="font-serif text-foreground underline-offset-2 hover:text-primary hover:underline"
+        >
+          {product.name[locale] ?? product.slug}
+        </button>
         <p className="text-[11px] text-muted-foreground">{product.slug}</p>
       </td>
       <td className="px-4 py-3 text-muted-foreground">{catTitle}</td>
@@ -243,29 +287,38 @@ function ProductRow({
           aria-label={t('admin.productActive')}
         />
       </td>
+      <td className="px-4 py-3">
+        <Button type="button" variant="outline" size="sm" onClick={onEdit}>
+          {t('admin.productEdit')}
+        </Button>
+      </td>
     </tr>
   )
 }
 
 function AdminProductForm({
   categories,
+  product,
   onDone,
 }: {
   categories: AdminCategory[]
+  /** Presente = edição completa de um produto existente; ausente = criação. */
+  product?: AdminProduct
   onDone: () => void
 }) {
   const { locale } = useLocale()
   const t = (key: string) => shopT(locale, key)
-  const [name, setName] = useState('')
-  const [slug, setSlug] = useState('')
-  const [categoryId, setCategoryId] = useState(categories[0]?.id ?? '')
-  const [price, setPrice] = useState('')
-  const [stock, setStock] = useState('0')
-  const [featured, setFeatured] = useState(false)
-  const [shortDesc, setShortDesc] = useState('')
-  const [longDesc, setLongDesc] = useState('')
+  const [name, setName] = useState(product?.name['pt-br'] ?? '')
+  const [slug, setSlug] = useState(product?.slug ?? '')
+  const [categoryId, setCategoryId] = useState(product?.categoryId ?? categories[0]?.id ?? '')
+  const [price, setPrice] = useState(product ? String(product.price ?? '') : '')
+  const [stock, setStock] = useState(product ? String(product.stock ?? 0) : '0')
+  const [featured, setFeatured] = useState(product?.featured ?? false)
+  const [active, setActive] = useState(product?.active ?? true)
+  const [shortDesc, setShortDesc] = useState(product?.shortDescription['pt-br'] ?? '')
+  const [longDesc, setLongDesc] = useState(product?.longDescription['pt-br'] ?? '')
   const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState(product?.images?.[0] ?? '')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -287,17 +340,9 @@ function AdminProductForm({
       const url = imageUrl.trim()
       await createProduct({
         slug: (slug || autoSlug(name)).slice(0, 60),
-        categoryId,
-        name: { 'pt-br': name, es: name, 'en-gb': name },
-        shortDescription: { 'pt-br': shortDesc, es: shortDesc, 'en-gb': shortDesc },
-        longDescription: { 'pt-br': longDesc, es: longDesc, 'en-gb': longDesc },
-        price: Number(price) || 0,
-        stock: Number(stock) || 0,
-        active: true,
-        featured,
-        imageFile,
-        images: url ? [url] : [],
+        ...commonWrite(),
       })
+      await refreshCatalog()
       onDone()
     } catch (err) {
       setError(getErrorMessage(err))
@@ -306,9 +351,52 @@ function AdminProductForm({
     }
   }
 
+  /** Campos compartilhados entre criação e edição completa. */
+  function commonWrite() {
+    return {
+      categoryId,
+      name: { 'pt-br': name, es: name, 'en-gb': name },
+      shortDescription: { 'pt-br': shortDesc, es: shortDesc, 'en-gb': shortDesc },
+      longDescription: { 'pt-br': longDesc, es: longDesc, 'en-gb': longDesc },
+      price: Number(price) || 0,
+      stock: Number(stock) || 0,
+      active,
+      featured,
+      imageFile,
+      images: imageUrl.trim() ? [imageUrl.trim()] : [],
+    }
+  }
+
+  async function handleEditSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!product) return
+    setBusy(true)
+    setError(null)
+    try {
+      // Update no registro existente — nunca cria produto novo.
+      await updateProductFull(product.id, { ...commonWrite(), slug: product.slug })
+      await refreshCatalog()
+      onDone()
+    } catch (err) {
+      setError(getErrorMessage(err))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  // Imagem atual: arquivo enviado (prioridade) ou a URL cadastrada.
+  const currentImage = product
+    ? product.imageFile
+      ? pb.files.getURL(
+          product as unknown as { id: string; collectionId: string },
+          product.imageFile,
+        )
+      : (product.images?.[0] ?? '')
+    : ''
+
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={product ? handleEditSubmit : handleSubmit}
       className="space-y-3 rounded-lg border border-primary/30 bg-card p-5"
     >
       <div className="grid gap-3 sm:grid-cols-2">
@@ -331,8 +419,9 @@ function AdminProductForm({
           <Input
             id="prod-slug"
             value={slug}
+            disabled={!!product}
             onChange={(e) => setSlug(e.target.value)}
-            placeholder={autoSlug(name)}
+            placeholder={product ? undefined : autoSlug(name)}
             className="bg-background"
           />
         </div>
@@ -407,6 +496,16 @@ function AdminProductForm({
           className="bg-background"
         />
       </div>
+      {currentImage && (
+        <div className="flex items-center gap-3">
+          <img
+            src={currentImage}
+            alt={t('admin.productImage')}
+            className="h-16 w-16 rounded-md border border-border/60 object-cover"
+          />
+          <p className="text-[11px] text-muted-foreground">{t('admin.productImageCurrent')}</p>
+        </div>
+      )}
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1">
           <Label htmlFor="prod-image-file" className="text-xs text-muted-foreground">
@@ -438,6 +537,15 @@ function AdminProductForm({
       <label className="flex items-center gap-2 text-xs text-muted-foreground">
         <input
           type="checkbox"
+          checked={active}
+          onChange={(e) => setActive(e.target.checked)}
+          className="h-4 w-4 accent-primary"
+        />
+        {t('admin.productActive')}
+      </label>
+      <label className="flex items-center gap-2 text-xs text-muted-foreground">
+        <input
+          type="checkbox"
           checked={featured}
           onChange={(e) => setFeatured(e.target.checked)}
           className="h-4 w-4 accent-primary"
@@ -450,7 +558,7 @@ function AdminProductForm({
         </p>
       )}
       <Button type="submit" disabled={busy} className="bg-primary hover:bg-primary/90">
-        {t('account.save')}
+        {product ? t('account.save') : t('admin.productCreate')}
       </Button>
       <span className="ml-3 text-[11px] italic text-muted-foreground/70">
         {t('admin.priceHint')}

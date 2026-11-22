@@ -84,44 +84,37 @@ export async function updateProduct(
   await pb.collection('products').update(id, patch)
 }
 
-export async function createProduct(
-  data: Pick<
-    AdminProduct,
-    | 'slug'
-    | 'categoryId'
-    | 'name'
-    | 'shortDescription'
-    | 'longDescription'
-    | 'price'
-    | 'stock'
-    | 'active'
-  > & { images?: string[]; featured?: boolean; imageFile?: File | null },
-): Promise<void> {
-  const payload: Record<string, unknown> = {
+export interface ProductWriteData {
+  slug: string
+  categoryId: string
+  name: Record<Locale, string>
+  shortDescription: Record<Locale, string>
+  longDescription: Record<Locale, string>
+  price: number
+  stock: number
+  active: boolean
+  featured?: boolean
+  images?: string[]
+  imageFile?: File | null
+}
+
+function productPayload(data: ProductWriteData): Record<string, unknown> {
+  return {
     slug: data.slug,
-    sku: data.slug.toUpperCase().replaceAll('-', '').slice(0, 12),
     categoryId: data.categoryId,
     name: data.name,
     shortDescription: data.shortDescription,
     longDescription: data.longDescription,
     images: data.images ?? [],
-    variations: [],
-    productType: data.name,
-    scentFamily: '',
-    tags: [],
-    purposes: [],
     price: data.price,
     stock: data.stock,
     active: data.active,
     featured: data.featured ?? false,
-    isNew: false,
-    demonstrative: false,
     currency: 'BRL',
   }
-  if (!data.imageFile) {
-    await pb.collection('products').create(payload)
-    return
-  }
+}
+
+function productFormData(payload: Record<string, unknown>, imageFile: File): FormData {
   // Upload de arquivo: multipart, com os campos JSON serializados.
   const form = new FormData()
   for (const [key, value] of Object.entries(payload)) {
@@ -130,8 +123,41 @@ export async function createProduct(
       typeof value === 'object' && value !== null ? JSON.stringify(value) : String(value),
     )
   }
-  form.append('imageFile', data.imageFile)
-  await pb.collection('products').create(form)
+  form.append('imageFile', imageFile)
+  return form
+}
+
+export async function createProduct(data: ProductWriteData): Promise<void> {
+  const payload = {
+    ...productPayload(data),
+    sku: data.slug.toUpperCase().replaceAll('-', '').slice(0, 12),
+    variations: [],
+    productType: data.name,
+    scentFamily: '',
+    tags: [],
+    purposes: [],
+    isNew: false,
+    demonstrative: false,
+  }
+  if (!data.imageFile) {
+    await pb.collection('products').create(payload)
+    return
+  }
+  await pb.collection('products').create(productFormData(payload, data.imageFile))
+}
+
+/**
+ * Edição completa de um produto existente (mesmo payload da criação, mas
+ * update — nunca cria registro novo). Novo upload substitui o arquivo
+ * anterior do campo imageFile.
+ */
+export async function updateProductFull(id: string, data: ProductWriteData): Promise<void> {
+  const payload = productPayload(data)
+  if (!data.imageFile) {
+    await pb.collection('products').update(id, payload)
+    return
+  }
+  await pb.collection('products').update(id, productFormData(payload, data.imageFile))
 }
 
 export interface AdminCategory {
